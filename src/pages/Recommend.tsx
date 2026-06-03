@@ -10,6 +10,7 @@ interface StudentProfile {
   gpa: number;
   region: string;
   maxBudget: number;
+  schoolType: string;
 }
 
 type MatchResult = {
@@ -94,6 +95,18 @@ function matchSchools(profile: StudentProfile): MatchResult[] {
       score += 3;
     }
 
+    // 学校类型背景影响
+    if (profile.schoolType === "ap") {
+      reasons.push("美式课程背景，适应性强");
+    } else if (profile.schoolType === "ib") {
+      score += 2; // IB 课程受认可
+      reasons.push("IB 背景，学术能力受认可");
+    } else if (profile.schoolType === "alevel") {
+      reasons.push("A-Level 背景，需注意课程差异");
+    } else if (profile.schoolType === "public") {
+      reasons.push("公立学校背景，需加强英语准备");
+    }
+
     // 分类
     let type: "冲刺校" | "匹配校" | "保底校";
     if (score >= 75) {
@@ -125,6 +138,7 @@ export default function Recommend() {
     gpa: 0,
     region: "全部",
     maxBudget: 0,
+    schoolType: "",
   });
   const [results, setResults] = useState<MatchResult[] | null>(null);
   const [selectedSchool, setSelectedSchool] = useState<School | null>(null);
@@ -207,6 +221,24 @@ export default function Recommend() {
                   className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
                   required
                 />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  目前就读学校类型
+                </label>
+                <select
+                  value={profile.schoolType}
+                  onChange={(e) => update("schoolType", e.target.value)}
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+                >
+                  <option value="">请选择</option>
+                  <option value="ap">国际学校（美式/AP）</option>
+                  <option value="ib">国际学校（IB）</option>
+                  <option value="alevel">国际学校（A-Level/英式）</option>
+                  <option value="public_intl">公立学校国际部</option>
+                  <option value="public">公立学校普通班</option>
+                </select>
               </div>
 
               <div>
