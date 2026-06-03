@@ -321,7 +321,7 @@ export default function Recommend() {
                           school={r.school}
                           onClick={() => setSelectedSchool(r.school)}
                         />
-                        <div className="absolute top-2 right-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full">
+                        <div className="absolute bottom-1 right-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full">
                           匹配度 {r.score}%
                         </div>
                         <p className="text-xs text-gray-500 mt-1 px-1">
@@ -351,7 +351,7 @@ export default function Recommend() {
                           school={r.school}
                           onClick={() => setSelectedSchool(r.school)}
                         />
-                        <div className="absolute top-2 right-2 bg-blue-500 text-white text-xs px-2 py-1 rounded-full">
+                        <div className="absolute bottom-1 right-2 bg-blue-500 text-white text-xs px-2 py-1 rounded-full">
                           匹配度 {r.score}%
                         </div>
                         <p className="text-xs text-gray-500 mt-1 px-1">
@@ -381,7 +381,7 @@ export default function Recommend() {
                           school={r.school}
                           onClick={() => setSelectedSchool(r.school)}
                         />
-                        <div className="absolute top-2 right-2 bg-green-500 text-white text-xs px-2 py-1 rounded-full">
+                        <div className="absolute bottom-1 right-2 bg-green-500 text-white text-xs px-2 py-1 rounded-full">
                           匹配度 {r.score}%
                         </div>
                         <p className="text-xs text-gray-500 mt-1 px-1">
