@@ -316,14 +316,13 @@ export default function Recommend() {
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {reachSchools.map((r) => (
-                      <div key={r.school.id} className="relative">
+                      <div key={r.school.id}>
                         <SchoolCard
                           school={r.school}
                           onClick={() => setSelectedSchool(r.school)}
+                          matchScore={r.score}
+                          matchColor="bg-red-500"
                         />
-                        <div className="absolute bottom-1 right-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full">
-                          匹配度 {r.score}%
-                        </div>
                         <p className="text-xs text-gray-500 mt-1 px-1">
                           {r.reason}
                         </p>
@@ -346,14 +345,13 @@ export default function Recommend() {
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {matchSchoolsList.map((r) => (
-                      <div key={r.school.id} className="relative">
+                      <div key={r.school.id}>
                         <SchoolCard
                           school={r.school}
                           onClick={() => setSelectedSchool(r.school)}
+                          matchScore={r.score}
+                          matchColor="bg-blue-500"
                         />
-                        <div className="absolute bottom-1 right-2 bg-blue-500 text-white text-xs px-2 py-1 rounded-full">
-                          匹配度 {r.score}%
-                        </div>
                         <p className="text-xs text-gray-500 mt-1 px-1">
                           {r.reason}
                         </p>
@@ -376,14 +374,13 @@ export default function Recommend() {
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {safeSchools.map((r) => (
-                      <div key={r.school.id} className="relative">
+                      <div key={r.school.id}>
                         <SchoolCard
                           school={r.school}
                           onClick={() => setSelectedSchool(r.school)}
+                          matchScore={r.score}
+                          matchColor="bg-green-500"
                         />
-                        <div className="absolute bottom-1 right-2 bg-green-500 text-white text-xs px-2 py-1 rounded-full">
-                          匹配度 {r.score}%
-                        </div>
                         <p className="text-xs text-gray-500 mt-1 px-1">
                           {r.reason}
                         </p>

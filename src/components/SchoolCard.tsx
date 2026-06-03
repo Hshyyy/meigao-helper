@@ -3,6 +3,8 @@ import type { School } from "../data/schools";
 interface Props {
   school: School;
   onClick: () => void;
+  matchScore?: number;
+  matchColor?: string;
 }
 
 const tierColors = {
@@ -11,7 +13,12 @@ const tierColors = {
   热门: "bg-green-100 text-green-700",
 };
 
-export default function SchoolCard({ school, onClick }: Props) {
+export default function SchoolCard({
+  school,
+  onClick,
+  matchScore,
+  matchColor = "bg-gray-500",
+}: Props) {
   return (
     <div
       onClick={onClick}
@@ -24,13 +31,22 @@ export default function SchoolCard({ school, onClick }: Props) {
           </h3>
           <p className="text-xs text-gray-400 truncate">{school.name}</p>
         </div>
-        <span
-          className={`shrink-0 ml-2 px-2 py-0.5 rounded-full text-xs font-medium ${
-            tierColors[school.rankingTier]
-          }`}
-        >
-          {school.rankingTier}
-        </span>
+        <div className="shrink-0 ml-2 flex flex-col items-end gap-1">
+          <span
+            className={`px-2 py-0.5 rounded-full text-xs font-medium ${
+              tierColors[school.rankingTier]
+            }`}
+          >
+            {school.rankingTier}
+          </span>
+          {matchScore !== undefined && (
+            <span
+              className={`px-2 py-0.5 rounded-full text-xs font-medium text-white ${matchColor}`}
+            >
+              匹配 {matchScore}%
+            </span>
+          )}
+        </div>
       </div>
 
       <div className="space-y-2 text-sm text-gray-600">
