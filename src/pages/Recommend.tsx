@@ -236,10 +236,10 @@ export default function Recommend() {
                   className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
                 >
                   <option value={0}>不限</option>
-                  <option value={58000}>$58,000 以下</option>
                   <option value={60000}>$60,000 以下</option>
-                  <option value={62000}>$62,000 以下</option>
+                  <option value={63000}>$63,000 以下</option>
                   <option value={65000}>$65,000 以下</option>
+                  <option value={70000}>$70,000 以下</option>
                 </select>
               </div>
             </div>
