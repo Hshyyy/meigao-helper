@@ -107,7 +107,7 @@ function matchSchools(profile: StudentProfile): MatchResult[] {
     results.push({
       school,
       type,
-      score,
+      score: Math.min(score, 100),
       reason: reasons.join("；"),
     });
   }
