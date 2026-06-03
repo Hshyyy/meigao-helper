@@ -97,12 +97,16 @@ function matchSchools(profile: StudentProfile): MatchResult[] {
 
     // 学校类型背景影响
     if (profile.schoolType === "ap") {
+      score += 2;
       reasons.push("美式课程背景，适应性强");
     } else if (profile.schoolType === "ib") {
-      score += 2; // IB 课程受认可
+      score += 2;
       reasons.push("IB 背景，学术能力受认可");
     } else if (profile.schoolType === "alevel") {
+      score += 1;
       reasons.push("A-Level 背景，需注意课程差异");
+    } else if (profile.schoolType === "public_intl") {
+      reasons.push("公立国际部背景，课程衔接良好");
     } else if (profile.schoolType === "public") {
       reasons.push("公立学校背景，需加强英语准备");
     }
