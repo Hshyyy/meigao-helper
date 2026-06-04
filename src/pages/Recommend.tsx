@@ -192,6 +192,9 @@ export default function Recommend() {
                   className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
                   required
                 />
+                <p className="text-xs text-gray-400 mt-1">
+                  💡 顶尖校建议 105+，优秀校建议 95+，热门校建议 85+
+                </p>
               </div>
 
               <div>
@@ -208,6 +211,9 @@ export default function Recommend() {
                   className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
                   required
                 />
+                <p className="text-xs text-gray-400 mt-1">
+                  💡 百分位指你超过了百分之多少的考生，顶尖校建议 90%+
+                </p>
               </div>
 
               <div>
@@ -225,6 +231,9 @@ export default function Recommend() {
                   className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
                   required
                 />
+                <p className="text-xs text-gray-400 mt-1">
+                  💡 4.0 为满分，顶尖校建议 3.7+，优秀校建议 3.5+
+                </p>
               </div>
 
               <div>
