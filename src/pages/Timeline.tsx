@@ -412,13 +412,21 @@ export default function Timeline() {
 
     // 如果申请已截止，直接返回
     if (daysUntilDeadline <= 0) {
+      // 动态计算下一个可用的入学年份
+      let nextYear = enrollYear + 1;
+      while (true) {
+        const nextDeadline = new Date(nextYear - 1, 0, 15);
+        const nextDays = Math.ceil((nextDeadline.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+        if (nextDays > 0) break;
+        nextYear++;
+      }
       return {
         title: "申请已截止",
         items: [
           `📚 ${enrollYear} 年秋季入学的申请截止日期（${enrollYear - 1} 年 1 月 15 日）已过`,
           `⚠️ 请选择更晚的入学年份`,
           `💡 提示：大部分寄宿高中的申请截止日期在入学前一年的 1 月中旬`,
-          `🎯 下一个可选入学年份：${enrollYear + 1} 年秋季`,
+          `🎯 最近可选入学年份：${nextYear} 年秋季（截止日期 ${nextYear - 1} 年 1 月 15 日）`,
           `📝 如有疑问，请联系学校招生办确认是否还有补录机会`,
         ],
       };
