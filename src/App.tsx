@@ -5,8 +5,8 @@ const navItems = [
   { path: "/", label: "首页" },
   { path: "/schools", label: "学校库" },
   { path: "/recommend", label: "智能选校" },
-  { path: "/favorites", label: "我的收藏" },
-  { path: "/compare", label: "学校对比" },
+  { path: "/favorites", label: "❤️ 收藏" },
+  { path: "/compare", label: "⚖️ 对比" },
 ];
 
 export default function App() {

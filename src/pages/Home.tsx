@@ -34,11 +34,19 @@ export default function Home() {
             >
               📋 浏览全部学校
             </Link>
+          </div>
+          <div className="flex gap-4 justify-center flex-wrap mt-4">
             <Link
               to="/compare"
-              className="border-2 border-white text-white px-8 py-3 rounded-xl font-semibold text-lg hover:bg-white/10 transition-colors no-underline"
+              className="border-2 border-white/60 text-white/80 px-6 py-2.5 rounded-xl font-medium text-base hover:bg-white/10 transition-colors no-underline"
             >
               ⚖️ 学校对比
+            </Link>
+            <Link
+              to="/favorites"
+              className="border-2 border-white/60 text-white/80 px-6 py-2.5 rounded-xl font-medium text-base hover:bg-white/10 transition-colors no-underline"
+            >
+              ❤️ 我的收藏
             </Link>
           </div>
         </div>
