@@ -5,6 +5,8 @@ interface Props {
   onClick: () => void;
   matchScore?: number;
   matchColor?: string;
+  isFavorited?: boolean;
+  onToggleFavorite?: () => void;
 }
 
 const tierColors = {
@@ -18,12 +20,28 @@ export default function SchoolCard({
   onClick,
   matchScore,
   matchColor = "bg-gray-500",
+  isFavorited,
+  onToggleFavorite,
 }: Props) {
   return (
     <div
       onClick={onClick}
-      className="bg-white rounded-xl shadow-sm border border-gray-200 p-5 cursor-pointer hover:shadow-md hover:border-blue-300 transition-all"
+      className="bg-white rounded-xl shadow-sm border border-gray-200 p-5 cursor-pointer hover:shadow-md hover:border-blue-300 transition-all relative"
     >
+      {/* 收藏按钮 */}
+      {onToggleFavorite && (
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            onToggleFavorite();
+          }}
+          className="absolute top-3 left-3 text-lg"
+          aria-label={isFavorited ? "取消收藏" : "收藏"}
+        >
+          {isFavorited ? "❤️" : "🤍"}
+        </button>
+      )}
+
       <div className="flex items-start justify-between mb-3">
         <div className="flex-1 min-w-0">
           <h3 className="font-semibold text-gray-900 text-base truncate">
@@ -64,13 +82,14 @@ export default function SchoolCard({
         </div>
       </div>
 
+      {/* 标签 */}
       <div className="flex flex-wrap gap-1 mt-3">
-        {school.highlights.slice(0, 2).map((h) => (
+        {school.tags.slice(0, 3).map((tag) => (
           <span
-            key={h}
-            className="bg-gray-100 text-gray-600 text-xs px-2 py-0.5 rounded"
+            key={tag}
+            className="bg-blue-50 text-blue-600 text-xs px-2 py-0.5 rounded"
           >
-            {h}
+            {tag}
           </span>
         ))}
       </div>

@@ -18,8 +18,23 @@ export interface School {
   studentCount: number; // 学生总数
   studentTeacherRatio: string; // 师生比
   highlights: string[]; // 特色亮点
+  tags: string[]; // 特色标签
   website: string;
 }
+
+// 所有可选标签
+export const allTags = [
+  "STEM强",
+  "文科强",
+  "艺术强",
+  "体育强",
+  "小班教学",
+  "国际生友好",
+  "领导力培养",
+  "宗教背景",
+  "校园优美",
+  "Need-blind",
+];
 
 export const schools: School[] = [
   {
@@ -42,6 +57,7 @@ export const schools: School[] = [
     studentCount: 1150,
     studentTeacherRatio: "5:1",
     highlights: ["全美最顶尖寄宿高中之一", "校友包括两位美国总统", "课程极其丰富", "Need-blind 录取"],
+    tags: ["STEM强", "文科强", "小班教学", "国际生友好", "领导力培养", "Need-blind"],
     website: "https://www.andover.edu",
   },
   {
@@ -64,6 +80,7 @@ export const schools: School[] = [
     studentCount: 1100,
     studentTeacherRatio: "5:1",
     highlights: ["哈克尼斯圆桌教学法", "全美最大高中图书馆", "理科实力极强", "Need-blind 录取"],
+    tags: ["STEM强", "文科强", "小班教学", "国际生友好", "Need-blind"],
     website: "https://www.exeter.edu",
   },
   {
@@ -86,6 +103,7 @@ export const schools: School[] = [
     studentCount: 860,
     studentTeacherRatio: "6:1",
     highlights: ["肯尼迪总统母校", "国际生比例较高", "人文与STEM并重", "校园设施一流"],
+    tags: ["STEM强", "文科强", "艺术强", "国际生友好", "领导力培养"],
     website: "https://www.choate.edu",
   },
   {
@@ -108,6 +126,7 @@ export const schools: School[] = [
     studentCount: 630,
     studentTeacherRatio: "5:1",
     highlights: ["传统新英格兰名校", "校园环境优美", "课外活动丰富", "大学录取走向极佳"],
+    tags: ["文科强", "体育强", "校园优美", "领导力培养"],
     website: "https://deerfield.edu",
   },
   {
@@ -130,6 +149,7 @@ export const schools: School[] = [
     studentCount: 530,
     studentTeacherRatio: "5:1",
     highlights: ["100%寄宿制", "校园占地2000英亩", "宗教背景但包容多元", "国际生友好"],
+    tags: ["文科强", "艺术强", "宗教背景", "校园优美", "国际生友好"],
     website: "https://www.sps.edu",
   },
   {
@@ -152,6 +172,7 @@ export const schools: School[] = [
     studentCount: 820,
     studentTeacherRatio: "6:1",
     highlights: ["哈克尼斯教学法", "校园如大学般设施完善", "领导力培养突出", "地理位置优越"],
+    tags: ["STEM强", "文科强", "小班教学", "领导力培养", "校园优美"],
     website: "https://www.lawrenceville.org",
   },
   {
@@ -174,6 +195,7 @@ export const schools: School[] = [
     studentCount: 600,
     studentTeacherRatio: "5:1",
     highlights: ["环境科学项目出色", "校园湖景优美", "艺术项目强大", "重视社区服务"],
+    tags: ["STEM强", "艺术强", "校园优美"],
     website: "https://www.hotchkiss.org",
   },
   {
@@ -196,6 +218,7 @@ export const schools: School[] = [
     studentCount: 380,
     studentTeacherRatio: "4:1",
     highlights: ["录取最严格的寄宿高中之一", "小班精英教育", "罗斯福总统母校", "师生关系紧密"],
+    tags: ["文科强", "小班教学", "宗教背景", "领导力培养"],
     website: "https://www.groton.org",
   },
   {
@@ -218,6 +241,7 @@ export const schools: School[] = [
     studentCount: 410,
     studentTeacherRatio: "5:1",
     highlights: ["校园温馨如家", "艺术项目出色", "位于历史文化名城", "社区感强"],
+    tags: ["文科强", "艺术强", "小班教学", "校园优美"],
     website: "https://www.mxschool.edu",
   },
   {
@@ -240,6 +264,7 @@ export const schools: School[] = [
     studentCount: 700,
     studentTeacherRatio: "6:1",
     highlights: ["靠近波士顿", "学术氛围自由", "课外活动多样", "大学走向优秀"],
+    tags: ["STEM强", "文科强", "艺术强", "体育强"],
     website: "https://www.milton.edu",
   },
   {
@@ -262,6 +287,7 @@ export const schools: School[] = [
     studentCount: 250,
     studentTeacherRatio: "6:1",
     highlights: ["独特的马术项目", "加州阳光校园", "户外教育理念", "小而精的社区"],
+    tags: ["小班教学", "体育强", "校园优美"],
     website: "https://www.thacher.org",
   },
   {
@@ -284,6 +310,7 @@ export const schools: School[] = [
     studentCount: 550,
     studentTeacherRatio: "6:1",
     highlights: ["国际生比例高", "STEM 项目强", "靠近普林斯顿大学", "奖学金机会多"],
+    tags: ["STEM强", "国际生友好", "体育强"],
     website: "https://www.peddie.org",
   },
   {
@@ -306,6 +333,7 @@ export const schools: School[] = [
     studentCount: 280,
     studentTeacherRatio: "5:1",
     highlights: ["加州最美校园之一", "靠近海滩", "学术严谨", "户外活动丰富"],
+    tags: ["小班教学", "文科强", "校园优美"],
     website: "https://www.cate.org",
   },
   {
@@ -328,6 +356,7 @@ export const schools: School[] = [
     studentCount: 380,
     studentTeacherRatio: "6:1",
     highlights: ["文科实力突出", "艺术项目一流", "校园包容多元", "注重独立思考"],
+    tags: ["文科强", "艺术强", "小班教学", "国际生友好"],
     website: "https://www.concordacademy.org",
   },
   {
@@ -350,6 +379,7 @@ export const schools: School[] = [
     studentCount: 590,
     studentTeacherRatio: "6:1",
     highlights: ["校园设施一流", "体育项目强", "国际生社区活跃", "传统新英格兰风格"],
+    tags: ["体育强", "国际生友好", "校园优美"],
     website: "https://www.taftschool.org",
   },
   {
@@ -372,6 +402,7 @@ export const schools: School[] = [
     studentCount: 700,
     studentTeacherRatio: "6:1",
     highlights: ["理科和工程课程强", "校园美丽", "课外活动丰富", "大学升学指导出色"],
+    tags: ["STEM强", "校园优美"],
     website: "https://www.loomischaffee.org",
   },
   {
@@ -394,6 +425,7 @@ export const schools: School[] = [
     studentCount: 310,
     studentTeacherRatio: "6:1",
     highlights: ["100%寄宿制", "校园设施新", "学术支持强", "社区感强"],
+    tags: ["小班教学", "文科强"],
     website: "https://www.standrews-de.org",
   },
   {
@@ -416,6 +448,7 @@ export const schools: School[] = [
     studentCount: 460,
     studentTeacherRatio: "6:1",
     highlights: ["校园环境优美", "领导力项目突出", "体育设施一流", "国际生支持好"],
+    tags: ["领导力培养", "体育强", "国际生友好", "校园优美"],
     website: "https://www.blair.edu",
   },
   {
@@ -438,6 +471,7 @@ export const schools: School[] = [
     studentCount: 520,
     studentTeacherRatio: "7:1",
     highlights: ["国际生比例最高之一", "费城近郊", "课程选择广泛", "奖学金机会多"],
+    tags: ["国际生友好", "体育强"],
     website: "https://www.thehill.org",
   },
   {
@@ -460,6 +494,7 @@ export const schools: School[] = [
     studentCount: 430,
     studentTeacherRatio: "6:1",
     highlights: ["校园设施近年大量翻新", "艺术和体育并重", "国际生社区活跃", "性价比相对较高"],
+    tags: ["艺术强", "体育强", "国际生友好"],
     website: "https://www.mercersburg.edu",
   },
   {
@@ -482,6 +517,7 @@ export const schools: School[] = [
     studentCount: 500,
     studentTeacherRatio: "7:1",
     highlights: ["宗教背景但包容", "校园沿河风景好", "体育项目强", "国际生支持完善"],
+    tags: ["宗教背景", "体育强", "国际生友好", "校园优美"],
     website: "https://www.kent-school.edu",
   },
   {
@@ -504,6 +540,7 @@ export const schools: School[] = [
     studentCount: 440,
     studentTeacherRatio: "6:1",
     highlights: ["靠近华盛顿特区", "100%寄宿制", "人文课程强", "校园安全优美"],
+    tags: ["文科强", "宗教背景", "校园优美"],
     website: "https://www.episcopalhighschool.org",
   },
   {
@@ -526,6 +563,7 @@ export const schools: School[] = [
     studentCount: 320,
     studentTeacherRatio: "6:1",
     highlights: ["顶级女校", "杰奎琳·肯尼迪母校", "女性领导力培养", "艺术项目出色"],
+    tags: ["艺术强", "领导力培养", "小班教学"],
     website: "https://www.porters.org",
   },
   {
@@ -548,6 +586,7 @@ export const schools: School[] = [
     studentCount: 400,
     studentTeacherRatio: "7:1",
     highlights: ["加州气候宜人", "古生物学博物馆", "男女合校但分班教学", "STEM 项目强"],
+    tags: ["STEM强", "校园优美"],
     website: "https://www.webb.org",
   },
   {
@@ -570,6 +609,7 @@ export const schools: School[] = [
     studentCount: 390,
     studentTeacherRatio: "7:1",
     highlights: ["顶级男校", "校园占地1200英亩", "体育项目极强", "传统南方绅士文化"],
+    tags: ["体育强", "校园优美"],
     website: "https://www.woodberry.org",
   },
   {
@@ -592,6 +632,7 @@ export const schools: School[] = [
     studentCount: 350,
     studentTeacherRatio: "6:1",
     highlights: ["波士顿近郊", "学术严谨", "校园设施完善", "社区感强"],
+    tags: ["文科强", "小班教学"],
     website: "https://www.stmarksschool.org",
   },
   {
@@ -614,6 +655,7 @@ export const schools: School[] = [
     studentCount: 350,
     studentTeacherRatio: "6:1",
     highlights: ["校园环境优美", "户外教育项目", "艺术和音乐强", "国际生友好"],
+    tags: ["艺术强", "国际生友好", "校园优美"],
     website: "https://www.pomfretschool.org",
   },
   {
@@ -636,6 +678,7 @@ export const schools: School[] = [
     studentCount: 410,
     studentTeacherRatio: "6:1",
     highlights: ["国际生比例高", "创业教育项目", "滑雪项目出色", "校园设施现代化"],
+    tags: ["国际生友好", "体育强", "STEM强"],
     website: "https://www.suffieldacademy.org",
   },
   {
@@ -658,6 +701,7 @@ export const schools: School[] = [
     studentCount: 400,
     studentTeacherRatio: "6:1",
     highlights: ["最古老的寄宿高中之一", "波士顿以北", "体育和艺术均衡", "校园温馨"],
+    tags: ["体育强", "艺术强", "校园优美"],
     website: "https://www.thegovernorsacademy.org",
   },
   {
@@ -680,6 +724,7 @@ export const schools: School[] = [
     studentCount: 500,
     studentTeacherRatio: "7:1",
     highlights: ["海边校园", "海洋科学项目独特", "帆船运动强", "国际生支持完善"],
+    tags: ["STEM强", "体育强", "国际生友好", "校园优美"],
     website: "https://www.taboracademy.org",
   },
 ];

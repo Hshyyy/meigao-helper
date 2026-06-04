@@ -111,6 +111,21 @@ export default function SchoolDetail({ school, onClose }: Props) {
             </div>
           </div>
 
+          {/* 学校标签 */}
+          <div>
+            <h3 className="font-semibold text-gray-900 mb-3">🏷️ 学校特色</h3>
+            <div className="flex flex-wrap gap-2">
+              {school.tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="bg-purple-50 text-purple-700 text-sm px-3 py-1 rounded-full"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </div>
+
           {/* 官网链接 */}
           <a
             href={school.website}

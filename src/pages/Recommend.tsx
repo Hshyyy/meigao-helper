@@ -146,6 +146,23 @@ export default function Recommend() {
   });
   const [results, setResults] = useState<MatchResult[] | null>(null);
   const [selectedSchool, setSelectedSchool] = useState<School | null>(null);
+  const [favorites, setFavorites] = useState<number[]>(() => {
+    try {
+      return JSON.parse(localStorage.getItem("favorites") || "[]");
+    } catch {
+      return [];
+    }
+  });
+
+  const toggleFavorite = (id: number) => {
+    setFavorites((prev) => {
+      const next = prev.includes(id)
+        ? prev.filter((f) => f !== id)
+        : [...prev, id];
+      localStorage.setItem("favorites", JSON.stringify(next));
+      return next;
+    });
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -335,6 +352,8 @@ export default function Recommend() {
                           onClick={() => setSelectedSchool(r.school)}
                           matchScore={r.score}
                           matchColor="bg-red-500"
+                          isFavorited={favorites.includes(r.school.id)}
+                          onToggleFavorite={() => toggleFavorite(r.school.id)}
                         />
                         <p className="text-xs text-gray-500 mt-1 px-1">
                           {r.reason}
@@ -364,6 +383,8 @@ export default function Recommend() {
                           onClick={() => setSelectedSchool(r.school)}
                           matchScore={r.score}
                           matchColor="bg-blue-500"
+                          isFavorited={favorites.includes(r.school.id)}
+                          onToggleFavorite={() => toggleFavorite(r.school.id)}
                         />
                         <p className="text-xs text-gray-500 mt-1 px-1">
                           {r.reason}
@@ -393,6 +414,8 @@ export default function Recommend() {
                           onClick={() => setSelectedSchool(r.school)}
                           matchScore={r.score}
                           matchColor="bg-green-500"
+                          isFavorited={favorites.includes(r.school.id)}
+                          onToggleFavorite={() => toggleFavorite(r.school.id)}
                         />
                         <p className="text-xs text-gray-500 mt-1 px-1">
                           {r.reason}
