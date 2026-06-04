@@ -410,9 +410,22 @@ export default function Timeline() {
     const monthsLeft = Math.max(0, Math.round(daysUntilDeadline / 30));
     const effectiveYears = Math.floor(monthsLeft / 12);
 
+    // 如果申请已截止，直接返回
+    if (daysUntilDeadline <= 0) {
+      return {
+        title: "申请已截止",
+        items: [
+          `📚 ${enrollYear} 年秋季入学的申请截止日期（${enrollYear - 1} 年 1 月 15 日）已过`,
+          `⚠️ 请选择更晚的入学年份`,
+          `💡 提示：大部分寄宿高中的申请截止日期在入学前一年的 1 月中旬`,
+          `🎯 下一个可选入学年份：${enrollYear + 1} 年秋季`,
+          `📝 如有疑问，请联系学校招生办确认是否还有补录机会`,
+        ],
+      };
+    }
+
     // 格式化时间显示
     const formatTime = () => {
-      if (daysUntilDeadline <= 0) return "已截止";
       if (daysUntilDeadline < 30) return `${daysUntilDeadline} 天`;
       if (monthsLeft < 12) return `${monthsLeft} 个月`;
       const years = Math.floor(monthsLeft / 12);
