@@ -34,6 +34,12 @@ export default function Home() {
             >
               📋 浏览全部学校
             </Link>
+            <Link
+              to="/compare"
+              className="border-2 border-white text-white px-8 py-3 rounded-xl font-semibold text-lg hover:bg-white/10 transition-colors no-underline"
+            >
+              ⚖️ 学校对比
+            </Link>
           </div>
         </div>
       </section>
