@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { schools } from "../data/schools";
 import type { School } from "../data/schools";
 import SchoolCard from "../components/SchoolCard";
@@ -436,6 +437,15 @@ export default function Recommend() {
           onClose={() => setSelectedSchool(null)}
         />
       )}
+
+      {/* 浮动对比入口按钮 */}
+      <Link
+        to="/compare"
+        className="fixed bottom-6 right-6 bg-purple-600 text-white w-14 h-14 rounded-full shadow-lg flex items-center justify-center text-2xl hover:bg-purple-700 transition-colors no-underline z-30"
+        title="学校对比"
+      >
+        ⚖️
+      </Link>
     </div>
   );
 }
