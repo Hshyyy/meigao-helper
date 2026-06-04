@@ -6,47 +6,45 @@ const systems = {
   american: {
     name: "美式/AP",
     grades: [
-      { value: "G7", label: "Grade 7（初一）" },
-      { value: "G8", label: "Grade 8（初二）" },
-      { value: "G9", label: "Grade 9（初三）" },
-      { value: "G10", label: "Grade 10（高一）" },
-      { value: "G11", label: "Grade 11（高二）" },
-      { value: "G12", label: "Grade 12（高三）" },
+      { value: "G7", label: "Grade 7（初一）— 提前规划" },
+      { value: "G8", label: "Grade 8（初二）— 最佳准备期" },
+      { value: "G9", label: "Grade 9（初三）— 主要入学点 ⭐" },
+      { value: "G10", label: "Grade 10（高一）— 可申请" },
+      { value: "G11", label: "Grade 11（高二）— 少数学校接受" },
+      { value: "PG", label: "Postgraduate（已毕业）— 第五年" },
     ],
   },
   british: {
     name: "英式/A-Level",
     grades: [
-      { value: "Y7", label: "Year 7（初一）" },
-      { value: "Y8", label: "Year 8（初二）" },
-      { value: "Y9", label: "Year 9（初三）" },
-      { value: "Y10", label: "Year 10（高一）" },
-      { value: "Y11", label: "Year 11（高二）" },
-      { value: "Y12", label: "Year 12（高三）" },
-      { value: "Y13", label: "Year 13（高三+）" },
+      { value: "Y7", label: "Year 7（初一）— 提前规划" },
+      { value: "Y8", label: "Year 8（初二）— 最佳准备期" },
+      { value: "Y9", label: "Year 9（初三）— 主要入学点 ⭐" },
+      { value: "Y10", label: "Year 10（高一）— 可申请" },
+      { value: "Y11", label: "Year 11（高二）— 少数学校接受" },
+      { value: "PG", label: "Postgraduate（已毕业）— 第五年" },
     ],
   },
   ib: {
     name: "IB",
     grades: [
-      { value: "G6", label: "Grade 6（初一）" },
-      { value: "G7", label: "Grade 7（初二）" },
-      { value: "G8", label: "Grade 8（初三）" },
-      { value: "G9", label: "Grade 9（高一）" },
-      { value: "G10", label: "Grade 10（高二）" },
-      { value: "G11", label: "Grade 11（高三）" },
-      { value: "G12", label: "Grade 12（高三+）" },
+      { value: "G6", label: "Grade 6（初一）— 提前规划" },
+      { value: "G7", label: "Grade 7（初二）— 最佳准备期" },
+      { value: "G8", label: "Grade 8（初三）— 主要入学点 ⭐" },
+      { value: "G9", label: "Grade 9（高一）— 可申请" },
+      { value: "G10", label: "Grade 10（高二）— 少数学校接受" },
+      { value: "PG", label: "Postgraduate（已毕业）— 第五年" },
     ],
   },
   chinese: {
     name: "国内课程体系",
     grades: [
-      { value: "C7", label: "初一" },
-      { value: "C8", label: "初二" },
-      { value: "C9", label: "初三" },
-      { value: "C10", label: "高一" },
-      { value: "C11", label: "高二" },
-      { value: "C12", label: "高三" },
+      { value: "C7", label: "初一 — 提前规划" },
+      { value: "C8", label: "初二 — 最佳准备期" },
+      { value: "C9", label: "初三 — 主要入学点 ⭐" },
+      { value: "C10", label: "高一 — 可申请" },
+      { value: "C11", label: "高二 — 少数学校接受" },
+      { value: "PG", label: "已毕业 — 第五年（Postgraduate）" },
     ],
   },
 };
@@ -397,6 +395,21 @@ export default function Timeline() {
     const gradeNum = parseInt(grade.replace(/[^\d]/g, ""));
     const yearsLeft = 12 - gradeNum + 1;
 
+    // PG（第五年）特殊情况
+    if (grade === "PG") {
+      return {
+        title: "Postgraduate（第五年）申请指南",
+        items: [
+          "📋 PG 年是什么：部分美高提供的一年制项目，适合已高中毕业的学生",
+          "🎯 适合人群：想提升背景再申请大学、Gap Year、体育特长生、英语需要提升的学生",
+          "📝 申请要求：已获得高中毕业证，SSAT/TOEFL 成绩（部分学校可豁免）",
+          "⏰ 申请时间：与正常申请相同，大部分学校 1 月中旬截止",
+          "🏫 可选学校：Phillips Exeter、Deerfield、Hotchkiss、Peddie 等部分学校提供 PG 年",
+          "💡 特别提醒：PG 年不是所有学校都有，需要提前确认目标学校是否提供",
+        ],
+      };
+    }
+
     if (system === "chinese") {
       if (yearsLeft >= 3) {
         return {
@@ -599,6 +612,9 @@ export default function Timeline() {
                 </option>
               ))}
             </select>
+            <p className="text-xs text-gray-400 mt-1">
+              ⭐ = 主要入学点 | 已毕业学生可选"第五年（PG）"
+            </p>
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
