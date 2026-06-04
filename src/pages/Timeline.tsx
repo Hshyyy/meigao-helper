@@ -403,11 +403,21 @@ export default function Timeline() {
   // 根据体系、年级、入学年份生成个性化提示
   const personalizedTips = useMemo(() => {
     const now = new Date();
-    const currentYear = now.getFullYear();
     const gradeNum = parseInt(grade.replace(/[^\d]/g, ""));
     const yearsToApplyingGrade = Math.max(0, 9 - gradeNum);
-    const yearsUntilApply = enrollYear - currentYear - 1;
-    const effectiveYears = yearsUntilApply - yearsToApplyingGrade;
+
+    // 基于实际日期计算剩余月数（更精确）
+    const applyDeadline = new Date(enrollYear - 1, 0, 15); // 申请截止：入学前一年1月15日
+    const targetApplyDate = new Date(
+      applyDeadline.getFullYear() - yearsToApplyingGrade,
+      applyDeadline.getMonth(),
+      applyDeadline.getDate()
+    );
+    const monthsLeftRaw =
+      (targetApplyDate.getFullYear() - now.getFullYear()) * 12 +
+      (targetApplyDate.getMonth() - now.getMonth());
+    const monthsLeft = Math.max(0, monthsLeftRaw);
+    const effectiveYears = Math.floor(monthsLeft / 12);
 
     // PG 特殊情况
     if (grade === "PG") {
@@ -440,9 +450,6 @@ export default function Timeline() {
       G6: 6, C7: 7, C8: 8, C9: 9, C10: 10, C11: 11,
     };
     const gn = gradeNumMap[grade] || 9;
-
-    // 计算具体剩余月数（不能为负数）
-    const monthsLeft = Math.max(0, effectiveYears * 12);
 
     // 根据剩余时间动态调整目标分数和学习强度
     let ssatTarget: string;
