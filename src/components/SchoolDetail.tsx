@@ -32,6 +32,14 @@ export default function SchoolDetail({ school, onClose }: Props) {
         </div>
 
         <div className="p-5 space-y-5">
+          {/* 学校简介 */}
+          <div>
+            <h3 className="font-semibold text-gray-900 mb-2">📖 学校简介</h3>
+            <p className="text-sm text-gray-600 leading-relaxed">
+              {school.description}
+            </p>
+          </div>
+
           {/* 基本信息 */}
           <div className="grid grid-cols-2 gap-3">
             <InfoItem label="地区" value={`${school.state} ${school.city}`} />
@@ -96,22 +104,55 @@ export default function SchoolDetail({ school, onClose }: Props) {
             </div>
           </div>
 
-          {/* 特色亮点 */}
+          {/* 学术特色 */}
           <div>
-            <h3 className="font-semibold text-gray-900 mb-3">✨ 特色亮点</h3>
-            <div className="flex flex-wrap gap-2">
-              {school.highlights.map((h) => (
-                <span
-                  key={h}
-                  className="bg-blue-50 text-blue-700 text-sm px-3 py-1 rounded-full"
+            <h3 className="font-semibold text-gray-900 mb-3">📚 学术特色</h3>
+            <ul className="space-y-2">
+              {school.academicFeatures.map((item) => (
+                <li
+                  key={item}
+                  className="text-sm text-gray-600 flex items-start gap-2"
                 >
-                  {h}
-                </span>
+                  <span className="text-blue-500 mt-0.5">•</span>
+                  {item}
+                </li>
               ))}
-            </div>
+            </ul>
           </div>
 
-          {/* 学校标签 */}
+          {/* 校园生活 */}
+          <div>
+            <h3 className="font-semibold text-gray-900 mb-3">🏫 校园生活</h3>
+            <ul className="space-y-2">
+              {school.campusLife.map((item) => (
+                <li
+                  key={item}
+                  className="text-sm text-gray-600 flex items-start gap-2"
+                >
+                  <span className="text-green-500 mt-0.5">•</span>
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* 升学走向 */}
+          <div>
+            <h3 className="font-semibold text-gray-900 mb-3">🎓 升学走向</h3>
+            <ul className="space-y-2">
+              {school.collegePrep.map((item) => (
+                <li
+                  key={item}
+                  className="text-sm text-gray-600 flex items-start gap-2"
+                >
+                  <span className="text-purple-500 mt-0.5">•</span>
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* 特色标签 */}
           <div>
             <h3 className="font-semibold text-gray-900 mb-3">🏷️ 学校特色</h3>
             <div className="flex flex-wrap gap-2">
