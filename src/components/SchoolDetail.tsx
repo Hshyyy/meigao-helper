@@ -152,6 +152,22 @@ export default function SchoolDetail({ school, onClose }: Props) {
             </ul>
           </div>
 
+          {/* 申请建议 */}
+          <div>
+            <h3 className="font-semibold text-gray-900 mb-3">💡 申请建议</h3>
+            <ul className="space-y-2">
+              {school.applicationTips.map((item) => (
+                <li
+                  key={item}
+                  className="text-sm text-gray-600 flex items-start gap-2"
+                >
+                  <span className="text-orange-500 mt-0.5">•</span>
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+
           {/* 特色标签 */}
           <div>
             <h3 className="font-semibold text-gray-900 mb-3">🏷️ 学校特色</h3>
