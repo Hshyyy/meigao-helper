@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { schools } from "../data/schools";
 import type { School } from "../data/schools";
 
@@ -40,31 +40,29 @@ export default function Compare() {
   const [search, setSearch] = useState("");
   const [activeTab, setActiveTab] = useState<"all" | "favorites">("all");
 
-  const favorites: number[] = useMemo(() => {
+  const favorites: number[] = (() => {
     try {
       return JSON.parse(localStorage.getItem("favorites") || "[]");
     } catch {
       return [];
     }
-  }, []);
+  })();
 
   const compareSchools = schools.filter((s) => compareIds.includes(s.id));
 
-  const filteredSchools = useMemo(() => {
-    const source = activeTab === "all" ? schools : schools.filter((s) => favorites.includes(s.id));
-    return source
-      .filter((s) => !compareIds.includes(s.id))
-      .filter((s) => {
-        if (!search.trim()) return true;
-        const q = search.trim().toLowerCase();
-        return (
-          s.nameCn.includes(q) ||
-          s.name.toLowerCase().includes(q) ||
-          s.state.includes(q) ||
-          s.city.toLowerCase().includes(q)
-        );
-      });
-  }, [activeTab, favorites, compareIds, search]);
+  const source = activeTab === "all" ? schools : schools.filter((s) => favorites.includes(s.id));
+  const filteredSchools = source
+    .filter((s) => !compareIds.includes(s.id))
+    .filter((s) => {
+      if (!search.trim()) return true;
+      const q = search.trim().toLowerCase();
+      return (
+        s.nameCn.includes(q) ||
+        s.name.toLowerCase().includes(q) ||
+        s.state.includes(q) ||
+        s.city.toLowerCase().includes(q)
+      );
+    });
 
   const addSchool = (id: number) => {
     if (compareIds.length >= 3) return;
