@@ -441,8 +441,8 @@ export default function Timeline() {
     };
     const gn = gradeNumMap[grade] || 9;
 
-    // 计算具体剩余月数
-    const monthsLeft = effectiveYears * 12;
+    // 计算具体剩余月数（不能为负数）
+    const monthsLeft = Math.max(0, effectiveYears * 12);
 
     // 根据剩余时间动态调整目标分数和学习强度
     let ssatTarget: string;
@@ -462,6 +462,21 @@ export default function Timeline() {
       ssatTarget = "85%+"; toeflTarget = "90+"; dailyHours = "2.5 小时"; weeklyMock = "每周 2 次";
     } else {
       ssatTarget = "90%+"; toeflTarget = "95+"; dailyHours = "3 小时"; weeklyMock = "每周 3 次";
+    }
+
+    // 如果有效准备时间为负，说明入学年份太近或已过
+    if (effectiveYears < 0) {
+      return {
+        title: "入学年份已过或太近",
+        items: [
+          `📚 你选择的 ${enrollYear} 年秋季入学，申请截止日期（${enrollYear - 1} 年 1 月 15 日）已过或即将到来`,
+          `⚠️ 建议：将入学年份调整为 ${enrollYear + 1} 年或更晚`,
+          `💡 提示：大部分学校申请截止日期在入学前一年的 1 月中旬`,
+          `🎯 ${sys.special}`,
+          `📝 标化：${sys.test}`,
+          `⏰ 请重新选择入学年份，系统会为你生成合适的申请计划`,
+        ],
+      };
     }
 
     // 动态生成标题和建议
