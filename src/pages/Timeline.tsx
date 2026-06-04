@@ -433,56 +433,131 @@ export default function Timeline() {
     };
     const sys = systemData[system];
 
-    // 2. 年级维度 - 阶段和重点
-    const gradeData: Record<string, { stage: string; focus: string; testTip: string; activityTip: string }> = {
-      G7: { stage: "最早期", focus: "打基础、探索兴趣", testTip: "了解 SSAT 考试内容，开始积累英语词汇", activityTip: "广泛尝试不同活动，找到真正热爱的方向" },
-      G8: { stage: "早期", focus: "确定方向、开始准备", testTip: "开始系统学习 SSAT 词汇和阅读，目标每天 30 分钟", activityTip: "选定 1-2 个兴趣深入发展" },
-      G9: { stage: "关键期", focus: "集中冲刺、准备申请", testTip: "全力准备 SSAT 和 TOEFL，目标 SSAT 85%+，TOEFL 90+", activityTip: "在 1-2 个领域做出深度，争取获奖" },
-      G10: { stage: "最后机会", focus: "抓紧时间、精准申请", testTip: "必须已经有 SSAT 和 TOEFL 成绩，或立即冲刺", activityTip: "完善课外活动履历，准备申请文书" },
-      G11: { stage: "极紧迫", focus: "只选少数学校", testTip: "大部分学校不接受 11 年级，只有少数学校可选", activityTip: "聚焦最想去的 3-5 所学校" },
-      Y7: { stage: "最早期", focus: "打基础、探索兴趣", testTip: "了解考试内容，开始积累英语词汇", activityTip: "广泛尝试不同活动，找到真正热爱的方向" },
-      Y8: { stage: "早期", focus: "确定方向、开始准备", testTip: "开始系统学习 IELTS/TOEFL 词汇和阅读", activityTip: "选定 1-2 个兴趣深入发展" },
-      Y9: { stage: "关键期", focus: "集中冲刺、准备申请", testTip: "全力准备 IELTS/TOEFL，目标 IELTS 6.5+", activityTip: "在 1-2 个领域做出深度，争取获奖" },
-      Y10: { stage: "最后机会", focus: "抓紧时间、精准申请", testTip: "必须已经有语言成绩，或立即冲刺", activityTip: "完善课外活动履历，准备申请文书" },
-      Y11: { stage: "极紧迫", focus: "只选少数学校", testTip: "大部分学校不接受 11 年级，只有少数学校可选", activityTip: "聚焦最想去的 3-5 所学校" },
-      G6: { stage: "最早期", focus: "打基础、探索兴趣", testTip: "了解考试内容，开始积累英语词汇", activityTip: "广泛尝试不同活动，找到真正热爱的方向" },
-      C7: { stage: "最早期", focus: "打基础、探索兴趣", testTip: "了解 SSAT 考试内容，开始每天背 30 个英语单词", activityTip: "广泛尝试不同活动，找到真正热爱的方向" },
-      C8: { stage: "早期", focus: "确定方向、开始准备", testTip: "开始系统学习 SSAT 词汇和阅读，目标每天 50 个单词", activityTip: "选定 1-2 个兴趣深入发展" },
-      C9: { stage: "关键期", focus: "集中冲刺、准备申请", testTip: "全力准备 SSAT 和 TOEFL，暑假集中冲刺", activityTip: "在 1-2 个领域做出深度，争取获奖" },
-      C10: { stage: "最后机会", focus: "抓紧时间、精准申请", testTip: "必须已经有 SSAT 和 TOEFL 成绩，或立即冲刺", activityTip: "完善课外活动履历，准备申请文书" },
-      C11: { stage: "极紧迫", focus: "只选少数学校", testTip: "大部分学校不接受高二申请，只有少数学校可选", activityTip: "聚焦最想去的 3-5 所学校" },
+    // 2. 根据年级+入学年份组合生成具体建议
+    const gradeNumMap: Record<string, number> = {
+      G7: 7, G8: 8, G9: 9, G10: 10, G11: 11,
+      Y7: 7, Y8: 8, Y9: 9, Y10: 10, Y11: 11,
+      G6: 6, C7: 7, C8: 8, C9: 9, C10: 10, C11: 11,
     };
-    const g = gradeData[grade] || gradeData["G9"];
+    const gn = gradeNumMap[grade] || 9;
 
-    // 3. 入学年份维度 - 紧迫程度
-    let urgency: string;
-    let urgencyAdvice: string;
-    if (effectiveYears >= 3) {
-      urgency = "充足";
-      urgencyAdvice = "可以慢慢规划，重点是打基础和探索";
-    } else if (effectiveYears === 2) {
-      urgency = "适中";
-      urgencyAdvice = "现在是黄金时期，需要系统准备";
-    } else if (effectiveYears === 1) {
-      urgency = "紧迫";
-      urgencyAdvice = "时间不多了，需要高效行动";
+    // 动态生成标题和建议
+    let title: string;
+    let items: string[];
+
+    if (gn <= 7 && effectiveYears >= 3) {
+      title = "充裕期 · 打基础阶段";
+      items = [
+        `📚 你目前是${gn === 7 ? "初一" : gn === 6 ? "初一" : "初二"}，距离申请还有 3 年以上，时间非常充裕`,
+        `📝 标化：现在不需要急着考试，但可以开始每天背 30 个英语单词，培养语感`,
+        `🎯 体系：${sys.special}`,
+        `🏆 活动：广泛尝试不同活动（体育、艺术、科学、公益），找到 1-2 个真正热爱的方向`,
+        `🏫 调研：利用本站浏览学校，了解不同学校的特色和录取要求`,
+        `💡 优势：${sys.advantage}，现在开始积累，以后会轻松很多`,
+      ];
+    } else if (gn <= 7 && effectiveYears === 2) {
+      title = "准备期 · 开始系统学习";
+      items = [
+        `📚 你还有 2 年准备时间，现在是开始系统学习的好时机`,
+        `📝 标化：开始系统学习 ${sys.test}，每天 30-60 分钟，重点是词汇和阅读`,
+        `🎯 体系：${sys.special}`,
+        `🏆 活动：从广泛尝试转向 1-2 个方向深入，开始积累成果`,
+        `📋 规划：制定 2 年备考计划，明确每个阶段的目标`,
+        `💡 提醒：${system === "chinese" ? "国内学生英语是短板，越早准备越有优势" : sys.advantage}`,
+      ];
+    } else if (gn <= 7 && effectiveYears <= 1) {
+      title = "加速期 · 时间比预期紧迫";
+      items = [
+        `📚 虽然你才${gn === 7 ? "初一" : "初二"}，但入学时间紧迫，需要加速准备`,
+        `📝 标化：立即开始 ${sys.test} 备考，每天 1-2 小时，重点突破词汇和语法`,
+        `🎯 体系：${sys.special}`,
+        `🏆 活动：快速选定 1-2 个方向深入，争取在申请前有成果`,
+        `🎤 面试：开始练习英文自我介绍，培养英语表达能力`,
+        `⏰ 截止：申请截止 ${enrollYear - 1} 年 1 月 15 日，务必提前准备`,
+      ];
+    } else if (gn === 8 && effectiveYears >= 2) {
+      title = "黄金期 · 确定方向、开始备考";
+      items = [
+        `📚 你目前初二，还有 2 年以上准备时间，这是最佳的起步阶段`,
+        `📝 标化：开始系统学习 ${sys.test}，每天 1 小时，重点是 SSAT 词汇和 TOEFL 听力`,
+        `🎯 体系：${sys.special}`,
+        `🏆 活动：选定 1-2 个兴趣深入发展，开始参加比赛或活动`,
+        `📋 推荐信：开始与老师建立良好关系，为以后的推荐信做准备`,
+        `💡 优势：${sys.advantage}，现在开始准备，申请时会更从容`,
+      ];
+    } else if (gn === 8 && effectiveYears <= 1) {
+      title = "冲刺期 · 时间紧迫，立即行动";
+      items = [
+        `📚 你目前初二，但入学时间紧迫，需要立即进入冲刺状态`,
+        `📝 标化：全力准备 ${sys.test}，每天 2 小时以上，暑假集中冲刺`,
+        `🎯 体系：${sys.special}`,
+        `🏆 活动：快速完善课外活动，确保有 1-2 个亮点`,
+        `🎤 面试：开始练习英文面试，建议找外教模拟`,
+        `⏰ 截止：申请截止 ${enrollYear - 1} 年 1 月 15 日，务必提前 1 个月完成材料`,
+      ];
+    } else if (gn === 9 && effectiveYears >= 2) {
+      title = "关键期 · 主要入学点，全力准备";
+      items = [
+        `📚 你目前初三，这是美高的主要入学点，还有 2 年以上准备时间`,
+        `📝 标化：全力准备 ${sys.test}，目标 SSAT 85%+，TOEFL 90+（顶尖校更高）`,
+        `🎯 体系：${sys.special}`,
+        `🏆 活动：在 1-2 个领域做出深度，争取获奖或有实质性成果`,
+        `📋 推荐信：正式联系 2-3 位熟悉你的老师`,
+        `💡 优势：${sys.advantage}，这是最关键的阶段，每一步都很重要`,
+      ];
+    } else if (gn === 9 && effectiveYears <= 1) {
+      title = "决战期 · 主要入学点，立即冲刺";
+      items = [
+        `📚 你目前初三，这是美高的主要入学点，时间非常紧迫！`,
+        `📝 标化：立即开始 ${sys.test} 冲刺，每周至少 2 次模考`,
+        `🎯 体系：${sys.special}`,
+        `📝 材料：同时准备申请文书、成绩单、推荐信`,
+        `🎤 面试：每天练习英文面试，建议找外教模拟`,
+        `⏰ 截止：申请截止 ${enrollYear - 1} 年 1 月 15 日，务必提前 1 个月完成`,
+      ];
+    } else if (gn === 10 && effectiveYears >= 1) {
+      title = "最后机会 · 高一入学，抓紧时间";
+      items = [
+        `📚 你目前高一，这是最后的申请机会，部分学校不接受 10 年级申请`,
+        `📝 标化：必须已经有 ${sys.test} 成绩，或立即冲刺`,
+        `🎯 体系：${sys.special}`,
+        `📋 学校：确认目标学校是否接受 10 年级申请，聚焦可选的学校`,
+        `🏆 活动：完善课外活动履历，准备申请文书`,
+        `⏰ 截止：申请截止 ${enrollYear - 1} 年 1 月 15 日`,
+      ];
+    } else if (gn === 10 && effectiveYears <= 0) {
+      title = "紧急 · 高一入学，必须立即行动";
+      items = [
+        `📚 你目前高一，时间非常紧迫！部分学校不接受 10 年级申请`,
+        `⚡ 标化：立即开始 ${sys.test} 冲刺，每周至少 2 次模考`,
+        `🎯 体系：${sys.special}`,
+        `📋 学校：只选接受 10 年级的学校，精准申请`,
+        `🎤 面试：立即开始练习英文面试`,
+        `⏰ 截止：申请截止 ${enrollYear - 1} 年 1 月 15 日，时间非常紧迫`,
+      ];
+    } else if (gn >= 11) {
+      title = "极紧迫 · 只有少数学校可选";
+      items = [
+        `📚 你目前${gn === 11 ? "高二" : "高三"}，大部分学校不接受这个年级的申请`,
+        `📋 学校：只有少数学校接受 11 年级申请，需要非常精准地选择`,
+        `📝 标化：必须已经有 ${sys.test} 成绩`,
+        `🎯 体系：${sys.special}`,
+        `🏆 活动：聚焦最想去的 3-5 所学校，精准准备`,
+        `⏰ 截止：申请截止 ${enrollYear - 1} 年 1 月 15 日`,
+      ];
     } else {
-      urgency = "非常紧迫";
-      urgencyAdvice = "必须立即行动，每一步都不能浪费";
+      title = "规划中";
+      items = [
+        `📚 根据你的选择，建议重新调整年级或入学年份`,
+        `💡 提示：大部分学生在初三（G9）申请美高`,
+        `🎯 体系：${sys.special}`,
+        `📝 标化：${sys.test}`,
+        `🏆 活动：根据你的时间安排课外活动`,
+        `⏰ 入学：目标 ${enrollYear} 年秋季入学`,
+      ];
     }
 
-    // 组合生成最终建议
-    return {
-      title: `${g.stage} · ${urgency} — ${g.focus}`,
-      items: [
-        `📚 阶段：你处于${g.stage}，${urgencyAdvice}`,
-        `📝 标化：${g.testTip}（考试类型：${sys.test}）`,
-        `🎯 体系：${sys.special}`,
-        `🏆 活动：${g.activityTip}`,
-        `💡 优势：${sys.advantage}`,
-        `⏰ 入学：目标 ${enrollYear} 年秋季入学，申请截止 ${enrollYear - 1} 年 1 月 15 日`,
-      ],
-    };
+    return { title, items };
   }, [system, grade, enrollYear]);
 
   return (
