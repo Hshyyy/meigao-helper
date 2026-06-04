@@ -48,6 +48,12 @@ export default function Home() {
             >
               ❤️ 我的收藏
             </Link>
+            <Link
+              to="/timeline"
+              className="border-2 border-white/60 text-white/80 px-6 py-2.5 rounded-xl font-medium text-base hover:bg-white/10 transition-colors no-underline"
+            >
+              📅 申请时间线
+            </Link>
           </div>
         </div>
       </section>

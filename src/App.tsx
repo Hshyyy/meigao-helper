@@ -7,6 +7,7 @@ const navItems = [
   { path: "/recommend", label: "智能选校" },
   { path: "/favorites", label: "❤️ 收藏" },
   { path: "/compare", label: "⚖️ 对比" },
+  { path: "/timeline", label: "📅 时间线" },
 ];
 
 export default function App() {
