@@ -50,11 +50,21 @@ export default function Compare() {
 
   const compareSchools = schools.filter((s) => compareIds.includes(s.id));
 
-  const favoriteSchools = useMemo(() => {
-    return schools
-      .filter((s) => favorites.includes(s.id) && !compareIds.includes(s.id))
-      .slice(0, 8);
-  }, [favorites, compareIds]);
+  const filteredSchools = useMemo(() => {
+    const source = activeTab === "all" ? schools : schools.filter((s) => favorites.includes(s.id));
+    return source
+      .filter((s) => !compareIds.includes(s.id))
+      .filter((s) => {
+        if (!search.trim()) return true;
+        const q = search.trim().toLowerCase();
+        return (
+          s.nameCn.includes(q) ||
+          s.name.toLowerCase().includes(q) ||
+          s.state.includes(q) ||
+          s.city.toLowerCase().includes(q)
+        );
+      });
+  }, [activeTab, favorites, compareIds, search]);
 
   const addSchool = (id: number) => {
     if (compareIds.length >= 3) return;
@@ -118,76 +128,92 @@ export default function Compare() {
       {compareIds.length < 3 && (
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-5 mb-6">
           {/* 搜索框 */}
-          <div className="mb-4">
+          <div className="relative mb-4">
             <input
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="🔍 输入学校名称搜索..."
-              className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm"
+              placeholder="🔍 输入学校名称、地区搜索..."
+              className="w-full border border-gray-300 rounded-lg px-4 py-2.5 pr-10 text-sm"
             />
+            {search && (
+              <button
+                onClick={() => setSearch("")}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+              >
+                ×
+              </button>
+            )}
           </div>
 
-          {/* 标签切换 */}
-          <div className="flex gap-2 mb-3">
-            <button
-              onClick={() => setActiveTab("all")}
-              className={`px-3 py-1.5 rounded-lg text-sm transition-colors ${
-                activeTab === "all"
-                  ? "bg-blue-100 text-blue-700"
-                  : "text-gray-500 hover:bg-gray-100"
-              }`}
-            >
-              全部学校
-            </button>
-            <button
-              onClick={() => setActiveTab("favorites")}
-              className={`px-3 py-1.5 rounded-lg text-sm transition-colors ${
-                activeTab === "favorites"
-                  ? "bg-blue-100 text-blue-700"
-                  : "text-gray-500 hover:bg-gray-100"
-              }`}
-            >
-              ❤️ 从收藏中选择
-              {favorites.length > 0 && (
-                <span className="ml-1 text-xs">({favorites.length})</span>
-              )}
-            </button>
+          {/* 标签切换 + 结果数量 */}
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex gap-2">
+              <button
+                onClick={() => setActiveTab("all")}
+                className={`px-3 py-1.5 rounded-lg text-sm transition-colors ${
+                  activeTab === "all"
+                    ? "bg-blue-100 text-blue-700"
+                    : "text-gray-500 hover:bg-gray-100"
+                }`}
+              >
+                全部学校
+              </button>
+              <button
+                onClick={() => setActiveTab("favorites")}
+                className={`px-3 py-1.5 rounded-lg text-sm transition-colors ${
+                  activeTab === "favorites"
+                    ? "bg-blue-100 text-blue-700"
+                    : "text-gray-500 hover:bg-gray-100"
+                }`}
+              >
+                ❤️ 从收藏中选择
+                {favorites.length > 0 && (
+                  <span className="ml-1 text-xs">({favorites.length})</span>
+                )}
+              </button>
+            </div>
+            <span className="text-xs text-gray-400">
+              找到 {filteredSchools.length} 所学校
+            </span>
           </div>
 
           {/* 学校列表 */}
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 max-h-48 overflow-y-auto">
-            {(activeTab === "all" ? schools : favoriteSchools)
-              .filter((s) => !compareIds.includes(s.id))
-              .filter((s) => {
-                if (!search.trim()) return true;
-                const q = search.trim().toLowerCase();
-                return (
-                  s.nameCn.includes(q) ||
-                  s.name.toLowerCase().includes(q) ||
-                  s.state.includes(q)
-                );
-              })
-              .map((school) => (
+          {filteredSchools.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 max-h-64 overflow-y-auto">
+              {filteredSchools.map((school) => (
                 <button
                   key={school.id}
                   onClick={() => addSchool(school.id)}
-                  className="text-left p-2.5 rounded-lg hover:bg-blue-50 border border-gray-100 text-sm transition-colors"
+                  className="text-left p-3 rounded-lg hover:bg-blue-50 border border-gray-100 text-sm transition-colors"
                 >
-                  <div className="font-medium text-gray-900 truncate">
-                    {school.nameCn}
+                  <div className="flex items-center justify-between">
+                    <div className="font-medium text-gray-900 truncate">
+                      {school.nameCn}
+                    </div>
+                    <span className="text-xs text-gray-400 ml-2 shrink-0">
+                      #{school.ranking}
+                    </span>
                   </div>
-                  <div className="text-xs text-gray-400 mt-0.5">
-                    {school.state} · #{school.ranking}
+                  <div className="flex items-center gap-3 mt-1 text-xs text-gray-400">
+                    <span>{school.state}</span>
+                    <span>${(school.tuition / 1000).toFixed(0)}k/年</span>
+                    <span>录取 {school.acceptanceRate}%</span>
                   </div>
                 </button>
               ))}
-          </div>
-
-          {activeTab === "favorites" && favoriteSchools.length === 0 && (
-            <p className="text-sm text-gray-400 text-center py-4">
-              还没有收藏任何学校，去学校库或智能选校页面收藏后再来对比
-            </p>
+            </div>
+          ) : (
+            <div className="text-center py-8 text-gray-400">
+              <p className="text-2xl mb-2">🔍</p>
+              <p className="text-sm">
+                {search.trim()
+                  ? `没有找到"${search}"相关的学校`
+                  : activeTab === "favorites"
+                  ? "还没有收藏任何学校，去学校库或智能选校页面收藏后再来对比"
+                  : "没有可选的学校"}
+              </p>
+            </div>
           )}
         </div>
       )}
