@@ -337,12 +337,12 @@ export default function Timeline() {
   const [system, setSystem] = useState<SystemKey>("chinese");
   const [grade, setGrade] = useState("C9");
   const [enrollYear, setEnrollYear] = useState(2026);
-  const [checkedTasks, setCheckedTasks] = useState<Set<string>>(() => {
+  const [checkedTasks, setCheckedTasks] = useState<Record<string, string>>(() => {
     try {
       const saved = localStorage.getItem("timelineProgress");
-      return saved ? new Set(JSON.parse(saved)) : new Set();
+      return saved ? JSON.parse(saved) : {};
     } catch {
-      return new Set();
+      return {};
     }
   });
 
@@ -363,24 +363,34 @@ export default function Timeline() {
 
   const toggleTask = (taskId: string) => {
     setCheckedTasks((prev) => {
-      const next = new Set(prev);
-      if (next.has(taskId)) {
-        next.delete(taskId);
+      const next = { ...prev };
+      if (next[taskId]) {
+        delete next[taskId];
       } else {
-        next.add(taskId);
+        const now = new Date();
+        next[taskId] = `${now.getMonth() + 1}月${now.getDate()}日`;
       }
-      localStorage.setItem(
-        "timelineProgress",
-        JSON.stringify(Array.from(next))
-      );
+      localStorage.setItem("timelineProgress", JSON.stringify(next));
       return next;
     });
   };
 
   const totalTasks = phases.reduce((sum, p) => sum + p.tasks.length, 0);
-  const completedTasks = checkedTasks.size;
+  const completedTasks = Object.keys(checkedTasks).length;
   const progress =
     totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
+
+  // 下一个要做的任务
+  const nextTask = useMemo(() => {
+    for (const phase of phases) {
+      for (const task of phase.tasks) {
+        if (!checkedTasks[task.id]) {
+          return task;
+        }
+      }
+    }
+    return null;
+  }, [phases, checkedTasks]);
 
   const daysUntilDeadline = useMemo(() => {
     const deadline = new Date(enrollYear, 0, 15);
@@ -701,13 +711,23 @@ export default function Timeline() {
             style={{ width: `${progress}%` }}
           />
         </div>
-        <p className="text-xs text-gray-400 mt-2">
-          {progress === 100
-            ? "🎉 恭喜！所有任务已完成，祝你申请顺利！"
-            : progress >= 50
-            ? "💪 进度过半，继续保持！"
-            : "🚀 开始你的申请之旅吧！"}
-        </p>
+        {/* 动态反馈 */}
+        <div className="mt-3">
+          {progress === 100 ? (
+            <p className="text-sm text-green-700 font-medium">
+              🎉 恭喜！所有任务已完成，祝你申请顺利！
+            </p>
+          ) : nextTask ? (
+            <p className="text-sm text-blue-700">
+              📌 <strong>下一步：</strong>{nextTask.text}
+            </p>
+          ) : null}
+          {completedTasks > 0 && progress < 100 && (
+            <p className="text-xs text-gray-400 mt-1">
+              你已完成 {completedTasks} 个任务，还剩 {totalTasks - completedTasks} 个
+            </p>
+          )}
+        </div>
       </div>
 
       {/* 时间线 */}
@@ -717,10 +737,11 @@ export default function Timeline() {
         <div className="space-y-6">
           {phases.map((phase) => {
             const colors = colorMap[phase.color];
-            const phaseCompleted = phase.tasks.filter((t) =>
-              checkedTasks.has(t.id)
+            const phaseCompleted = phase.tasks.filter(
+              (t) => checkedTasks[t.id]
             ).length;
             const phaseTotal = phase.tasks.length;
+            const phaseProgress = Math.round((phaseCompleted / phaseTotal) * 100);
 
             return (
               <div key={phase.id} className="relative pl-16">
@@ -737,45 +758,63 @@ export default function Timeline() {
                     <h3 className="text-lg font-semibold text-gray-900">
                       {phase.title}
                     </h3>
-                    <span className="text-xs text-gray-400">
-                      {phaseCompleted}/{phaseTotal}
-                    </span>
+                    <div className="flex items-center gap-2">
+                      <div className="w-16 h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                        <div
+                          className={`h-full ${colors.bg} rounded-full transition-all`}
+                          style={{ width: `${phaseProgress}%` }}
+                        />
+                      </div>
+                      <span className="text-xs text-gray-400">
+                        {phaseCompleted}/{phaseTotal}
+                      </span>
+                    </div>
                   </div>
 
                   <div className="space-y-3">
-                    {phase.tasks.map((task) => (
-                      <div key={task.id} className="flex items-start gap-3">
-                        <input
-                          type="checkbox"
-                          checked={checkedTasks.has(task.id)}
-                          onChange={() => toggleTask(task.id)}
-                          className="mt-1 h-4 w-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
-                        />
-                        <div className="flex-1">
-                          <span
-                            className={`text-sm ${
-                              checkedTasks.has(task.id)
-                                ? "text-gray-400 line-through"
-                                : "text-gray-700"
-                            }`}
-                          >
-                            {task.text}
-                          </span>
-                          <div className="flex items-center gap-2 mt-0.5">
-                            {task.deadline && (
-                              <span className="text-xs text-orange-600 bg-orange-50 px-2 py-0.5 rounded">
-                                ⏰ {task.deadline}
-                              </span>
+                    {phase.tasks.map((task) => {
+                      const isChecked = !!checkedTasks[task.id];
+                      const completedDate = checkedTasks[task.id];
+
+                      return (
+                        <div key={task.id} className="flex items-start gap-3">
+                          <input
+                            type="checkbox"
+                            checked={isChecked}
+                            onChange={() => toggleTask(task.id)}
+                            className="mt-1 h-4 w-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
+                          />
+                          <div className="flex-1">
+                            <span
+                              className={`text-sm ${
+                                isChecked
+                                  ? "text-gray-400 line-through"
+                                  : "text-gray-700"
+                              }`}
+                            >
+                              {task.text}
+                            </span>
+                            <div className="flex items-center gap-2 mt-0.5 flex-wrap">
+                              {task.deadline && !isChecked && (
+                                <span className="text-xs text-orange-600 bg-orange-50 px-2 py-0.5 rounded">
+                                  ⏰ {task.deadline}
+                                </span>
+                              )}
+                              {isChecked && completedDate && (
+                                <span className="text-xs text-green-600 bg-green-50 px-2 py-0.5 rounded">
+                                  ✅ {completedDate}完成
+                                </span>
+                              )}
+                            </div>
+                            {task.tip && !isChecked && (
+                              <p className="text-xs text-gray-400 mt-1">
+                                💡 {task.tip}
+                              </p>
                             )}
                           </div>
-                          {task.tip && (
-                            <p className="text-xs text-gray-400 mt-1">
-                              💡 {task.tip}
-                            </p>
-                          )}
                         </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 </div>
               </div>
