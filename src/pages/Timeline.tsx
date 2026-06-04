@@ -806,7 +806,7 @@ export default function Timeline() {
               : "申请已截止"}
           </span>
           <span className="text-xs text-gray-400">
-            截止日期：{enrollYear}年1月15日
+            截止日期：{enrollYear - 1}年1月15日
           </span>
         </div>
       </div>
