@@ -404,7 +404,13 @@ export default function Timeline() {
   const personalizedTips = useMemo(() => {
     const now = new Date();
     const currentYear = now.getFullYear();
-    const yearsUntilEnroll = enrollYear - currentYear;
+    const gradeNum = parseInt(grade.replace(/[^\d]/g, ""));
+    // 计算学生到达申请年级（G9）还需要几年
+    const yearsToApplyingGrade = Math.max(0, 9 - gradeNum);
+    // 实际可用准备时间 = 入学年份 - 当前年份 - 1（申请在入学前1年）
+    const yearsUntilApply = enrollYear - currentYear - 1;
+    // 有效准备时间 = 实际可用时间 - 到达申请年级的时间
+    const effectiveYears = yearsUntilApply - yearsToApplyingGrade;
 
     // PG（第五年）特殊情况
     if (grade === "PG") {
@@ -421,9 +427,9 @@ export default function Timeline() {
       };
     }
 
-    // 紧迫程度判断
-    const isModerate = yearsUntilEnroll === 2;
-    const isRelaxed = yearsUntilEnroll >= 3;
+    // 紧迫程度判断（基于有效准备时间）
+    const isRelaxed = effectiveYears >= 2;
+    const isModerate = effectiveYears === 1;
 
     // 体系特定的考试信息
     const testInfo: Record<SystemKey, { name: string; target: string; alt?: string }> = {
@@ -458,7 +464,7 @@ export default function Timeline() {
     // 根据紧迫程度生成建议
     if (isRelaxed) {
       return {
-        title: `你还有 ${yearsUntilEnroll} 年准备时间 — ${advice.focus}`,
+        title: `你还有充足的准备时间 — ${advice.focus}`,
         items: [
           `📚 ${advice.tip}`,
           `🎯 标化准备：可以先做一套 ${test.name} 模考，了解自己的水平，制定长期备考计划`,
@@ -471,7 +477,7 @@ export default function Timeline() {
     }
     if (isModerate) {
       return {
-        title: `还有 ${yearsUntilEnroll} 年 — 现在是准备的黄金时期`,
+        title: `准备时间适中 — 现在是黄金时期`,
         items: [
           `📝 ${test.name} 备考：系统学习各部分内容，建议每天 1-2 小时`,
           `📊 目标分数：${test.target}（顶尖校更高）`,
@@ -484,7 +490,7 @@ export default function Timeline() {
     }
     // 紧迫
     return {
-      title: `只剩 ${yearsUntilEnroll} 年！需要立即行动`,
+      title: `时间紧迫！需要立即行动`,
       items: [
         `⚡ 标化冲刺：立即开始 ${test.name} 模考冲刺，建议每周至少 2 次模考`,
         `📝 申请材料：同时开始准备申请文书、成绩单、推荐信`,
