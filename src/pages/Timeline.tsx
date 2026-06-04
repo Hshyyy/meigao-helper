@@ -1,6 +1,58 @@
 import { useState, useMemo } from "react";
 import { schools } from "../data/schools";
 
+// 课程体系配置
+const systems = {
+  american: {
+    name: "美式/AP",
+    grades: [
+      { value: "G7", label: "Grade 7（初一）" },
+      { value: "G8", label: "Grade 8（初二）" },
+      { value: "G9", label: "Grade 9（初三）" },
+      { value: "G10", label: "Grade 10（高一）" },
+      { value: "G11", label: "Grade 11（高二）" },
+      { value: "G12", label: "Grade 12（高三）" },
+    ],
+  },
+  british: {
+    name: "英式/A-Level",
+    grades: [
+      { value: "Y7", label: "Year 7（初一）" },
+      { value: "Y8", label: "Year 8（初二）" },
+      { value: "Y9", label: "Year 9（初三）" },
+      { value: "Y10", label: "Year 10（高一）" },
+      { value: "Y11", label: "Year 11（高二）" },
+      { value: "Y12", label: "Year 12（高三）" },
+      { value: "Y13", label: "Year 13（高三+）" },
+    ],
+  },
+  ib: {
+    name: "IB",
+    grades: [
+      { value: "G6", label: "Grade 6（初一）" },
+      { value: "G7", label: "Grade 7（初二）" },
+      { value: "G8", label: "Grade 8（初三）" },
+      { value: "G9", label: "Grade 9（高一）" },
+      { value: "G10", label: "Grade 10（高二）" },
+      { value: "G11", label: "Grade 11（高三）" },
+      { value: "G12", label: "Grade 12（高三+）" },
+    ],
+  },
+  chinese: {
+    name: "国内课程体系",
+    grades: [
+      { value: "C7", label: "初一" },
+      { value: "C8", label: "初二" },
+      { value: "C9", label: "初三" },
+      { value: "C10", label: "高一" },
+      { value: "C11", label: "高二" },
+      { value: "C12", label: "高三" },
+    ],
+  },
+};
+
+type SystemKey = keyof typeof systems;
+
 interface Task {
   id: string;
   text: string;
@@ -16,12 +68,51 @@ interface Phase {
   tasks: Task[];
 }
 
-// 根据入学年份和当前年级生成个性化时间线
+// 根据体系、年级、入学年份生成个性化时间线
 function generateTimeline(
-  enrollYear: number,
-  _currentGrade: string
+  system: SystemKey,
+  _grade: string,
+  enrollYear: number
 ): Phase[] {
-  const applyYear = enrollYear - 1; // 申请年份 = 入学年份 - 1
+  const applyYear = enrollYear - 1;
+  // 体系特定的考试建议
+  const testAdvice: Record<SystemKey, { name: string; tips: string[] }> = {
+    american: {
+      name: "SSAT + TOEFL",
+      tips: [
+        "SSAT 建议提前 6-12 个月开始准备",
+        "TOEFL 目标：顶尖校 100+，优秀校 90+",
+        "建议考 2-3 次，取最高分",
+      ],
+    },
+    british: {
+      name: "IELTS 或 TOEFL",
+      tips: [
+        "部分学校接受 GCSE 英语成绩替代 SSAT",
+        "IELTS 目标：顶尖校 7.0+，优秀校 6.0+",
+        "提前确认目标学校是否要求 SSAT",
+      ],
+    },
+    ib: {
+      name: "TOEFL 或 IELTS",
+      tips: [
+        "IB 成绩被广泛认可，部分学校免 SSAT",
+        "TOEFL 目标：顶尖校 100+，优秀校 90+",
+        "CAS 活动经历是加分项",
+      ],
+    },
+    chinese: {
+      name: "SSAT + TOEFL",
+      tips: [
+        "国内学生需要重点准备 SSAT 词汇和阅读",
+        "TOEFL 目标：顶尖校 100+，优秀校 90+",
+        "建议每天背 50 个 SSAT 词汇",
+        "暑假集中冲刺效果最好",
+      ],
+    },
+  };
+
+  const test = testAdvice[system];
 
   const phases: Phase[] = [
     {
@@ -42,8 +133,13 @@ function generateTimeline(
         },
         {
           id: "t3",
-          text: "参加学校线上/线下开放日",
-          tip: "大部分学校在春秋两季举办开放日",
+          text: `确认目标学校对${systems[system].name}学生的具体要求`,
+          tip:
+            system === "british"
+              ? "部分学校接受 GCSE 替代 SSAT，提前确认"
+              : system === "ib"
+              ? "IB 成绩被广泛认可，确认是否需要 SSAT"
+              : "大部分学校要求 SSAT 和 TOEFL",
         },
       ],
     },
@@ -55,20 +151,27 @@ function generateTimeline(
       tasks: [
         {
           id: "t4",
-          text: "报名并准备 SSAT 考试",
-          tip: "建议提前 6-12 个月开始准备，可考多次取最高分",
+          text: `准备并参加 ${test.name} 考试`,
+          tip: test.tips[0],
           deadline: `${applyYear}年10月前完成`,
         },
         {
           id: "t5",
-          text: "报名并准备 TOEFL 考试",
-          tip: "顶尖校建议 100+，优秀校建议 90+",
-          deadline: `${applyYear}年11月前完成`,
+          text: "保持校内成绩稳定",
+          tip:
+            system === "chinese"
+              ? "GPA 需要换算成 4.0 制，建议保持在 3.5 以上"
+              : system === "ib"
+              ? "IB 预测成绩很重要，保持在 35+ 以上"
+              : system === "british"
+              ? "GCSE/A-Level 预测成绩是重要参考"
+              : "GPA 保持在 3.5 以上",
         },
         {
           id: "t6",
-          text: "保持校内 GPA 稳定",
-          tip: "GPA 是录取的重要参考，不能因备考而忽视",
+          text: "准备语言考试（如需要）",
+          tip: test.tips.slice(1).join("；"),
+          deadline: `${applyYear}年11月前完成`,
         },
       ],
     },
@@ -87,12 +190,18 @@ function generateTimeline(
         {
           id: "t8",
           text: "准备成绩单和在读证明",
-          tip: "需要中英文对照版本，学校盖章",
+          tip:
+            system === "chinese"
+              ? "需要中英文对照版本，学校盖章，GPA 需换算"
+              : "准备英文版成绩单，学校盖章",
         },
         {
           id: "t9",
           text: "整理课外活动和获奖材料",
-          tip: "按时间顺序整理，突出深度而非广度",
+          tip:
+            system === "ib"
+              ? "CAS 活动经历是加分项，重点整理"
+              : "按时间顺序整理，突出深度而非广度",
         },
       ],
     },
@@ -110,7 +219,10 @@ function generateTimeline(
         {
           id: "t11",
           text: "撰写申请文书",
-          tip: "展现真实的自己，不要写套话，找人帮忙修改",
+          tip:
+            system === "chinese"
+              ? "展现真实的自己，找英语好的人帮忙润色"
+              : "展现真实的自己，不要写套话",
         },
         {
           id: "t12",
@@ -133,8 +245,14 @@ function generateTimeline(
         },
         {
           id: "t14",
-          text: "参加学校面试（线上或校园）",
-          tip: "保持自然、自信，展现真实的自己",
+          text:
+            system === "chinese"
+              ? "强化英语口语，准备英文面试"
+              : "参加学校面试（线上或校园）",
+          tip:
+            system === "chinese"
+              ? "面试是全英文的，建议找外教模拟练习"
+              : "保持自然、自信，展现真实的自己",
           deadline: `${applyYear}年11月-${enrollYear}年2月`,
         },
       ],
@@ -175,30 +293,52 @@ function generateTimeline(
   return phases;
 }
 
-const colorMap: Record<string, { bg: string; border: string; text: string; light: string }> = {
-  blue: { bg: "bg-blue-500", border: "border-blue-200", text: "text-blue-700", light: "bg-blue-50" },
-  green: { bg: "bg-green-500", border: "border-green-200", text: "text-green-700", light: "bg-green-50" },
-  purple: { bg: "bg-purple-500", border: "border-purple-200", text: "text-purple-700", light: "bg-purple-50" },
-  orange: { bg: "bg-orange-500", border: "border-orange-200", text: "text-orange-700", light: "bg-orange-50" },
-  pink: { bg: "bg-pink-500", border: "border-pink-200", text: "text-pink-700", light: "bg-pink-50" },
-  red: { bg: "bg-red-500", border: "border-red-200", text: "text-red-700", light: "bg-red-50" },
+const colorMap: Record<
+  string,
+  { bg: string; border: string; text: string; light: string }
+> = {
+  blue: {
+    bg: "bg-blue-500",
+    border: "border-blue-200",
+    text: "text-blue-700",
+    light: "bg-blue-50",
+  },
+  green: {
+    bg: "bg-green-500",
+    border: "border-green-200",
+    text: "text-green-700",
+    light: "bg-green-50",
+  },
+  purple: {
+    bg: "bg-purple-500",
+    border: "border-purple-200",
+    text: "text-purple-700",
+    light: "bg-purple-50",
+  },
+  orange: {
+    bg: "bg-orange-500",
+    border: "border-orange-200",
+    text: "text-orange-700",
+    light: "bg-orange-50",
+  },
+  pink: {
+    bg: "bg-pink-500",
+    border: "border-pink-200",
+    text: "text-pink-700",
+    light: "bg-pink-50",
+  },
+  red: {
+    bg: "bg-red-500",
+    border: "border-red-200",
+    text: "text-red-700",
+    light: "bg-red-50",
+  },
 };
 
 export default function Timeline() {
-  const [enrollYear, setEnrollYear] = useState<number>(() => {
-    try {
-      return Number(localStorage.getItem("timelineEnrollYear")) || 2026;
-    } catch {
-      return 2026;
-    }
-  });
-  const [currentGrade, setCurrentGrade] = useState<string>(() => {
-    try {
-      return localStorage.getItem("timelineGrade") || "初二";
-    } catch {
-      return "初二";
-    }
-  });
+  const [system, setSystem] = useState<SystemKey>("chinese");
+  const [grade, setGrade] = useState("C9");
+  const [enrollYear, setEnrollYear] = useState(2026);
   const [checkedTasks, setCheckedTasks] = useState<Set<string>>(() => {
     try {
       const saved = localStorage.getItem("timelineProgress");
@@ -219,8 +359,8 @@ export default function Timeline() {
   const favoriteSchools = schools.filter((s) => favorites.includes(s.id));
 
   const phases = useMemo(
-    () => generateTimeline(enrollYear, currentGrade),
-    [enrollYear, currentGrade]
+    () => generateTimeline(system, grade, enrollYear),
+    [system, grade, enrollYear]
   );
 
   const toggleTask = (taskId: string) => {
@@ -239,33 +379,58 @@ export default function Timeline() {
     });
   };
 
-  const handleYearChange = (year: number) => {
-    setEnrollYear(year);
-    localStorage.setItem("timelineEnrollYear", String(year));
-  };
-
-  const handleGradeChange = (grade: string) => {
-    setCurrentGrade(grade);
-    localStorage.setItem("timelineGrade", grade);
-  };
-
   const totalTasks = phases.reduce((sum, p) => sum + p.tasks.length, 0);
   const completedTasks = checkedTasks.size;
-  const progress = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
+  const progress =
+    totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
 
-  // 计算距离申请截止还有多少天
   const daysUntilDeadline = useMemo(() => {
-    const deadline = new Date(enrollYear, 0, 15); // 1月15日
+    const deadline = new Date(enrollYear, 0, 15);
     const now = new Date();
-    const diff = deadline.getTime() - now.getTime();
-    return Math.ceil(diff / (1000 * 60 * 60 * 24));
+    return Math.ceil(
+      (deadline.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)
+    );
   }, [enrollYear]);
+
+  // 根据体系和年级生成个性化提示
+  const personalizedTip = useMemo(() => {
+    const gradeNum = parseInt(grade.replace(/[^\d]/g, ""));
+    const yearsLeft = 12 - gradeNum + 1;
+
+    if (system === "chinese") {
+      if (yearsLeft >= 3)
+        return "你还有充足时间，建议现在开始积累英语词汇，培养课外活动兴趣";
+      if (yearsLeft >= 2)
+        return "现在是准备 SSAT/TOEFL 的黄金时期，建议系统性备考";
+      return "时间紧迫！需要立即开始标化考试冲刺，同时准备申请材料";
+    }
+    if (system === "british") {
+      if (yearsLeft >= 3)
+        return "你还有充足时间，建议先确认目标学校是否要求 SSAT，同时保持 GCSE 成绩";
+      if (yearsLeft >= 2)
+        return "部分学校接受 GCSE 替代 SSAT，建议提前确认目标学校要求";
+      return "时间紧迫！立即确认目标学校要求，准备 IELTS 或 TOEFL";
+    }
+    if (system === "ib") {
+      if (yearsLeft >= 3)
+        return "你还有充足时间，IB 成绩被广泛认可，保持好校内成绩是关键";
+      if (yearsLeft >= 2)
+        return "IB 成绩被广泛认可，部分学校免 SSAT，重点准备 TOEFL";
+      return "时间紧迫！确认目标学校是否需要 SSAT，重点准备 TOEFL";
+    }
+    // american
+    if (yearsLeft >= 3)
+      return "你还有充足时间，建议现在开始 SSAT 词汇积累，培养课外活动";
+    if (yearsLeft >= 2)
+      return "现在是准备 SSAT/TOEFL 的黄金时期，10 年级暑假集中冲刺";
+    return "时间紧迫！立即开始标化考试冲刺，同时准备申请材料";
+  }, [system, grade]);
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold text-gray-900 mb-2">申请时间线</h1>
       <p className="text-gray-500 mb-6">
-        根据你的情况生成个性化申请规划
+        根据你的课程体系和年级，生成个性化申请规划
       </p>
 
       {/* 个性化设置 */}
@@ -274,16 +439,22 @@ export default function Timeline() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              目标入学年份
+              课程体系
             </label>
             <select
-              value={enrollYear}
-              onChange={(e) => handleYearChange(Number(e.target.value))}
+              value={system}
+              onChange={(e) => {
+                const s = e.target.value as SystemKey;
+                setSystem(s);
+                setGrade(systems[s].grades[0].value);
+              }}
               className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
             >
-              <option value={2026}>2026 年秋季</option>
-              <option value={2027}>2027 年秋季</option>
-              <option value={2028}>2028 年秋季</option>
+              {Object.entries(systems).map(([key, s]) => (
+                <option key={key} value={key}>
+                  {s.name}
+                </option>
+              ))}
             </select>
           </div>
           <div>
@@ -291,34 +462,59 @@ export default function Timeline() {
               目前年级
             </label>
             <select
-              value={currentGrade}
-              onChange={(e) => handleGradeChange(e.target.value)}
+              value={grade}
+              onChange={(e) => setGrade(e.target.value)}
               className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
             >
-              <option>初一</option>
-              <option>初二</option>
-              <option>初三</option>
-              <option>高一</option>
+              {systems[system].grades.map((g) => (
+                <option key={g.value} value={g.value}>
+                  {g.label}
+                </option>
+              ))}
             </select>
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              申请截止倒计时
+              目标入学年份
             </label>
-            <div
-              className={`px-4 py-2 rounded-lg text-sm font-medium ${
-                daysUntilDeadline > 180
-                  ? "bg-green-50 text-green-700"
-                  : daysUntilDeadline > 90
-                  ? "bg-yellow-50 text-yellow-700"
-                  : "bg-red-50 text-red-700"
-              }`}
+            <select
+              value={enrollYear}
+              onChange={(e) => setEnrollYear(Number(e.target.value))}
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
             >
-              {daysUntilDeadline > 0
-                ? `还有 ${daysUntilDeadline} 天（${enrollYear}年1月15日）`
-                : "申请已截止"}
-            </div>
+              <option value={2026}>2026 年秋季</option>
+              <option value={2027}>2027 年秋季</option>
+              <option value={2028}>2028 年秋季</option>
+            </select>
           </div>
+        </div>
+
+        {/* 个性化提示 */}
+        <div className="mt-4 bg-amber-50 border border-amber-200 rounded-lg p-3">
+          <p className="text-sm text-amber-800">
+            💡 <strong>给你的建议：</strong>
+            {personalizedTip}
+          </p>
+        </div>
+
+        {/* 倒计时 */}
+        <div className="mt-3 flex items-center gap-4">
+          <span
+            className={`px-3 py-1.5 rounded-lg text-sm font-medium ${
+              daysUntilDeadline > 180
+                ? "bg-green-50 text-green-700"
+                : daysUntilDeadline > 90
+                ? "bg-yellow-50 text-yellow-700"
+                : "bg-red-50 text-red-700"
+            }`}
+          >
+            {daysUntilDeadline > 0
+              ? `⏰ 距申请截止还有 ${daysUntilDeadline} 天`
+              : "申请已截止"}
+          </span>
+          <span className="text-xs text-gray-400">
+            截止日期：{enrollYear}年1月15日
+          </span>
         </div>
       </div>
 
@@ -335,15 +531,10 @@ export default function Timeline() {
                 className="bg-blue-50 text-blue-700 text-sm px-3 py-1 rounded-full"
               >
                 {school.nameCn}
-                <span className="text-xs text-blue-500 ml-1">
-                  截止 1月15日
-                </span>
+                <span className="text-xs text-blue-500 ml-1">截止 1月15日</span>
               </span>
             ))}
           </div>
-          <p className="text-xs text-gray-400 mt-2">
-            💡 大部分寄宿高中申请截止日期在 1 月中旬，建议提前准备
-          </p>
         </div>
       )}
 
