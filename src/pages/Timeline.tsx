@@ -403,21 +403,23 @@ export default function Timeline() {
   // 根据体系、年级、入学年份生成个性化提示
   const personalizedTips = useMemo(() => {
     const now = new Date();
-    const gradeNum = parseInt(grade.replace(/[^\d]/g, ""));
-    const yearsToApplyingGrade = Math.max(0, 9 - gradeNum);
 
-    // 基于实际日期计算剩余月数（更精确）
+    // 基于申请截止日期计算剩余时间
     const applyDeadline = new Date(enrollYear - 1, 0, 15); // 申请截止：入学前一年1月15日
-    const targetApplyDate = new Date(
-      applyDeadline.getFullYear() - yearsToApplyingGrade,
-      applyDeadline.getMonth(),
-      applyDeadline.getDate()
-    );
-    const monthsLeftRaw =
-      (targetApplyDate.getFullYear() - now.getFullYear()) * 12 +
-      (targetApplyDate.getMonth() - now.getMonth());
-    const monthsLeft = Math.max(0, monthsLeftRaw);
+    const daysUntilDeadline = Math.ceil((applyDeadline.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+    const monthsLeft = Math.max(0, Math.round(daysUntilDeadline / 30));
     const effectiveYears = Math.floor(monthsLeft / 12);
+
+    // 格式化时间显示
+    const formatTime = () => {
+      if (daysUntilDeadline <= 0) return "已截止";
+      if (daysUntilDeadline < 30) return `${daysUntilDeadline} 天`;
+      if (monthsLeft < 12) return `${monthsLeft} 个月`;
+      const years = Math.floor(monthsLeft / 12);
+      const remainMonths = monthsLeft % 12;
+      return remainMonths > 0 ? `${years} 年 ${remainMonths} 个月` : `${years} 年`;
+    };
+    const timeStr = formatTime();
 
     // PG 特殊情况
     if (grade === "PG") {
@@ -492,9 +494,9 @@ export default function Timeline() {
 
     // G7（初一）
     if (gn === 7 && monthsLeft >= 48) {
-      title = `超前规划 · 还有 ${Math.round(monthsLeft / 12)} 年`;
+      title = `超前规划 · 还有 ${timeStr}`;
       items = [
-        `📚 你目前初一，距离申请还有 ${Math.round(monthsLeft / 12)} 年，完全不用着急`,
+        `📚 你目前初一，距离申请还有 ${timeStr}，完全不用着急`,
         `📝 英语：看英文动画片、读英文绘本（推荐《Magic Tree House》），每天 20 分钟培养语感`,
         `🎯 ${sys.special}`,
         `🏆 活动：广泛尝试各种活动——游泳、钢琴、编程、绘画、志愿者，找到真正喜欢的`,
@@ -502,9 +504,9 @@ export default function Timeline() {
         `💡 ${sys.advantage}`,
       ];
     } else if (gn === 7 && monthsLeft >= 36) {
-      title = `基础积累 · 还有 ${Math.round(monthsLeft / 12)} 年`;
+      title = `基础积累 · 还有 ${timeStr}`;
       items = [
-        `📚 你目前初一，还有 ${Math.round(monthsLeft / 12)} 年，开始接触标化考试`,
+        `📚 你目前初一，还有 ${timeStr}，开始接触标化考试`,
         `📝 SSAT：每周做 1-2 篇阅读理解，熟悉题型，目标分数 ${ssatTarget}`,
         `📝 TOEFL：每天听 15 分钟英文播客，培养听力`,
         `🎯 ${sys.special}`,
@@ -512,9 +514,9 @@ export default function Timeline() {
         `💡 ${sys.advantage}`,
       ];
     } else if (gn === 7 && monthsLeft >= 24) {
-      title = `系统备考 · 还有 ${monthsLeft} 个月`;
+      title = `系统备考 · 还有 ${timeStr}`;
       items = [
-        `📚 你目前初一，还有 ${monthsLeft} 个月，需要开始系统备考`,
+        `📚 你目前初一，还有 ${timeStr}，需要开始系统备考`,
         `📝 SSAT：每天背 50 个词汇，周末做 1 套阅读，目标 ${ssatTarget}`,
         `📝 TOEFL：每天听 20 分钟英文，练习跟读`,
         `🎯 ${sys.special}`,
@@ -522,9 +524,9 @@ export default function Timeline() {
         `📋 推荐信：与老师建立良好关系`,
       ];
     } else if (gn === 7 && monthsLeft >= 12) {
-      title = `加速冲刺 · 只剩 ${monthsLeft} 个月！`;
+      title = `加速冲刺 · 只剩 ${timeStr}！`;
       items = [
-        `📚 你目前初一，只剩 ${monthsLeft} 个月，需要全力加速`,
+        `📚 你目前初一，只剩 ${timeStr}，需要全力加速`,
         `📝 SSAT：每天 ${dailyHours}，词汇+阅读+数学同步推进，目标 ${ssatTarget}`,
         `📝 TOEFL：每天 1 小时听力口语，目标 ${toeflTarget}`,
         `🎯 ${sys.special}`,
@@ -533,9 +535,9 @@ export default function Timeline() {
         `⏰ ${weeklyMock}模考`,
       ];
     } else if (gn === 7) {
-      title = `紧急状态 · 只剩 ${monthsLeft} 个月！`;
+      title = `紧急状态 · 只剩 ${timeStr}！`;
       items = [
-        `📚 你目前初一，只剩 ${monthsLeft} 个月，建议调整入学年份`,
+        `📚 你目前初一，只剩 ${timeStr}，建议调整入学年份`,
         `⚠️ 初一学生通常申请 2-3 年后入学，当前时间不足`,
         `📝 如果坚持：每天 ${dailyHours} 高强度备考，目标 SSAT ${ssatTarget}`,
         `🎯 ${sys.special}`,
@@ -545,9 +547,9 @@ export default function Timeline() {
     }
     // G8（初二）
     else if (gn === 8 && monthsLeft >= 36) {
-      title = `从容准备 · 还有 ${Math.round(monthsLeft / 12)} 年`;
+      title = `从容准备 · 还有 ${timeStr}`;
       items = [
-        `📚 你目前初二，还有 ${Math.round(monthsLeft / 12)} 年，可以从容准备`,
+        `📚 你目前初二，还有 ${timeStr}，可以从容准备`,
         `📝 SSAT：每天背 30 个词汇，读英文小说，目标 ${ssatTarget}`,
         `📝 TOEFL：每天听 15 分钟英文，培养语感`,
         `🎯 ${sys.special}`,
@@ -555,9 +557,9 @@ export default function Timeline() {
         `💡 ${sys.advantage}`,
       ];
     } else if (gn === 8 && monthsLeft >= 24) {
-      title = `黄金准备 · 还有 ${monthsLeft} 个月`;
+      title = `黄金准备 · 还有 ${timeStr}`;
       items = [
-        `📚 你目前初二，还有 ${monthsLeft} 个月，最佳起步时间`,
+        `📚 你目前初二，还有 ${timeStr}，最佳起步时间`,
         `📝 SSAT：每天 ${dailyHours}，词汇+阅读+数学，目标 ${ssatTarget}`,
         `📝 TOEFL：每天 30 分钟听力口语，目标 ${toeflTarget}`,
         `🎯 ${sys.special}`,
@@ -565,9 +567,9 @@ export default function Timeline() {
         `📋 推荐信：与老师建立关系`,
       ];
     } else if (gn === 8 && monthsLeft >= 12) {
-      title = `紧迫冲刺 · 只剩 ${monthsLeft} 个月！`;
+      title = `紧迫冲刺 · 只剩 ${timeStr}！`;
       items = [
-        `📚 你目前初二，只剩 ${monthsLeft} 个月，必须高效行动`,
+        `📚 你目前初二，只剩 ${timeStr}，必须高效行动`,
         `📝 SSAT：每天 ${dailyHours}，暑假集中突破，目标 ${ssatTarget}`,
         `📝 TOEFL：每天 1 小时，目标 ${toeflTarget}`,
         `🎯 ${sys.special}`,
@@ -576,9 +578,9 @@ export default function Timeline() {
         `⏰ ${weeklyMock}模考`,
       ];
     } else if (gn === 8) {
-      title = `紧急状态 · 只剩 ${monthsLeft} 个月！`;
+      title = `紧急状态 · 只剩 ${timeStr}！`;
       items = [
-        `📚 你目前初二，只剩 ${monthsLeft} 个月，建议调整入学年份`,
+        `📚 你目前初二，只剩 ${timeStr}，建议调整入学年份`,
         `⚠️ 初二学生通常申请 1-2 年后入学`,
         `📝 如果坚持：每天 ${dailyHours} 高强度冲刺，目标 SSAT ${ssatTarget}`,
         `🎯 ${sys.special}`,
@@ -587,9 +589,9 @@ export default function Timeline() {
     }
     // G9（初三）
     else if (gn === 9 && monthsLeft >= 36) {
-      title = `主要入学点 · 充裕准备 · 还有 ${Math.round(monthsLeft / 12)} 年`;
+      title = `主要入学点 · 充裕准备 · 还有 ${timeStr}`;
       items = [
-        `📚 你目前初三，主要入学点，还有 ${Math.round(monthsLeft / 12)} 年准备`,
+        `📚 你目前初三，主要入学点，还有 ${timeStr}准备`,
         `📝 SSAT：系统学习，每天 ${dailyHours}，目标 ${ssatTarget}`,
         `📝 TOEFL：重点提升听力口语，目标 ${toeflTarget}`,
         `🎯 ${sys.special}`,
@@ -597,9 +599,9 @@ export default function Timeline() {
         `📋 推荐信：正式联系 2-3 位老师`,
       ];
     } else if (gn === 9 && monthsLeft >= 24) {
-      title = `主要入学点 · 黄金期 · 还有 ${monthsLeft} 个月`;
+      title = `主要入学点 · 黄金期 · 还有 ${timeStr}`;
       items = [
-        `📚 你目前初三，主要入学点，还有 ${monthsLeft} 个月`,
+        `📚 你目前初三，主要入学点，还有 ${timeStr}`,
         `📝 SSAT：每天 ${dailyHours}，目标 ${ssatTarget}，${weeklyMock}模考`,
         `📝 TOEFL：每天 1 小时，目标 ${toeflTarget}`,
         `🎯 ${sys.special}`,
@@ -608,9 +610,9 @@ export default function Timeline() {
         `🎤 面试：开始练习英文自我介绍`,
       ];
     } else if (gn === 9 && monthsLeft >= 12) {
-      title = `主要入学点 · 冲刺期 · 只剩 ${monthsLeft} 个月！`;
+      title = `主要入学点 · 冲刺期 · 只剩 ${timeStr}！`;
       items = [
-        `📚 你目前初三，主要入学点，只剩 ${monthsLeft} 个月！`,
+        `📚 你目前初三，主要入学点，只剩 ${timeStr}！`,
         `📝 SSAT：每天 ${dailyHours}，目标 ${ssatTarget}，${weeklyMock}模考`,
         `📝 TOEFL：每天 1 小时，目标 ${toeflTarget}，口语每天练习`,
         `🎯 ${sys.special}`,
@@ -619,9 +621,9 @@ export default function Timeline() {
         `⏰ 申请截止 ${enrollYear - 1} 年 1 月 15 日`,
       ];
     } else if (gn === 9) {
-      title = `主要入学点 · 决战 · 只剩 ${monthsLeft} 个月！`;
+      title = `主要入学点 · 决战 · 只剩 ${timeStr}！`;
       items = [
-        `📚 你目前初三，主要入学点，只剩 ${monthsLeft} 个月！`,
+        `📚 你目前初三，主要入学点，只剩 ${timeStr}！`,
         `⚡ SSAT：每天 ${dailyHours} 高强度冲刺，目标 ${ssatTarget}，${weeklyMock}模考`,
         `⚡ TOEFL：每天 2 小时，目标 ${toeflTarget}`,
         `🎯 ${sys.special}`,
@@ -632,9 +634,9 @@ export default function Timeline() {
     }
     // G10（高一）
     else if (gn === 10 && monthsLeft >= 24) {
-      title = `最后机会 · 还有 ${monthsLeft} 个月`;
+      title = `最后机会 · 还有 ${timeStr}`;
       items = [
-        `📚 你目前高一，最后机会，还有 ${monthsLeft} 个月`,
+        `📚 你目前高一，最后机会，还有 ${timeStr}`,
         `📝 SSAT：确认已有 ${ssatTarget} 成绩，或开始备考`,
         `📝 TOEFL：确认已有 ${toeflTarget} 成绩，或开始冲刺`,
         `🎯 ${sys.special}`,
@@ -642,9 +644,9 @@ export default function Timeline() {
         `🏆 活动：完善履历，准备文书`,
       ];
     } else if (gn === 10 && monthsLeft >= 12) {
-      title = `最后机会 · 只剩 ${monthsLeft} 个月！`;
+      title = `最后机会 · 只剩 ${timeStr}！`;
       items = [
-        `📚 你目前高一，只剩 ${monthsLeft} 个月！`,
+        `📚 你目前高一，只剩 ${timeStr}！`,
         `📝 SSAT：必须已有或立即冲刺，目标 ${ssatTarget}，${weeklyMock}模考`,
         `📝 TOEFL：必须已有或立即冲刺，目标 ${toeflTarget}`,
         `🎯 ${sys.special}`,
@@ -652,9 +654,9 @@ export default function Timeline() {
         `🎤 面试：立即准备`,
       ];
     } else if (gn === 10) {
-      title = `最后机会 · 紧急！只剩 ${monthsLeft} 个月！`;
+      title = `最后机会 · 紧急！只剩 ${timeStr}！`;
       items = [
-        `📚 你目前高一，只剩 ${monthsLeft} 个月！建议调整入学年份`,
+        `📚 你目前高一，只剩 ${timeStr}！建议调整入学年份`,
         `⚠️ 高一学生通常申请 1-2 年后入学`,
         `📝 如果坚持：每天 ${dailyHours} 冲刺 SSAT+TOEFL`,
         `🎯 ${sys.special}`,
@@ -674,7 +676,7 @@ export default function Timeline() {
     }
     // 默认
     else {
-      title = `规划中 · 还有 ${monthsLeft} 个月`;
+      title = `规划中 · 还有 ${timeStr}`;
       items = [
         `📚 建议调整年级或入学年份`,
         `💡 大部分学生在初三（G9）申请美高`,
