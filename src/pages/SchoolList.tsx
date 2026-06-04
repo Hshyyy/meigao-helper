@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import { Link } from "react-router-dom";
 import { schools, regions, tuitionRanges, allTags } from "../data/schools";
 import type { School } from "../data/schools";
 import SchoolCard from "../components/SchoolCard";
@@ -20,6 +21,13 @@ export default function SchoolList() {
       return [];
     }
   });
+  const [compareIds, setCompareIds] = useState<number[]>(() => {
+    try {
+      return JSON.parse(localStorage.getItem("compare") || "[]");
+    } catch {
+      return [];
+    }
+  });
   const [selectedSchool, setSelectedSchool] = useState<School | null>(null);
 
   const toggleFavorite = (id: number) => {
@@ -28,6 +36,21 @@ export default function SchoolList() {
         ? prev.filter((f) => f !== id)
         : [...prev, id];
       localStorage.setItem("favorites", JSON.stringify(next));
+      return next;
+    });
+  };
+
+  const toggleCompare = (id: number) => {
+    setCompareIds((prev) => {
+      let next: number[];
+      if (prev.includes(id)) {
+        next = prev.filter((i) => i !== id);
+      } else if (prev.length >= 3) {
+        return prev;
+      } else {
+        next = [...prev, id];
+      }
+      localStorage.setItem("compare", JSON.stringify(next));
       return next;
     });
   };
@@ -217,6 +240,8 @@ export default function SchoolList() {
               onClick={() => setSelectedSchool(school)}
               isFavorited={favorites.includes(school.id)}
               onToggleFavorite={() => toggleFavorite(school.id)}
+              isCompared={compareIds.includes(school.id)}
+              onToggleCompare={() => toggleCompare(school.id)}
             />
           ))}
         </div>
@@ -228,6 +253,51 @@ export default function SchoolList() {
           school={selectedSchool}
           onClose={() => setSelectedSchool(null)}
         />
+      )}
+
+      {/* 浮动对比栏 */}
+      {compareIds.length > 0 && (
+        <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-40">
+          <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <span className="text-sm text-gray-500">
+                已选 {compareIds.length}/3 所学校对比
+              </span>
+              <div className="flex gap-2">
+                {compareIds.map((id) => {
+                  const school = schools.find((s) => s.id === id);
+                  return school ? (
+                    <span
+                      key={id}
+                      className="bg-purple-50 text-purple-700 text-xs px-2 py-1 rounded-full"
+                    >
+                      {school.nameCn}
+                    </span>
+                  ) : null;
+                })}
+              </div>
+            </div>
+            <div className="flex gap-2">
+              <button
+                onClick={() => {
+                  setCompareIds([]);
+                  localStorage.setItem("compare", JSON.stringify([]));
+                }}
+                className="text-sm text-gray-400 hover:text-gray-600 px-3 py-1"
+              >
+                清空
+              </button>
+              {compareIds.length >= 2 && (
+                <Link
+                  to="/compare"
+                  className="bg-purple-600 text-white text-sm px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors no-underline"
+                >
+                  开始对比 →
+                </Link>
+              )}
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

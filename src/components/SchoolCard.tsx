@@ -7,6 +7,8 @@ interface Props {
   matchColor?: string;
   isFavorited?: boolean;
   onToggleFavorite?: () => void;
+  isCompared?: boolean;
+  onToggleCompare?: () => void;
 }
 
 const tierColors = {
@@ -22,6 +24,8 @@ export default function SchoolCard({
   matchColor = "bg-gray-500",
   isFavorited,
   onToggleFavorite,
+  isCompared,
+  onToggleCompare,
 }: Props) {
   return (
     <div
@@ -68,10 +72,10 @@ export default function SchoolCard({
         </div>
       </div>
 
-      {/* 标签 + 收藏 */}
+      {/* 标签 + 操作按钮 */}
       <div className="flex items-center justify-between mt-3">
         <div className="flex flex-wrap gap-1">
-          {school.tags.slice(0, 3).map((tag) => (
+          {school.tags.slice(0, 2).map((tag) => (
             <span
               key={tag}
               className="bg-blue-50 text-blue-600 text-xs px-2 py-0.5 rounded"
@@ -80,18 +84,35 @@ export default function SchoolCard({
             </span>
           ))}
         </div>
-        {onToggleFavorite && (
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              onToggleFavorite();
-            }}
-            className="text-lg shrink-0 ml-1"
-            aria-label={isFavorited ? "取消收藏" : "收藏"}
-          >
-            {isFavorited ? "❤️" : "🤍"}
-          </button>
-        )}
+        <div className="flex items-center gap-1 shrink-0">
+          {onToggleCompare && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onToggleCompare();
+              }}
+              className={`text-xs px-2 py-0.5 rounded ${
+                isCompared
+                  ? "bg-purple-100 text-purple-700"
+                  : "bg-gray-100 text-gray-500 hover:bg-purple-50 hover:text-purple-600"
+              }`}
+            >
+              ⚖️
+            </button>
+          )}
+          {onToggleFavorite && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onToggleFavorite();
+              }}
+              className="text-lg"
+              aria-label={isFavorited ? "取消收藏" : "收藏"}
+            >
+              {isFavorited ? "❤️" : "🤍"}
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );

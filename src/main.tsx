@@ -6,6 +6,8 @@ import App from "./App";
 import Home from "./pages/Home";
 import SchoolList from "./pages/SchoolList";
 import Recommend from "./pages/Recommend";
+import Favorites from "./pages/Favorites";
+import Compare from "./pages/Compare";
 import NotFound from "./pages/NotFound";
 
 createRoot(document.getElementById("root")!).render(
@@ -16,6 +18,8 @@ createRoot(document.getElementById("root")!).render(
           <Route index element={<Home />} />
           <Route path="schools" element={<SchoolList />} />
           <Route path="recommend" element={<Recommend />} />
+          <Route path="favorites" element={<Favorites />} />
+          <Route path="compare" element={<Compare />} />
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
