@@ -50,20 +50,6 @@ export default function Compare() {
 
   const compareSchools = schools.filter((s) => compareIds.includes(s.id));
 
-  const searchResults = useMemo(() => {
-    if (!search.trim()) return [];
-    const q = search.trim().toLowerCase();
-    return schools
-      .filter((s) => !compareIds.includes(s.id))
-      .filter(
-        (s) =>
-          s.nameCn.includes(q) ||
-          s.name.toLowerCase().includes(q) ||
-          s.state.includes(q)
-      )
-      .slice(0, 8);
-  }, [search, compareIds]);
-
   const favoriteSchools = useMemo(() => {
     return schools
       .filter((s) => favorites.includes(s.id) && !compareIds.includes(s.id))
@@ -132,7 +118,7 @@ export default function Compare() {
       {compareIds.length < 3 && (
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-5 mb-6">
           {/* 搜索框 */}
-          <div className="relative mb-4">
+          <div className="mb-4">
             <input
               type="text"
               value={search}
@@ -140,29 +126,6 @@ export default function Compare() {
               placeholder="🔍 输入学校名称搜索..."
               className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm"
             />
-            {searchResults.length > 0 && (
-              <div className="absolute top-full left-0 right-0 bg-white border border-gray-200 rounded-lg shadow-lg mt-1 z-10 max-h-48 overflow-y-auto">
-                {searchResults.map((school) => (
-                  <button
-                    key={school.id}
-                    onClick={() => addSchool(school.id)}
-                    className="w-full text-left px-4 py-2 hover:bg-blue-50 text-sm flex items-center justify-between"
-                  >
-                    <div>
-                      <span className="font-medium text-gray-900">
-                        {school.nameCn}
-                      </span>
-                      <span className="text-gray-400 ml-2 text-xs">
-                        {school.name}
-                      </span>
-                    </div>
-                    <span className="text-xs text-gray-400">
-                      {school.state}
-                    </span>
-                  </button>
-                ))}
-              </div>
-            )}
           </div>
 
           {/* 标签切换 */}
@@ -196,6 +159,15 @@ export default function Compare() {
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 max-h-48 overflow-y-auto">
             {(activeTab === "all" ? schools : favoriteSchools)
               .filter((s) => !compareIds.includes(s.id))
+              .filter((s) => {
+                if (!search.trim()) return true;
+                const q = search.trim().toLowerCase();
+                return (
+                  s.nameCn.includes(q) ||
+                  s.name.toLowerCase().includes(q) ||
+                  s.state.includes(q)
+                );
+              })
               .map((school) => (
                 <button
                   key={school.id}
