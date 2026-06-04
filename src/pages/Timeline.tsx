@@ -405,14 +405,11 @@ export default function Timeline() {
     const now = new Date();
     const currentYear = now.getFullYear();
     const gradeNum = parseInt(grade.replace(/[^\d]/g, ""));
-    // 计算学生到达申请年级（G9）还需要几年
     const yearsToApplyingGrade = Math.max(0, 9 - gradeNum);
-    // 实际可用准备时间 = 入学年份 - 当前年份 - 1（申请在入学前1年）
     const yearsUntilApply = enrollYear - currentYear - 1;
-    // 有效准备时间 = 实际可用时间 - 到达申请年级的时间
     const effectiveYears = yearsUntilApply - yearsToApplyingGrade;
 
-    // PG（第五年）特殊情况
+    // PG 特殊情况
     if (grade === "PG") {
       return {
         title: "Postgraduate（第五年）申请指南",
@@ -427,77 +424,63 @@ export default function Timeline() {
       };
     }
 
-    // 紧迫程度判断（基于有效准备时间）
-    const isRelaxed = effectiveYears >= 2;
-    const isModerate = effectiveYears === 1;
-
-    // 体系特定的考试信息
-    const testInfo: Record<SystemKey, { name: string; target: string; alt?: string }> = {
-      american: { name: "SSAT + TOEFL", target: "SSAT 85%+，TOEFL 90+" },
-      british: { name: "IELTS 或 TOEFL", target: "IELTS 6.5+ 或 TOEFL 90+", alt: "部分学校接受 GCSE 替代 SSAT" },
-      ib: { name: "TOEFL 或 IELTS", target: "TOEFL 90+ 或 IELTS 6.5+", alt: "IB 成绩被广泛认可，部分学校免 SSAT" },
-      chinese: { name: "SSAT + TOEFL", target: "SSAT 85%+，TOEFL 90+" },
+    // 1. 体系维度 - 考试和优势
+    const systemData: Record<SystemKey, { test: string; advantage: string; special: string }> = {
+      american: { test: "SSAT + TOEFL", advantage: "美式体系学生在课外活动和 GPA 方面有天然优势", special: "保持 GPA 3.5+，深入发展课外活动" },
+      british: { test: "IELTS 或 TOEFL", advantage: "英式体系学生在写作和批判性思维方面有优势", special: "部分学校接受 GCSE 替代 SSAT，先确认目标学校要求" },
+      ib: { test: "TOEFL 或 IELTS", advantage: "IB 学生在跨学科思考和国际视野方面有优势", special: "IB 成绩被广泛认可，部分学校免 SSAT" },
+      chinese: { test: "SSAT + TOEFL", advantage: "国内学生基础扎实，数理化成绩通常优秀", special: "重点提升英语能力，SSAT 词汇和阅读是关键" },
     };
-    const test = testInfo[system];
+    const sys = systemData[system];
 
-    // 年级特定建议
-    const gradeAdvice: Record<string, { focus: string; activities: string; tip: string }> = {
-      G7: { focus: "打基础、探索兴趣", activities: "广泛尝试不同活动，找到真正热爱的方向", tip: "这是最早期的阶段，重点是培养英语能力和探索兴趣" },
-      G8: { focus: "确定方向、开始准备", activities: "选定 1-2 个兴趣深入发展", tip: "现在开始了解 SSAT 考试内容，制定备考计划" },
-      G9: { focus: "集中冲刺、准备申请", activities: "在 1-2 个领域做出深度，争取获奖", tip: "这是主要入学点，需要全力准备标化考试和申请材料" },
-      G10: { focus: "抓紧最后机会", activities: "完善课外活动，准备申请文书", tip: "部分学校不接受 10 年级申请，需确认目标学校要求" },
-      G11: { focus: "只选少数学校，精准申请", activities: "聚焦最想去的 3-5 所学校", tip: "只有少数学校接受 11 年级申请，需要非常精准" },
-      Y7: { focus: "打基础、探索兴趣", activities: "广泛尝试不同活动，找到真正热爱的方向", tip: "这是最早期的阶段，重点是培养英语能力和探索兴趣" },
-      Y8: { focus: "确定方向、开始准备", activities: "选定 1-2 个兴趣深入发展", tip: "现在开始了解考试内容，制定备考计划" },
-      Y9: { focus: "集中冲刺、准备申请", activities: "在 1-2 个领域做出深度，争取获奖", tip: "这是主要入学点，需要全力准备标化考试和申请材料" },
-      Y10: { focus: "抓紧最后机会", activities: "完善课外活动，准备申请文书", tip: "部分学校不接受 10 年级申请，需确认目标学校要求" },
-      Y11: { focus: "只选少数学校，精准申请", activities: "聚焦最想去的 3-5 所学校", tip: "只有少数学校接受 11 年级申请，需要非常精准" },
-      G6: { focus: "打基础、探索兴趣", activities: "广泛尝试不同活动，找到真正热爱的方向", tip: "这是最早期的阶段，重点是培养英语能力和探索兴趣" },
-      C7: { focus: "打基础、探索兴趣", activities: "广泛尝试不同活动，找到真正热爱的方向", tip: "这是最早期的阶段，重点是培养英语能力和探索兴趣" },
-      C8: { focus: "确定方向、开始准备", activities: "选定 1-2 个兴趣深入发展", tip: "现在开始了解 SSAT 考试内容，制定备考计划" },
-      C9: { focus: "集中冲刺、准备申请", activities: "在 1-2 个领域做出深度，争取获奖", tip: "这是主要入学点，需要全力准备标化考试和申请材料" },
-      C10: { focus: "抓紧最后机会", activities: "完善课外活动，准备申请文书", tip: "部分学校不接受 10 年级申请，需确认目标学校要求" },
-      C11: { focus: "只选少数学校，精准申请", activities: "聚焦最想去的 3-5 所学校", tip: "只有少数学校接受 11 年级申请，需要非常精准" },
+    // 2. 年级维度 - 阶段和重点
+    const gradeData: Record<string, { stage: string; focus: string; testTip: string; activityTip: string }> = {
+      G7: { stage: "最早期", focus: "打基础、探索兴趣", testTip: "了解 SSAT 考试内容，开始积累英语词汇", activityTip: "广泛尝试不同活动，找到真正热爱的方向" },
+      G8: { stage: "早期", focus: "确定方向、开始准备", testTip: "开始系统学习 SSAT 词汇和阅读，目标每天 30 分钟", activityTip: "选定 1-2 个兴趣深入发展" },
+      G9: { stage: "关键期", focus: "集中冲刺、准备申请", testTip: "全力准备 SSAT 和 TOEFL，目标 SSAT 85%+，TOEFL 90+", activityTip: "在 1-2 个领域做出深度，争取获奖" },
+      G10: { stage: "最后机会", focus: "抓紧时间、精准申请", testTip: "必须已经有 SSAT 和 TOEFL 成绩，或立即冲刺", activityTip: "完善课外活动履历，准备申请文书" },
+      G11: { stage: "极紧迫", focus: "只选少数学校", testTip: "大部分学校不接受 11 年级，只有少数学校可选", activityTip: "聚焦最想去的 3-5 所学校" },
+      Y7: { stage: "最早期", focus: "打基础、探索兴趣", testTip: "了解考试内容，开始积累英语词汇", activityTip: "广泛尝试不同活动，找到真正热爱的方向" },
+      Y8: { stage: "早期", focus: "确定方向、开始准备", testTip: "开始系统学习 IELTS/TOEFL 词汇和阅读", activityTip: "选定 1-2 个兴趣深入发展" },
+      Y9: { stage: "关键期", focus: "集中冲刺、准备申请", testTip: "全力准备 IELTS/TOEFL，目标 IELTS 6.5+", activityTip: "在 1-2 个领域做出深度，争取获奖" },
+      Y10: { stage: "最后机会", focus: "抓紧时间、精准申请", testTip: "必须已经有语言成绩，或立即冲刺", activityTip: "完善课外活动履历，准备申请文书" },
+      Y11: { stage: "极紧迫", focus: "只选少数学校", testTip: "大部分学校不接受 11 年级，只有少数学校可选", activityTip: "聚焦最想去的 3-5 所学校" },
+      G6: { stage: "最早期", focus: "打基础、探索兴趣", testTip: "了解考试内容，开始积累英语词汇", activityTip: "广泛尝试不同活动，找到真正热爱的方向" },
+      C7: { stage: "最早期", focus: "打基础、探索兴趣", testTip: "了解 SSAT 考试内容，开始每天背 30 个英语单词", activityTip: "广泛尝试不同活动，找到真正热爱的方向" },
+      C8: { stage: "早期", focus: "确定方向、开始准备", testTip: "开始系统学习 SSAT 词汇和阅读，目标每天 50 个单词", activityTip: "选定 1-2 个兴趣深入发展" },
+      C9: { stage: "关键期", focus: "集中冲刺、准备申请", testTip: "全力准备 SSAT 和 TOEFL，暑假集中冲刺", activityTip: "在 1-2 个领域做出深度，争取获奖" },
+      C10: { stage: "最后机会", focus: "抓紧时间、精准申请", testTip: "必须已经有 SSAT 和 TOEFL 成绩，或立即冲刺", activityTip: "完善课外活动履历，准备申请文书" },
+      C11: { stage: "极紧迫", focus: "只选少数学校", testTip: "大部分学校不接受高二申请，只有少数学校可选", activityTip: "聚焦最想去的 3-5 所学校" },
     };
-    const advice = gradeAdvice[grade] || gradeAdvice["G9"];
+    const g = gradeData[grade] || gradeData["G9"];
 
-    // 根据紧迫程度生成建议
-    if (isRelaxed) {
-      return {
-        title: `你还有充足的准备时间 — ${advice.focus}`,
-        items: [
-          `📚 ${advice.tip}`,
-          `🎯 标化准备：可以先做一套 ${test.name} 模考，了解自己的水平，制定长期备考计划`,
-          `🏆 课外活动：${advice.activities}`,
-          `🏫 学校调研：利用本站的智能选校功能，初步筛选 10-15 所感兴趣的学校`,
-          `📝 成绩维护：保持校内成绩稳定，GPA 目标 3.5+（顶尖校 3.7+）`,
-          `💡 特别提醒：${test.alt || "越早准备越有优势，现在开始积累英语词汇"}`,
-        ],
-      };
+    // 3. 入学年份维度 - 紧迫程度
+    let urgency: string;
+    let urgencyAdvice: string;
+    if (effectiveYears >= 3) {
+      urgency = "充足";
+      urgencyAdvice = "可以慢慢规划，重点是打基础和探索";
+    } else if (effectiveYears === 2) {
+      urgency = "适中";
+      urgencyAdvice = "现在是黄金时期，需要系统准备";
+    } else if (effectiveYears === 1) {
+      urgency = "紧迫";
+      urgencyAdvice = "时间不多了，需要高效行动";
+    } else {
+      urgency = "非常紧迫";
+      urgencyAdvice = "必须立即行动，每一步都不能浪费";
     }
-    if (isModerate) {
-      return {
-        title: `准备时间适中 — 现在是黄金时期`,
-        items: [
-          `📝 ${test.name} 备考：系统学习各部分内容，建议每天 1-2 小时`,
-          `📊 目标分数：${test.target}（顶尖校更高）`,
-          `🏆 课外活动：${advice.activities}，争取有实质性成果`,
-          `📋 推荐信：提前联系 2-3 位熟悉你的老师，给他们充足时间准备`,
-          `🎤 面试准备：开始练习英文自我介绍和常见面试问题`,
-          `💡 特别提醒：${test.alt || "暑假是集中冲刺的最佳时间"}`,
-        ],
-      };
-    }
-    // 紧迫
+
+    // 组合生成最终建议
     return {
-      title: `时间紧迫！需要立即行动`,
+      title: `${g.stage} · ${urgency} — ${g.focus}`,
       items: [
-        `⚡ 标化冲刺：立即开始 ${test.name} 模考冲刺，建议每周至少 2 次模考`,
-        `📝 申请材料：同时开始准备申请文书、成绩单、推荐信`,
-        `🎤 面试准备：练习英文自我介绍和常见面试问题，建议找外教模拟`,
-        `📋 学校确认：最终确定 8-12 所目标学校（2-3 冲刺、4-5 匹配、2-3 保底）`,
-        `⏰ 截止日期：大部分学校 1 月中旬截止，务必提前 1 个月完成所有材料`,
-        `💡 特别提醒：${system === "chinese" ? "国内学生面试是全英文的，口语准备至关重要" : test.alt || "时间紧迫，每一步都要高效"}`,
+        `📚 阶段：你处于${g.stage}，${urgencyAdvice}`,
+        `📝 标化：${g.testTip}（考试类型：${sys.test}）`,
+        `🎯 体系：${sys.special}`,
+        `🏆 活动：${g.activityTip}`,
+        `💡 优势：${sys.advantage}`,
+        `⏰ 入学：目标 ${enrollYear} 年秋季入学，申请截止 ${enrollYear - 1} 年 1 月 15 日`,
       ],
     };
   }, [system, grade, enrollYear]);
