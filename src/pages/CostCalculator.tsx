@@ -137,12 +137,12 @@ export default function CostCalculator() {
               <label className="block text-sm font-medium text-gray-700 mb-1">住宿方式</label>
               {isPureBoarding && (
                 <select disabled className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm bg-gray-50 text-gray-500">
-                  <option>寄宿（住校）— 仅此选项</option>
+                  <option>寄宿（住校）</option>
                 </select>
               )}
               {isPureDay && (
                 <select disabled className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm bg-gray-50 text-gray-500">
-                  <option>走读（不住校）— 仅此选项</option>
+                  <option>走读（不住校）</option>
                 </select>
               )}
               {isMixed && (
