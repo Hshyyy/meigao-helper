@@ -394,11 +394,23 @@ function getPersonalizedAdvice(
 
   // 体系特定建议
   if (profile.schoolType === "ib") {
-    tips.push("IB 课程被广泛认可，申请时强调你的跨学科学习经历");
+    tips.push("IB 课程被广泛认可，申请时强调你的跨学科学习经历和 CAS 活动");
+    tips.push("部分学校接受 IB 成绩替代 SSAT，可优先考虑这些学校");
   } else if (profile.schoolType === "alevel") {
     tips.push("A-Level 课程深度足够，申请时突出你的学术专注度");
+    tips.push("部分学校接受 GCSE 替代 SSAT，建议先确认目标学校要求");
+  } else if (profile.schoolType === "ap") {
+    tips.push("美式课程背景是优势，申请时强调你的 GPA 和课外活动");
+    tips.push("AP 课程被广泛认可，保持 GPA 3.5+ 是关键");
+  } else if (profile.schoolType === "public_intl") {
+    tips.push("国际部学生通常有较好的英语基础，但面试仍需充分准备");
+    tips.push("建议同时准备 SSAT 和 TOEFL，大部分学校要求这两项");
+    tips.push("课外活动记录可能不如国际学校丰富，建议重点展示学术能力");
   } else if (profile.schoolType === "public") {
-    tips.push("体制内学生需要在面试中展现英语能力，建议多练习口语表达");
+    tips.push("体制内学生英语是短板，建议提前 1-2 年开始系统准备");
+    tips.push("面试是全英文的，建议找外教模拟练习，重点突破口语表达");
+    tips.push("课外活动记录可能较少，建议通过文书展示个人特质和潜力");
+    tips.push("推荐信可能不熟悉美式格式，建议与老师沟通格式要求");
   }
 
   return tips;
