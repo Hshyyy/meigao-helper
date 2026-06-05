@@ -69,7 +69,7 @@ export default function SchoolDetail({ school, onClose }: Props) {
             <InfoItem label="Enrollment" value={`${school.studentCount} 人`} />
             <InfoItem label="Student-Faculty Ratio" value={school.studentTeacherRatio} />
             <InfoItem label="International Students" value={`${school.internationalRate}%`} />
-            <InfoItem label="Acceptance" value={`${school.acceptanceRate}%`} />
+            <InfoItem label="Acceptance Rate" value={`${school.acceptanceRate}%`} />
           </div>
 
           {/* 录取要求 */}
