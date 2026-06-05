@@ -410,6 +410,19 @@ export default function Timeline() {
     const monthsLeft = Math.max(0, Math.round(daysUntilDeadline / 30));
     const effectiveYears = Math.floor(monthsLeft / 12);
 
+    // 根据年级计算"距离申请年级还有几年"
+    const gradeNumMap: Record<string, number> = {
+      G7: 7, G8: 8, G9: 9, G10: 10, G11: 11,
+      Y7: 7, Y8: 8, Y9: 9, Y10: 10, Y11: 11,
+      G6: 6, C7: 7, C8: 8, C9: 9, C10: 10, C11: 11,
+    };
+    const gn = gradeNumMap[grade] || 9;
+    // 综合紧迫度 = 申请截止时间 vs 学生当前年级
+    // 如果学生已经是高年级（G10+），即使时间充裕，也要更紧迫
+    const isHighGrade = gn >= 10;
+    const isMidGrade = gn === 9;
+    const isLowGrade = gn <= 8;
+
     // 如果申请已截止，直接返回
     if (daysUntilDeadline <= 0) {
       // 动态计算下一个可用的入学年份
@@ -467,12 +480,7 @@ export default function Timeline() {
     const sys = systemData[system];
 
     // 2. 根据年级+入学年份组合生成具体建议
-    const gradeNumMap: Record<string, number> = {
-      G7: 7, G8: 8, G9: 9, G10: 10, G11: 11,
-      Y7: 7, Y8: 8, Y9: 9, Y10: 10, Y11: 11,
-      G6: 6, C7: 7, C8: 8, C9: 9, C10: 10, C11: 11,
-    };
-    const gn = gradeNumMap[grade] || 9;
+    // 年级影响：低年级=更多准备时间，高年级=更紧迫
 
     // 根据剩余时间动态调整目标分数和学习强度
     let ssatTarget: string;
@@ -509,117 +517,64 @@ export default function Timeline() {
       };
     }
 
-    // 动态生成标题和建议
+    // 动态生成标题和建议 - 三者动态结合
     let title: string;
     let items: string[];
 
-    // G7（初一）
-    if (gn === 7 && monthsLeft >= 48) {
-      title = `超前规划 · 还有 ${timeStr}`;
+    // 低年级（G7-G8）：重点是打基础、探索兴趣
+    if (isLowGrade && effectiveYears >= 3) {
+      title = `从容起步 · 还有 ${timeStr}`;
       items = [
-        `📚 你目前初一，距离申请还有 ${timeStr}，完全不用着急`,
-        `📝 英语：看英文动画片、读英文绘本（推荐《Magic Tree House》），每天 20 分钟培养语感`,
+        `📚 你目前${gn === 7 ? "初一" : "初二"}，距离申请还有 ${timeStr}，时间非常充裕`,
+        `📝 英语：看英文动画片、读英文绘本，每天 20 分钟培养语感`,
         `🎯 ${sys.special}`,
         `🏆 活动：广泛尝试各种活动——游泳、钢琴、编程、绘画、志愿者，找到真正喜欢的`,
         `🏫 调研：浏览本站学校库，收藏感兴趣的学校`,
         `💡 ${sys.advantage}`,
       ];
-    } else if (gn === 7 && monthsLeft >= 36) {
-      title = `基础积累 · 还有 ${timeStr}`;
+    } else if (isLowGrade && effectiveYears >= 2) {
+      title = `系统学习 · 还有 ${timeStr}`;
       items = [
-        `📚 你目前初一，还有 ${timeStr}，开始接触标化考试`,
-        `📝 SSAT：每周做 1-2 篇阅读理解，熟悉题型，目标分数 ${ssatTarget}`,
-        `📝 TOEFL：每天听 15 分钟英文播客，培养听力`,
-        `🎯 ${sys.special}`,
-        `🏆 活动：从广泛尝试转向 2-3 个方向，开始积累`,
-        `💡 ${sys.advantage}`,
-      ];
-    } else if (gn === 7 && monthsLeft >= 24) {
-      title = `系统备考 · 还有 ${timeStr}`;
-      items = [
-        `📚 你目前初一，还有 ${timeStr}，需要开始系统备考`,
-        `📝 SSAT：每天背 50 个词汇，周末做 1 套阅读，目标 ${ssatTarget}`,
-        `📝 TOEFL：每天听 20 分钟英文，练习跟读`,
-        `🎯 ${sys.special}`,
-        `🏆 活动：选定 1-2 个方向深入，参加比赛`,
-        `📋 推荐信：与老师建立良好关系`,
-      ];
-    } else if (gn === 7 && monthsLeft >= 12) {
-      title = `加速冲刺 · 只剩 ${timeStr}！`;
-      items = [
-        `📚 你目前初一，只剩 ${timeStr}，需要全力加速`,
-        `📝 SSAT：每天 ${dailyHours}，词汇+阅读+数学同步推进，目标 ${ssatTarget}`,
-        `📝 TOEFL：每天 1 小时听力口语，目标 ${toeflTarget}`,
-        `🎯 ${sys.special}`,
-        `🏆 活动：快速聚焦 1-2 个方向，争取出成果`,
-        `🎤 面试：开始练习英文自我介绍，每天 15 分钟`,
-        `⏰ ${weeklyMock}模考`,
-      ];
-    } else if (gn === 7) {
-      title = `紧急状态 · 只剩 ${timeStr}！`;
-      items = [
-        `📚 你目前初一，只剩 ${timeStr}，建议调整入学年份`,
-        `⚠️ 初一学生通常申请 2-3 年后入学，当前时间不足`,
-        `📝 如果坚持：每天 ${dailyHours} 高强度备考，目标 SSAT ${ssatTarget}`,
-        `🎯 ${sys.special}`,
-        `📋 学校：确认哪些学校接受低年级申请`,
-        `⏰ ${weeklyMock}模考`,
-      ];
-    }
-    // G8（初二）
-    else if (gn === 8 && monthsLeft >= 36) {
-      title = `从容准备 · 还有 ${timeStr}`;
-      items = [
-        `📚 你目前初二，还有 ${timeStr}，可以从容准备`,
-        `📝 SSAT：每天背 30 个词汇，读英文小说，目标 ${ssatTarget}`,
-        `📝 TOEFL：每天听 15 分钟英文，培养语感`,
-        `🎯 ${sys.special}`,
-        `🏆 活动：广泛尝试，找到 2-3 个兴趣方向`,
-        `💡 ${sys.advantage}`,
-      ];
-    } else if (gn === 8 && monthsLeft >= 24) {
-      title = `黄金准备 · 还有 ${timeStr}`;
-      items = [
-        `📚 你目前初二，还有 ${timeStr}，最佳起步时间`,
+        `📚 你目前${gn === 7 ? "初一" : "初二"}，还有 ${timeStr}，开始系统学习`,
         `📝 SSAT：每天 ${dailyHours}，词汇+阅读+数学，目标 ${ssatTarget}`,
         `📝 TOEFL：每天 30 分钟听力口语，目标 ${toeflTarget}`,
         `🎯 ${sys.special}`,
         `🏆 活动：选定 1-2 个方向深入，参加比赛`,
-        `📋 推荐信：与老师建立关系`,
+        `📋 推荐信：与老师建立良好关系`,
       ];
-    } else if (gn === 8 && monthsLeft >= 12) {
-      title = `紧迫冲刺 · 只剩 ${timeStr}！`;
+    } else if (isLowGrade && effectiveYears >= 1) {
+      title = `加速准备 · 只剩 ${timeStr}！`;
       items = [
-        `📚 你目前初二，只剩 ${timeStr}，必须高效行动`,
-        `📝 SSAT：每天 ${dailyHours}，暑假集中突破，目标 ${ssatTarget}`,
+        `📚 你目前${gn === 7 ? "初一" : "初二"}，只剩 ${timeStr}，需要加速`,
+        `📝 SSAT：每天 ${dailyHours}，目标 ${ssatTarget}，${weeklyMock}模考`,
         `📝 TOEFL：每天 1 小时，目标 ${toeflTarget}`,
         `🎯 ${sys.special}`,
-        `🏆 活动：快速完善课外活动`,
-        `🎤 面试：开始练习英文面试`,
-        `⏰ ${weeklyMock}模考`,
+        `🏆 活动：快速聚焦 1-2 个方向，争取出成果`,
+        `🎤 面试：开始练习英文自我介绍`,
+        `⏰ 申请截止 ${enrollYear - 1} 年 1 月 15 日`,
       ];
-    } else if (gn === 8) {
-      title = `紧急状态 · 只剩 ${timeStr}！`;
+    } else if (isLowGrade) {
+      title = `时间紧迫 · 只剩 ${timeStr}！`;
       items = [
-        `📚 你目前初二，只剩 ${timeStr}，建议调整入学年份`,
-        `⚠️ 初二学生通常申请 1-2 年后入学`,
+        `📚 你目前${gn === 7 ? "初一" : "初二"}，只剩 ${timeStr}，建议调整入学年份`,
+        `⚠️ ${gn === 7 ? "初一" : "初二"}学生通常申请 ${gn === 7 ? "2-3" : "1-2"} 年后入学`,
         `📝 如果坚持：每天 ${dailyHours} 高强度冲刺，目标 SSAT ${ssatTarget}`,
         `🎯 ${sys.special}`,
-        `⏰ ${weeklyMock}模考`,
+        `⏰ 申请截止 ${enrollYear - 1} 年 1 月 15 日`,
       ];
     }
-    // G9（初三）
-    else if (gn === 9 && monthsLeft >= 36) {
+    // 初三（G9）：主要入学点
+    else if (isMidGrade && effectiveYears >= 3) {
       title = `主要入学点 · 充裕准备 · 还有 ${timeStr}`;
       items = [
-        `📚 你目前初三，主要入学点，还有 ${timeStr}准备`,
+        `📚 你目前初三，这是美高主要入学点，还有 ${timeStr}准备`,
         `📝 SSAT：系统学习，每天 ${dailyHours}，目标 ${ssatTarget}`,
         `📝 TOEFL：重点提升听力口语，目标 ${toeflTarget}`,
         `🎯 ${sys.special}`,
         `🏆 活动：深入发展 1-2 个领域，争取获奖`,
         `📋 推荐信：正式联系 2-3 位老师`,
       ];
-    } else if (gn === 9 && monthsLeft >= 24) {
+    } else if (isMidGrade && effectiveYears >= 2) {
       title = `主要入学点 · 黄金期 · 还有 ${timeStr}`;
       items = [
         `📚 你目前初三，主要入学点，还有 ${timeStr}`,
@@ -630,7 +585,7 @@ export default function Timeline() {
         `📋 推荐信：正式联系老师`,
         `🎤 面试：开始练习英文自我介绍`,
       ];
-    } else if (gn === 9 && monthsLeft >= 12) {
+    } else if (isMidGrade && effectiveYears >= 1) {
       title = `主要入学点 · 冲刺期 · 只剩 ${timeStr}！`;
       items = [
         `📚 你目前初三，主要入学点，只剩 ${timeStr}！`,
@@ -641,7 +596,7 @@ export default function Timeline() {
         `🎤 面试：每天练习，建议找外教模拟`,
         `⏰ 申请截止 ${enrollYear - 1} 年 1 月 15 日`,
       ];
-    } else if (gn === 9) {
+    } else if (isMidGrade) {
       title = `主要入学点 · 决战 · 只剩 ${timeStr}！`;
       items = [
         `📚 你目前初三，主要入学点，只剩 ${timeStr}！`,
@@ -653,46 +608,35 @@ export default function Timeline() {
         `⏰ 申请截止 ${enrollYear - 1} 年 1 月 15 日`,
       ];
     }
-    // G10（高一）
-    else if (gn === 10 && monthsLeft >= 24) {
+    // 高年级（G10+）：时间紧迫，选择有限
+    else if (isHighGrade && effectiveYears >= 2) {
       title = `最后机会 · 还有 ${timeStr}`;
       items = [
-        `📚 你目前高一，最后机会，还有 ${timeStr}`,
-        `📝 SSAT：确认已有 ${ssatTarget} 成绩，或开始备考`,
+        `📚 你目前${gn === 10 ? "高一" : "高二"}，这是最后机会，还有 ${timeStr}`,
+        `📝 SSAT：确认已有 ${ssatTarget} 成绩，或立即备考`,
         `📝 TOEFL：确认已有 ${toeflTarget} 成绩，或开始冲刺`,
         `🎯 ${sys.special}`,
-        `📋 学校：确认目标学校是否接受 10 年级`,
+        `📋 学校：确认目标学校是否接受 ${gn === 10 ? "10" : "11"} 年级`,
         `🏆 活动：完善履历，准备文书`,
       ];
-    } else if (gn === 10 && monthsLeft >= 12) {
+    } else if (isHighGrade && effectiveYears >= 1) {
       title = `最后机会 · 只剩 ${timeStr}！`;
       items = [
-        `📚 你目前高一，只剩 ${timeStr}！`,
+        `📚 你目前${gn === 10 ? "高一" : "高二"}，只剩 ${timeStr}！`,
         `📝 SSAT：必须已有或立即冲刺，目标 ${ssatTarget}，${weeklyMock}模考`,
         `📝 TOEFL：必须已有或立即冲刺，目标 ${toeflTarget}`,
         `🎯 ${sys.special}`,
-        `📋 学校：只选接受 10 年级的学校`,
+        `📋 学校：只选接受 ${gn === 10 ? "10" : "11"} 年级的学校`,
         `🎤 面试：立即准备`,
       ];
-    } else if (gn === 10) {
+    } else if (isHighGrade) {
       title = `最后机会 · 紧急！只剩 ${timeStr}！`;
       items = [
-        `📚 你目前高一，只剩 ${timeStr}！建议调整入学年份`,
-        `⚠️ 高一学生通常申请 1-2 年后入学`,
+        `📚 你目前${gn === 10 ? "高一" : "高二"}，只剩 ${timeStr}！建议调整入学年份`,
+        `⚠️ ${gn === 10 ? "高一" : "高二"}学生通常申请 1-2 年后入学`,
         `📝 如果坚持：每天 ${dailyHours} 冲刺 SSAT+TOEFL`,
         `🎯 ${sys.special}`,
-        `📋 学校：精准选择接受 10 年级的学校`,
-      ];
-    }
-    // G11（高二）
-    else if (gn === 11) {
-      title = `极紧迫 · 只有少数学校可选`;
-      items = [
-        `📚 你目前高二，大部分学校不接受 11 年级`,
-        `📋 学校：只有少数学校接受，需精准选择`,
-        `📝 标化：必须已有 SSAT ${ssatTarget} 和 TOEFL ${toeflTarget}`,
-        `🎯 ${sys.special}`,
-        `🏆 活动：聚焦最想去的 3-5 所学校`,
+        `📋 学校：精准选择接受 ${gn === 10 ? "10" : "11"} 年级的学校`,
       ];
     }
     // 默认
