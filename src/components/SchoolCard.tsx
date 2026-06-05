@@ -74,6 +74,7 @@ export default function SchoolCard({
           <span>📊 预估总费用 ${displayCost.toLocaleString()}/年</span>
           <span>录取率 {school.acceptanceRate}%</span>
         </div>
+        <p className="text-xs text-blue-500">💡 点击查看详情，可选住宿方式</p>
       </div>
 
       {/* 标签 + 操作按钮 */}
