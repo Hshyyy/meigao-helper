@@ -257,15 +257,15 @@ export default function Compare() {
               </tr>
             </thead>
             <tbody>
-              {/* 排名 */}
-              <CompareRow label="排名" values={compareSchools.map(s => `#${s.ranking}`)} bestFn="min" bestValues={compareSchools.map(s => s.ranking)} />
-              {/* 梯队 */}
-              <CompareRow label="梯队" values={compareSchools.map(s => s.rankingTier)} />
+              {/* Ranking */}
+              <CompareRow label="Ranking" values={compareSchools.map(s => `#${s.ranking}`)} bestFn="min" bestValues={compareSchools.map(s => s.ranking)} />
+              {/* Tier */}
+              <CompareRow label="Tier" values={compareSchools.map(s => s.rankingTier)} />
               {/* Boarding */}
               <CompareRow label="Boarding" values={compareSchools.map(s => s.type === "寄宿" ? "纯寄宿学校" : s.type === "寄宿/走读" ? "寄宿/走读可选" : "纯走读学校")} />
-              {/* 住宿方式（可选） */}
+              {/* Housing */}
               <tr className="border-b border-gray-50">
-                <td className="p-4 text-sm text-gray-500">住宿方式</td>
+                <td className="p-4 text-sm text-gray-500">Housing</td>
                 {compareSchools.map((school) => {
                   const choice = getHousingChoice(school);
                   const isPureBoarding = school.type === "寄宿";
@@ -289,34 +289,34 @@ export default function Compare() {
                   );
                 })}
               </tr>
-              {/* 年学费 */}
-              <CompareRow label="年学费" values={compareSchools.map(s => `$${s.tuition.toLocaleString()}`)} />
-              {/* 预估年总费用 */}
+              {/* Tuition */}
+              <CompareRow label="Tuition" values={compareSchools.map(s => `$${s.tuition.toLocaleString()}`)} />
+              {/* Est. Annual Cost */}
               <CompareRow
-                label="预估年总费用"
+                label="Est. Annual Cost"
                 values={compareSchools.map(s => `$${calcCost(s, getHousingChoice(s)).toLocaleString()}`)}
                 highlight
                 bestFn="min"
                 bestValues={compareSchools.map(s => calcCost(s, getHousingChoice(s)))}
               />
-              {/* 录取率 */}
-              <CompareRow label="录取率" values={compareSchools.map(s => `${s.acceptanceRate}%`)} bestFn="max" bestValues={compareSchools.map(s => s.acceptanceRate)} />
-              {/* 国际生比例 */}
-              <CompareRow label="国际生比例" values={compareSchools.map(s => `${s.internationalRate}%`)} />
-              {/* 建议托福 */}
-              <CompareRow label="建议托福" values={compareSchools.map(s => `${s.toeflMin}+`)} />
-              {/* 建议 SSAT */}
-              <CompareRow label="建议 SSAT" values={compareSchools.map(s => `${s.ssatPercentile}%+`)} />
-              {/* 建议 GPA */}
-              <CompareRow label="建议 GPA" values={compareSchools.map(s => `${s.gpaMin}+`)} />
-              {/* 学生总数 */}
-              <CompareRow label="学生总数" values={compareSchools.map(s => `${s.studentCount} 人`)} />
-              {/* 师生比 */}
-              <CompareRow label="师生比" values={compareSchools.map(s => s.studentTeacherRatio)} />
-              {/* 年级范围 */}
-              <CompareRow label="年级范围" values={compareSchools.map(s => s.grades)} />
-              {/* 地区 */}
-              <CompareRow label="地区" values={compareSchools.map(s => s.state)} />
+              {/* Acceptance Rate */}
+              <CompareRow label="Acceptance Rate" values={compareSchools.map(s => `${s.acceptanceRate}%`)} bestFn="max" bestValues={compareSchools.map(s => s.acceptanceRate)} />
+              {/* International Students */}
+              <CompareRow label="International Students" values={compareSchools.map(s => `${s.internationalRate}%`)} />
+              {/* TOEFL */}
+              <CompareRow label="TOEFL" values={compareSchools.map(s => `${s.toeflMin}+`)} />
+              {/* SSAT */}
+              <CompareRow label="SSAT" values={compareSchools.map(s => `${s.ssatPercentile}%+`)} />
+              {/* GPA */}
+              <CompareRow label="GPA" values={compareSchools.map(s => `${s.gpaMin}+`)} />
+              {/* Enrollment */}
+              <CompareRow label="Enrollment" values={compareSchools.map(s => `${s.studentCount} 人`)} />
+              {/* Student-Faculty Ratio */}
+              <CompareRow label="Student-Faculty Ratio" values={compareSchools.map(s => s.studentTeacherRatio)} />
+              {/* Grades */}
+              <CompareRow label="Grades" values={compareSchools.map(s => s.grades)} />
+              {/* Location */}
+              <CompareRow label="Location" values={compareSchools.map(s => s.state)} />
               <tr className="border-b border-gray-50">
                 <td className="p-4 text-sm text-gray-500">特色标签</td>
                 {compareSchools.map((school) => (
