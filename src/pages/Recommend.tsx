@@ -258,7 +258,7 @@ export default function Recommend() {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  {profile.schoolType === "public" ? "校内成绩（百分制）" : "GPA（0-4.0）"}
+                  {profile.schoolType === "public" ? "校内平均分（百分制）" : "GPA（0-4.0）"}
                 </label>
                 <input
                   type="number"
@@ -273,7 +273,7 @@ export default function Recommend() {
                 />
                 <p className="text-xs text-gray-400 mt-1">
                   {profile.schoolType === "public"
-                    ? "💡 百分制，顶尖校建议 90+，优秀校建议 85+"
+                    ? "💡 百分制，顶尖校建议 90+，优秀校建议 85+。此处为系统匹配用，实际申请需提交完整成绩单"
                     : "💡 4.0 为满分，顶尖校建议 3.7+，优秀校建议 3.5+"}
                 </p>
               </div>
