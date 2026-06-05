@@ -184,7 +184,9 @@ export default function SchoolDetail({ school, onClose, profile }: Props) {
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm text-gray-600">GPA</span>
-                <span className="text-sm font-medium text-gray-900">{school.gpaMin}+</span>
+                <span className="text-sm font-medium text-gray-900">
+                  {school.gpaMin}+（即成绩 {gpaToPercent(school.gpaMin)}%+）
+                </span>
               </div>
             </div>
           </div>
