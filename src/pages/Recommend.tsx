@@ -165,7 +165,7 @@ export default function Recommend() {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!profile.schoolType) {
       alert("请选择目前就读学校类型");
@@ -265,9 +265,11 @@ export default function Recommend() {
                 <select
                   value={profile.schoolType}
                   onChange={(e) => update("schoolType", e.target.value)}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+                  className={`w-full border border-gray-300 rounded-lg px-3 py-2 text-sm ${
+                    !profile.schoolType ? "text-gray-400" : "text-gray-900"
+                  }`}
                 >
-                  <option value="">选择学校类型</option>
+                  <option value="" disabled hidden>选择学校类型</option>
                   <option value="ap">国际学校（美式/AP）</option>
                   <option value="ib">国际学校（IB）</option>
                   <option value="alevel">国际学校（A-Level/英式）</option>
