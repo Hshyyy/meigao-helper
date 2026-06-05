@@ -8,7 +8,7 @@ const housingOptions = {
   boarding: { label: "寄宿（住校）", cost: 0, note: "含住宿餐饮" },
   hostFamily: { label: "寄宿家庭", cost: 15000, note: "含餐饮" },
   rent: { label: "租房", cost: 16800, note: "含餐饮费" },
-  ownHouse: { label: "自有房产", cost: 0, note: "免费" },
+  ownHouse: { label: "My House", cost: 0, note: "免费" },
 };
 
 type HousingChoice = "boarding" | "hostFamily" | "rent" | "ownHouse";
@@ -280,7 +280,7 @@ export default function Compare() {
                           {school.type === "寄宿/走读" && <option value="boarding">寄宿（住校）</option>}
                           <option value="hostFamily">寄宿家庭</option>
                           <option value="rent">租房</option>
-                          <option value="ownHouse">自有房产</option>
+                          <option value="ownHouse">My House</option>
                         </select>
                       )}
                     </td>

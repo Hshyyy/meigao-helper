@@ -12,7 +12,7 @@ const housingOptions = [
   { value: "hostFamily", label: "寄宿家庭", cost: 15000, note: "住在美国家庭，含餐饮" },
   { value: "rent", label: "租房", cost: 12000, note: "自己租公寓，不含餐饮" },
   { value: "guardian", label: "监护人寄宿", cost: 18000, note: "住监护人家，含餐饮和监管" },
-  { value: "ownHouse", label: "自有房产", cost: 0, note: "家人在美国有房子" },
+  { value: "ownHouse", label: "My House", cost: 0, note: "家人在美国有房子" },
 ];
 
 export default function CostCalculator() {
