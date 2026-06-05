@@ -158,7 +158,7 @@ export default function CostCalculator() {
               <p className="text-xs text-gray-400 mt-1">
                 {isPureBoarding && "✅ 纯寄宿学校，学费含住宿和餐饮"}
                 {isPureDay && "⚠️ 纯走读学校，需自行安排住宿"}
-                {isMixed && "🔄 寄宿/走读可选，国际生通常选寄宿"}
+                {isMixed && "🔄 寄宿/走读可选，国际生通常选寄宿，主要看个人选择和喜好"}
               </p>
             </div>
 
