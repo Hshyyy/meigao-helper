@@ -10,6 +10,7 @@ interface Props {
   onToggleFavorite?: () => void;
   isCompared?: boolean;
   onToggleCompare?: () => void;
+  adjustedCost?: number; // 根据住宿方式调整后的费用
 }
 
 const tierColors = {
@@ -27,7 +28,9 @@ export default function SchoolCard({
   onToggleFavorite,
   isCompared,
   onToggleCompare,
+  adjustedCost,
 }: Props) {
+  const displayCost = adjustedCost ?? getEstimatedAnnualCost(school);
   return (
     <div
       onClick={onClick}
@@ -68,7 +71,7 @@ export default function SchoolCard({
           <span className="text-xs text-gray-400">{getHousingNote(school)}</span>
         </div>
         <div className="flex justify-between">
-          <span>📊 预估总费用 ${getEstimatedAnnualCost(school).toLocaleString()}/年</span>
+          <span>📊 预估总费用 ${displayCost.toLocaleString()}/年</span>
           <span>录取率 {school.acceptanceRate}%</span>
         </div>
       </div>
