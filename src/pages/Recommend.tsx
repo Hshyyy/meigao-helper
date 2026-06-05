@@ -118,16 +118,16 @@ function matchSchools(profile: StudentProfile): MatchResult[] {
     const toeflDiff = profile.toefl - school.toeflMin;
     if (toeflDiff >= 10) {
       score += 40;
-      reasons.push("托福远超要求");
+      reasons.push(`托福 ${profile.toefl}，超出要求 ${toeflDiff} 分`);
     } else if (toeflDiff >= 0) {
       score += 30;
-      reasons.push("托福达到要求");
+      reasons.push(`托福 ${profile.toefl}，刚好达标`);
     } else if (toeflDiff >= -5) {
       score += 15;
-      reasons.push("托福略低于要求");
+      reasons.push(`托福 ${profile.toefl}，低于要求 ${Math.abs(toeflDiff)} 分`);
     } else {
       score += 5;
-      reasons.push("托福低于要求较多");
+      reasons.push(`托福 ${profile.toefl}，低于要求 ${Math.abs(toeflDiff)} 分`);
     }
 
     // SSAT 匹配 (30%)
@@ -143,16 +143,16 @@ function matchSchools(profile: StudentProfile): MatchResult[] {
       const ssatDiff = profile.ssat - school.ssatPercentile;
       if (ssatDiff >= 5) {
         score += 30;
-        reasons.push("SSAT 远超要求");
+        reasons.push(`SSAT ${profile.ssat}%，超出要求 ${ssatDiff}%`);
       } else if (ssatDiff >= 0) {
         score += 22;
-        reasons.push("SSAT 达到要求");
+        reasons.push(`SSAT ${profile.ssat}%，刚好达标`);
       } else if (ssatDiff >= -5) {
         score += 10;
-        reasons.push("SSAT 略低于要求");
+        reasons.push(`SSAT ${profile.ssat}%，低于要求 ${Math.abs(ssatDiff)}%`);
       } else {
         score += 3;
-        reasons.push("SSAT 低于要求较多");
+        reasons.push(`SSAT ${profile.ssat}%，低于要求 ${Math.abs(ssatDiff)}%`);
       }
     }
 
@@ -160,16 +160,16 @@ function matchSchools(profile: StudentProfile): MatchResult[] {
     const gpaDiff = profile.gpa - school.gpaMin;
     if (gpaDiff >= 0.3) {
       score += 20;
-      reasons.push("GPA 优秀");
+      reasons.push(`GPA ${profile.gpa}，超出要求 ${gpaDiff.toFixed(1)}`);
     } else if (gpaDiff >= 0) {
       score += 15;
-      reasons.push("GPA 达标");
+      reasons.push(`GPA ${profile.gpa}，刚好达标`);
     } else if (gpaDiff >= -0.2) {
       score += 8;
-      reasons.push("GPA 略低");
+      reasons.push(`GPA ${profile.gpa}，低于要求 ${Math.abs(gpaDiff).toFixed(1)}`);
     } else {
       score += 3;
-      reasons.push("GPA 偏低");
+      reasons.push(`GPA ${profile.gpa}，低于要求 ${Math.abs(gpaDiff).toFixed(1)}`);
     }
 
     // 录取率加成 (10%)
