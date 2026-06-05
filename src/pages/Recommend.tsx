@@ -165,7 +165,7 @@ export default function Recommend() {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
     if (!profile.schoolType) {
       alert("请选择目前就读学校类型");
@@ -234,7 +234,11 @@ export default function Recommend() {
                   required
                 />
                 <p className="text-xs text-gray-400 mt-1">
-                  💡 百分位指你超过了百分之多少的考生，顶尖校建议 90%+
+                  {profile.schoolType === "ib"
+                    ? "💡 部分学校接受 IB 成绩替代 SSAT，建议先确认目标学校要求"
+                    : profile.schoolType === "alevel"
+                    ? "💡 部分学校接受 GCSE 替代 SSAT，建议先确认目标学校要求"
+                    : "💡 百分位指你超过了百分之多少的考生，顶尖校建议 90%+"}
                 </p>
               </div>
 
