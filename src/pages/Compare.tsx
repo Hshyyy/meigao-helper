@@ -318,7 +318,7 @@ export default function Compare() {
               {/* Location */}
               <CompareRow label="Location" values={compareSchools.map(s => s.state)} />
               <tr className="border-b border-gray-50">
-                <td className="p-4 text-sm text-gray-500">特色标签</td>
+                <td className="p-4 text-sm text-gray-500">Tags</td>
                 {compareSchools.map((school) => (
                   <td
                     key={school.id}
@@ -338,7 +338,7 @@ export default function Compare() {
                 ))}
               </tr>
               <tr>
-                <td className="p-4 text-sm text-gray-500">特色亮点</td>
+                <td className="p-4 text-sm text-gray-500">Highlights</td>
                 {compareSchools.map((school) => (
                   <td
                     key={school.id}
