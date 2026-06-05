@@ -276,6 +276,11 @@ export default function Recommend() {
                     ? "💡 按实际成绩填写，顶尖校建议 90%+，优秀校建议 85%+"
                     : "💡 4.0 为满分，顶尖校建议 3.7+，优秀校建议 3.5+"}
                 </p>
+                {profile.schoolType === "public" && (
+                  <p className="text-xs text-gray-400 mt-0.5">
+                    📌 实际申请时需提交所有科目的完整成绩单
+                  </p>
+                )}
               </div>
 
               <div>
