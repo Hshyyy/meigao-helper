@@ -1,32 +1,35 @@
 import { useState } from "react";
-import { schools } from "../data/schools";
+import { schools, getEstimatedAnnualCost, getHousingNote } from "../data/schools";
 import type { School } from "../data/schools";
 
 const compareFields = [
-  { label: "排名", key: "ranking", format: (v: number) => `#${v}` },
-  { label: "梯队", key: "rankingTier", format: (v: string) => v },
+  { label: "排名", key: "ranking", format: (v: number, _?: School) => `#${v}` },
+  { label: "梯队", key: "rankingTier", format: (v: string, _?: School) => v },
+  { label: "学校类型", key: "type", format: (v: string, _?: School) => v },
+  { label: "住宿政策", key: "_housing", format: (_: unknown, s: School) => getHousingNote(s) },
   {
     label: "年学费",
     key: "tuition",
-    format: (v: number) => `$${v.toLocaleString()}`,
+    format: (v: number, _?: School) => `$${v.toLocaleString()}`,
   },
-  { label: "录取率", key: "acceptanceRate", format: (v: number) => `${v}%` },
+  { label: "预估年总费用", key: "_annualCost", format: (_: unknown, s: School) => `$${getEstimatedAnnualCost(s).toLocaleString()}` },
+  { label: "录取率", key: "acceptanceRate", format: (v: number, _?: School) => `${v}%` },
   {
     label: "国际生比例",
     key: "internationalRate",
-    format: (v: number) => `${v}%`,
+    format: (v: number, _?: School) => `${v}%`,
   },
-  { label: "建议托福", key: "toeflMin", format: (v: number) => `${v}+` },
+  { label: "建议托福", key: "toeflMin", format: (v: number, _?: School) => `${v}+` },
   {
     label: "建议 SSAT",
     key: "ssatPercentile",
-    format: (v: number) => `${v}%+`,
+    format: (v: number, _?: School) => `${v}%+`,
   },
-  { label: "建议 GPA", key: "gpaMin", format: (v: number) => `${v}+` },
-  { label: "学生总数", key: "studentCount", format: (v: number) => `${v} 人` },
-  { label: "师生比", key: "studentTeacherRatio", format: (v: string) => v },
-  { label: "年级范围", key: "grades", format: (v: string) => v },
-  { label: "地区", key: "state", format: (v: string) => v },
+  { label: "建议 GPA", key: "gpaMin", format: (v: number, _?: School) => `${v}+` },
+  { label: "学生总数", key: "studentCount", format: (v: number, _?: School) => `${v} 人` },
+  { label: "师生比", key: "studentTeacherRatio", format: (v: string, _?: School) => v },
+  { label: "年级范围", key: "grades", format: (v: string, _?: School) => v },
+  { label: "地区", key: "state", format: (v: string, _?: School) => v },
 ];
 
 export default function Compare() {
@@ -257,13 +260,13 @@ export default function Compare() {
                 <tr key={field.key} className="border-b border-gray-50">
                   <td className="p-4 text-sm text-gray-500">{field.label}</td>
                   {compareSchools.map((school) => {
-                    const value = school[field.key as keyof School];
-                    const display = field.format(value as never);
+                    const isCustomField = field.key.startsWith("_");
+                    const value = isCustomField ? null : school[field.key as keyof School];
+                    const display = isCustomField
+                      ? (field.format as (v: unknown, s: School) => string)(null, school)
+                      : field.format(value as never, school);
                     let isBest = false;
-                    if (
-                      field.key === "ranking" ||
-                      field.key === "acceptanceRate"
-                    ) {
+                    if (field.key === "ranking" || field.key === "acceptanceRate") {
                       const values = compareSchools.map(
                         (s) => s[field.key as keyof School] as number
                       );
@@ -271,6 +274,10 @@ export default function Compare() {
                         field.key === "ranking"
                           ? value === Math.min(...values)
                           : value === Math.max(...values);
+                    }
+                    if (field.key === "_annualCost") {
+                      const values = compareSchools.map((s) => getEstimatedAnnualCost(s));
+                      isBest = getEstimatedAnnualCost(school) === Math.min(...values);
                     }
                     return (
                       <td

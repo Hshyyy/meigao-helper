@@ -1561,3 +1561,21 @@ export const tuitionRanges = [
   { label: "$65,000 - $70,000", min: 65000, max: 70000 },
   { label: "$70,000 以上", min: 70000, max: Infinity },
 ];
+
+// 预估年度总费用（学费 + 住宿 + 其他）
+export function getEstimatedAnnualCost(school: School): number {
+  const isBoarding = school.type === "寄宿" || school.type === "寄宿/走读";
+  const roomBoard = isBoarding ? 0 : 15000; // 走读需寄宿家庭
+  const insurance = 1800;
+  const books = 800;
+  const personal = 1500;
+  const misc = 1700; // 校服+零用钱
+  return school.tuition + roomBoard + insurance + books + personal + misc;
+}
+
+// 住宿费用说明
+export function getHousingNote(school: School): string {
+  if (school.type === "寄宿") return "含住宿餐饮";
+  if (school.type === "寄宿/走读") return "可选寄宿";
+  return "需另找寄宿家庭";
+}

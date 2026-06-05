@@ -1,4 +1,5 @@
 import type { School } from "../data/schools";
+import { getEstimatedAnnualCost, getHousingNote } from "../data/schools";
 
 interface Props {
   school: School;
@@ -63,12 +64,12 @@ export default function SchoolCard({
           <span>#{school.ranking}</span>
         </div>
         <div className="flex justify-between">
-          <span>💰 ${school.tuition.toLocaleString()}/年</span>
-          <span>录取率 {school.acceptanceRate}%</span>
+          <span>💰 学费 ${school.tuition.toLocaleString()}/年</span>
+          <span className="text-xs text-gray-400">{getHousingNote(school)}</span>
         </div>
         <div className="flex justify-between">
-          <span>🌍 国际生 {school.internationalRate}%</span>
-          <span>托福 {school.toeflMin}+</span>
+          <span>📊 预估总费用 ${getEstimatedAnnualCost(school).toLocaleString()}/年</span>
+          <span>录取率 {school.acceptanceRate}%</span>
         </div>
       </div>
 
