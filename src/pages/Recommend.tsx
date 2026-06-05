@@ -600,6 +600,7 @@ export default function Recommend() {
         <SchoolDetail
           school={selectedSchool}
           onClose={() => setSelectedSchool(null)}
+          profile={profile}
         />
       )}
 

@@ -1,9 +1,17 @@
 import { useState } from "react";
 import type { School } from "../data/schools";
 
+interface StudentProfile {
+  toefl: number;
+  ssat: number;
+  gpa: number;
+  schoolType: string;
+}
+
 interface Props {
   school: School;
   onClose: () => void;
+  profile?: StudentProfile;
 }
 
 // 住宿方案
@@ -14,7 +22,7 @@ const housingOptions = [
   { value: "ownHouse", label: "My House", cost: 0, note: "家人在美国有房子" },
 ];
 
-export default function SchoolDetail({ school, onClose }: Props) {
+export default function SchoolDetail({ school, onClose, profile }: Props) {
   const isBoarding = school.type === "寄宿";
   const isDay = school.type === "走读";
   const isMixed = school.type === "寄宿/走读";
@@ -216,9 +224,54 @@ export default function SchoolDetail({ school, onClose }: Props) {
             </ul>
           </div>
 
-          {/* 申请建议 */}
+          {/* 你的匹配分析 */}
+          {profile && (
+            <div>
+              <h3 className="font-semibold text-gray-900 mb-3">📊 你的匹配分析</h3>
+              <div className="bg-gray-50 rounded-xl p-4 space-y-3">
+                <MatchItem
+                  label="托福"
+                  value={profile.toefl}
+                  required={school.toeflMin}
+                  unit="分"
+                  higher
+                />
+                <MatchItem
+                  label="SSAT"
+                  value={profile.ssat}
+                  required={school.ssatPercentile}
+                  unit="%"
+                  higher
+                />
+                <MatchItem
+                  label="GPA"
+                  value={profile.gpa}
+                  required={school.gpaMin}
+                  unit=""
+                  higher
+                />
+              </div>
+            </div>
+          )}
+
+          {/* 针对你的建议 */}
+          {profile && (
+            <div>
+              <h3 className="font-semibold text-gray-900 mb-3">💡 针对你的建议</h3>
+              <ul className="space-y-2">
+                {getPersonalizedAdvice(profile, school).map((tip, i) => (
+                  <li key={i} className="text-sm text-gray-600 flex items-start gap-2">
+                    <span className="text-blue-500 mt-0.5">•</span>
+                    {tip}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {/* 学校申请特点 */}
           <div>
-            <h3 className="font-semibold text-gray-900 mb-3">💡 申请建议</h3>
+            <h3 className="font-semibold text-gray-900 mb-3">📋 学校申请特点</h3>
             <ul className="space-y-2">
               {school.applicationTips.map((item) => (
                 <li key={item} className="text-sm text-gray-600 flex items-start gap-2">
@@ -263,4 +316,90 @@ function InfoItem({ label, value }: { label: string; value: string }) {
       <div className="text-sm font-medium text-gray-900 mt-0.5">{value}</div>
     </div>
   );
+}
+
+// 匹配度条
+function MatchItem({
+  label,
+  value,
+  required,
+  unit,
+  higher,
+}: {
+  label: string;
+  value: number;
+  required: number;
+  unit: string;
+  higher: boolean;
+}) {
+  const diff = value - required;
+  const isGood = higher ? diff >= 0 : diff <= 0;
+  const pct = Math.min(100, Math.max(0, (value / (required * 1.2)) * 100));
+
+  return (
+    <div>
+      <div className="flex items-center justify-between mb-1">
+        <span className="text-sm text-gray-600">{label}</span>
+        <span className={`text-sm font-medium ${isGood ? "text-green-600" : "text-red-600"}`}>
+          {value}{unit} / 要求 {required}{unit}
+          {diff > 0 ? ` (+${diff}${unit})` : diff < 0 ? ` (${diff}${unit})` : " ✓"}
+        </span>
+      </div>
+      <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+        <div
+          className={`h-full rounded-full ${isGood ? "bg-green-500" : "bg-red-500"}`}
+          style={{ width: `${pct}%` }}
+        />
+      </div>
+    </div>
+  );
+}
+
+// 生成个性化建议
+function getPersonalizedAdvice(
+  profile: { toefl: number; ssat: number; gpa: number; schoolType: string },
+  school: School
+): string[] {
+  const tips: string[] = [];
+  const toeflDiff = profile.toefl - school.toeflMin;
+  const ssatDiff = profile.ssat - school.ssatPercentile;
+  const gpaDiff = profile.gpa - school.gpaMin;
+
+  // 托福建议
+  if (toeflDiff >= 10) {
+    tips.push(`托福 ${profile.toefl} 已超出要求 ${toeflDiff} 分，这是你的强项，申请时要重点展示`);
+  } else if (toeflDiff >= 0) {
+    tips.push(`托福 ${profile.toefl} 刚好达标，建议再提升 5-10 分以增加竞争力`);
+  } else {
+    tips.push(`托福 ${profile.toefl} 低于要求 ${Math.abs(toeflDiff)} 分，需要重点提升听力和口语`);
+  }
+
+  // SSAT 建议
+  if (ssatDiff >= 5) {
+    tips.push(`SSAT ${profile.ssat}% 超出要求，申请时可以强调你的标化优势`);
+  } else if (ssatDiff >= 0) {
+    tips.push(`SSAT ${profile.ssat}% 刚好达标，建议再冲刺 5% 以增加竞争力`);
+  } else {
+    tips.push(`SSAT ${profile.ssat}% 低于要求 ${Math.abs(ssatDiff)}%，需要重点突破词汇和阅读`);
+  }
+
+  // GPA 建议
+  if (gpaDiff >= 0.3) {
+    tips.push(`GPA ${profile.gpa} 超出要求，是你的优势，文书和面试中要重点提及`);
+  } else if (gpaDiff >= 0) {
+    tips.push(`GPA ${profile.gpa} 达标，保持稳定即可`);
+  } else {
+    tips.push(`GPA ${profile.gpa} 略低于要求，建议通过课外活动和文书来弥补`);
+  }
+
+  // 体系特定建议
+  if (profile.schoolType === "ib") {
+    tips.push("IB 课程被广泛认可，申请时强调你的跨学科学习经历");
+  } else if (profile.schoolType === "alevel") {
+    tips.push("A-Level 课程深度足够，申请时突出你的学术专注度");
+  } else if (profile.schoolType === "public") {
+    tips.push("体制内学生需要在面试中展现英语能力，建议多练习口语表达");
+  }
+
+  return tips;
 }
