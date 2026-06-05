@@ -160,6 +160,9 @@ export default function CostCalculator() {
                 {isPureDay && "⚠️ 纯走读学校，学校不提供住宿，国际生需自行安排寄宿家庭或租房"}
                 {isMixed && "🔄 学校政策允许寄宿或走读，国际生通常选寄宿，主要看个人选择和喜好"}
               </p>
+              <p className="text-xs text-gray-300 mt-1">
+                💡 说明：以学校政策是否允许走读为准，而非学生比例
+              </p>
             </div>
 
             {/* 走读时：选择住宿方案 */}
