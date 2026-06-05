@@ -5,6 +5,78 @@ import type { School } from "../data/schools";
 import SchoolCard from "../components/SchoolCard";
 import SchoolDetail from "../components/SchoolDetail";
 
+type MatchResult = {
+  school: School;
+  type: "冲刺校" | "匹配校" | "保底校";
+  score: number;
+  reason: string;
+};
+
+// 学校分组展示组件
+function SchoolSection({
+  results,
+  onSelect,
+  onToggleFavorite,
+  favorites,
+  ssatNote,
+}: {
+  results: MatchResult[];
+  onSelect: (s: School) => void;
+  onToggleFavorite: (id: number) => void;
+  favorites: number[];
+  ssatNote?: boolean;
+}) {
+  const colorMap = {
+    "冲刺校": { bg: "bg-red-100 text-red-700", dot: "bg-red-500" },
+    "匹配校": { bg: "bg-blue-100 text-blue-700", dot: "bg-blue-500" },
+    "保底校": { bg: "bg-green-100 text-green-700", dot: "bg-green-500" },
+  };
+  const descMap = {
+    "冲刺校": "有一定挑战，值得尝试",
+    "匹配校": "与你实力匹配，录取概率较大",
+    "保底校": "录取把握很大，作为稳妥选择",
+  };
+
+  const groups = ["冲刺校", "匹配校", "保底校"]
+    .map((t) => ({
+      type: t as MatchResult["type"],
+      items: results.filter((r) => r.type === t),
+    }))
+    .filter((g) => g.items.length > 0);
+
+  return (
+    <div className="space-y-6">
+      {groups.map(({ type, items }) => (
+        <div key={type}>
+          <div className="flex items-center gap-2 mb-3">
+            <span className={`${colorMap[type].bg} px-3 py-1 rounded-full text-sm font-medium`}>
+              {type === "冲刺校" ? "🔥" : type === "匹配校" ? "✅" : "🛡️"} {type}
+            </span>
+            <span className="text-sm text-gray-500">{descMap[type]}</span>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {items.map((r) => (
+              <div key={r.school.id}>
+                <SchoolCard
+                  school={r.school}
+                  onClick={() => onSelect(r.school)}
+                  matchScore={r.score}
+                  matchColor={colorMap[type].dot}
+                  isFavorited={favorites.includes(r.school.id)}
+                  onToggleFavorite={() => onToggleFavorite(r.school.id)}
+                />
+                <p className={`text-xs mt-1 px-1 ${ssatNote ? "text-amber-600" : "text-gray-500"}`}>
+                  {ssatNote ? "⚠️ 该校要求 SSAT，建议补充成绩后申请" : r.reason}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 interface StudentProfile {
   toefl: number;
   ssat: number;
@@ -13,13 +85,6 @@ interface StudentProfile {
   maxBudget: number;
   schoolType: string;
 }
-
-type MatchResult = {
-  school: School;
-  type: "冲刺校" | "匹配校" | "保底校";
-  score: number;
-  reason: string;
-};
 
 function matchSchools(profile: StudentProfile): MatchResult[] {
   const results: MatchResult[] = [];
@@ -393,23 +458,12 @@ export default function Recommend() {
                           可用 IB/A-Level 成绩替代 SSAT
                         </span>
                       </div>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {ssatFreeSchools.map((r) => (
-                          <div key={r.school.id}>
-                            <SchoolCard
-                              school={r.school}
-                              onClick={() => setSelectedSchool(r.school)}
-                              matchScore={r.score}
-                              matchColor="bg-green-500"
-                              isFavorited={favorites.includes(r.school.id)}
-                              onToggleFavorite={() => toggleFavorite(r.school.id)}
-                            />
-                            <p className="text-xs text-gray-500 mt-1 px-1">
-                              {r.reason}
-                            </p>
-                          </div>
-                        ))}
-                      </div>
+                      <SchoolSection
+                        results={ssatFreeSchools}
+                        onSelect={setSelectedSchool}
+                        onToggleFavorite={toggleFavorite}
+                        favorites={favorites}
+                      />
                     </section>
                   )}
 
@@ -424,23 +478,13 @@ export default function Recommend() {
                           以下学校要求 SSAT，建议考虑参加考试以扩大选择范围
                         </span>
                       </div>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {ssatRequiredSchools.map((r) => (
-                          <div key={r.school.id}>
-                            <SchoolCard
-                              school={r.school}
-                              onClick={() => setSelectedSchool(r.school)}
-                              matchScore={r.score}
-                              matchColor="bg-amber-500"
-                              isFavorited={favorites.includes(r.school.id)}
-                              onToggleFavorite={() => toggleFavorite(r.school.id)}
-                            />
-                            <p className="text-xs text-amber-600 mt-1 px-1">
-                              ⚠️ 该校要求 SSAT，建议补充成绩后申请
-                            </p>
-                          </div>
-                        ))}
-                      </div>
+                      <SchoolSection
+                        results={ssatRequiredSchools}
+                        onSelect={setSelectedSchool}
+                        onToggleFavorite={toggleFavorite}
+                        favorites={favorites}
+                        ssatNote
+                      />
                     </section>
                   )}
                 </>
