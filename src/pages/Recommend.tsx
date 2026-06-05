@@ -167,6 +167,10 @@ export default function Recommend() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!profile.schoolType) {
+      alert("请选择目前就读学校类型");
+      return;
+    }
     const matched = matchSchools(profile);
     setResults(matched);
   };
