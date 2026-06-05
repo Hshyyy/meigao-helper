@@ -8,6 +8,7 @@ const navItems = [
   { path: "/favorites", label: "❤️ 收藏" },
   { path: "/compare", label: "⚖️ 对比" },
   { path: "/timeline", label: "📅 时间线" },
+  { path: "/cost", label: "💰 费用" },
 ];
 
 export default function App() {

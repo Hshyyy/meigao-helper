@@ -9,6 +9,7 @@ import Recommend from "./pages/Recommend";
 import Favorites from "./pages/Favorites";
 import Compare from "./pages/Compare";
 import Timeline from "./pages/Timeline";
+import CostCalculator from "./pages/CostCalculator";
 import NotFound from "./pages/NotFound";
 
 createRoot(document.getElementById("root")!).render(
@@ -22,6 +23,7 @@ createRoot(document.getElementById("root")!).render(
           <Route path="favorites" element={<Favorites />} />
           <Route path="compare" element={<Compare />} />
           <Route path="timeline" element={<Timeline />} />
+          <Route path="cost" element={<CostCalculator />} />
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
