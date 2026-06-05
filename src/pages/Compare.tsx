@@ -1,7 +1,24 @@
 import { useState } from "react";
-import { schools, getEstimatedAnnualCost, getHousingNote } from "../data/schools";
+import { schools } from "../data/schools";
 import type { School } from "../data/schools";
 import SchoolDetail from "../components/SchoolDetail";
+
+// 住宿方案
+const housingOptions = {
+  boarding: { label: "寄宿（住校）", cost: 0, note: "含住宿餐饮" },
+  hostFamily: { label: "寄宿家庭", cost: 15000, note: "含餐饮" },
+  rent: { label: "租房", cost: 16800, note: "含餐饮费" },
+  ownHouse: { label: "自有房产", cost: 0, note: "免费" },
+};
+
+type HousingChoice = "boarding" | "hostFamily" | "rent" | "ownHouse";
+
+// 计算费用
+function calcCost(school: School, choice: HousingChoice): number {
+  const isBoarding = school.type === "寄宿" || (school.type === "寄宿/走读" && choice === "boarding");
+  const housingCost = isBoarding ? 0 : housingOptions[choice].cost;
+  return school.tuition + housingCost + 5300;
+}
 
 export default function Compare() {
   const [selectedSchool, setSelectedSchool] = useState<School | null>(null);
@@ -14,6 +31,7 @@ export default function Compare() {
   });
   const [search, setSearch] = useState("");
   const [activeTab, setActiveTab] = useState<"all" | "favorites">("all");
+  const [housingChoices, setHousingChoices] = useState<Record<number, HousingChoice>>({});
 
   const favorites: number[] = (() => {
     try {
@@ -59,23 +77,13 @@ export default function Compare() {
     localStorage.setItem("compare", JSON.stringify([]));
   };
 
-  const compareFields = [
-    { label: "排名", key: "ranking", format: (v: number) => `#${v}` },
-    { label: "梯队", key: "rankingTier", format: (v: string) => v },
-    { label: "学校类型", key: "type", format: (v: string) => v },
-    { label: "住宿政策", key: "_housing", format: (_: unknown, s: School) => getHousingNote(s) },
-    { label: "年学费", key: "tuition", format: (v: number) => `$${v.toLocaleString()}` },
-    { label: "预估年总费用", key: "_annualCost", format: (_: unknown, s: School) => `$${getEstimatedAnnualCost(s).toLocaleString()}` },
-    { label: "录取率", key: "acceptanceRate", format: (v: number) => `${v}%` },
-    { label: "国际生比例", key: "internationalRate", format: (v: number) => `${v}%` },
-    { label: "建议托福", key: "toeflMin", format: (v: number) => `${v}+` },
-    { label: "建议 SSAT", key: "ssatPercentile", format: (v: number) => `${v}%+` },
-    { label: "建议 GPA", key: "gpaMin", format: (v: number) => `${v}+` },
-    { label: "学生总数", key: "studentCount", format: (v: number) => `${v} 人` },
-    { label: "师生比", key: "studentTeacherRatio", format: (v: string) => v },
-    { label: "年级范围", key: "grades", format: (v: string) => v },
-    { label: "地区", key: "state", format: (v: string) => v },
-  ];
+  // 获取学校的住宿选择
+  const getHousingChoice = (school: School): HousingChoice => {
+    if (housingChoices[school.id]) return housingChoices[school.id];
+    if (school.type === "寄宿") return "boarding";
+    if (school.type === "走读") return "hostFamily";
+    return "boarding"; // 混合型默认寄宿
+  };
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
@@ -249,44 +257,64 @@ export default function Compare() {
               </tr>
             </thead>
             <tbody>
-              {compareFields.map((field) => (
-                <tr key={field.key} className="border-b border-gray-50">
-                  <td className="p-4 text-sm text-gray-500">{field.label}</td>
-                  {compareSchools.map((school) => {
-                    const isCustomField = field.key.startsWith("_");
-                    const value = isCustomField ? null : school[field.key as keyof School];
-                    const display = isCustomField
-                      ? (field.format as (v: unknown, s: School) => string)(null, school)
-                      : field.format(value as never, school);
-                    let isBest = false;
-                    if (field.key === "ranking" || field.key === "acceptanceRate") {
-                      const values = compareSchools.map(
-                        (s) => s[field.key as keyof School] as number
-                      );
-                      isBest =
-                        field.key === "ranking"
-                          ? value === Math.min(...values)
-                          : value === Math.max(...values);
-                    }
-                    if (field.key === "_annualCost") {
-                      const values = compareSchools.map((s) => getEstimatedAnnualCost(s));
-                      isBest = getEstimatedAnnualCost(school) === Math.min(...values);
-                    }
-                    return (
-                      <td
-                        key={school.id}
-                        className={`text-center p-4 text-sm border-l border-gray-100 ${
-                          isBest
-                            ? "font-semibold text-green-600"
-                            : "text-gray-900"
-                        }`}
-                      >
-                        {display}
-                      </td>
-                    );
-                  })}
-                </tr>
-              ))}
+              {/* 排名 */}
+              <CompareRow label="排名" values={compareSchools.map(s => `#${s.ranking}`)} bestFn="min" bestValues={compareSchools.map(s => s.ranking)} />
+              {/* 梯队 */}
+              <CompareRow label="梯队" values={compareSchools.map(s => s.rankingTier)} />
+              {/* 住宿方式（可选） */}
+              <tr className="border-b border-gray-50">
+                <td className="p-4 text-sm text-gray-500">住宿方式</td>
+                {compareSchools.map((school) => {
+                  const choice = getHousingChoice(school);
+                  const isPureBoarding = school.type === "寄宿";
+                  return (
+                    <td key={school.id} className="text-center p-4 border-l border-gray-100">
+                      {isPureBoarding ? (
+                        <span className="text-sm text-gray-600">寄宿（住校）</span>
+                      ) : (
+                        <select
+                          value={choice}
+                          onChange={(e) => setHousingChoices(prev => ({ ...prev, [school.id]: e.target.value as HousingChoice }))}
+                          className="border border-gray-300 rounded px-2 py-1 text-xs"
+                        >
+                          {school.type === "寄宿/走读" && <option value="boarding">寄宿（住校）</option>}
+                          <option value="hostFamily">寄宿家庭</option>
+                          <option value="rent">租房</option>
+                          <option value="ownHouse">自有房产</option>
+                        </select>
+                      )}
+                    </td>
+                  );
+                })}
+              </tr>
+              {/* 年学费 */}
+              <CompareRow label="年学费" values={compareSchools.map(s => `$${s.tuition.toLocaleString()}`)} />
+              {/* 预估年总费用 */}
+              <CompareRow
+                label="预估年总费用"
+                values={compareSchools.map(s => `$${calcCost(s, getHousingChoice(s)).toLocaleString()}`)}
+                highlight
+                bestFn="min"
+                bestValues={compareSchools.map(s => calcCost(s, getHousingChoice(s)))}
+              />
+              {/* 录取率 */}
+              <CompareRow label="录取率" values={compareSchools.map(s => `${s.acceptanceRate}%`)} bestFn="max" bestValues={compareSchools.map(s => s.acceptanceRate)} />
+              {/* 国际生比例 */}
+              <CompareRow label="国际生比例" values={compareSchools.map(s => `${s.internationalRate}%`)} />
+              {/* 建议托福 */}
+              <CompareRow label="建议托福" values={compareSchools.map(s => `${s.toeflMin}+`)} />
+              {/* 建议 SSAT */}
+              <CompareRow label="建议 SSAT" values={compareSchools.map(s => `${s.ssatPercentile}%+`)} />
+              {/* 建议 GPA */}
+              <CompareRow label="建议 GPA" values={compareSchools.map(s => `${s.gpaMin}+`)} />
+              {/* 学生总数 */}
+              <CompareRow label="学生总数" values={compareSchools.map(s => `${s.studentCount} 人`)} />
+              {/* 师生比 */}
+              <CompareRow label="师生比" values={compareSchools.map(s => s.studentTeacherRatio)} />
+              {/* 年级范围 */}
+              <CompareRow label="年级范围" values={compareSchools.map(s => s.grades)} />
+              {/* 地区 */}
+              <CompareRow label="地区" values={compareSchools.map(s => s.state)} />
               <tr className="border-b border-gray-50">
                 <td className="p-4 text-sm text-gray-500">特色标签</td>
                 {compareSchools.map((school) => (
@@ -330,7 +358,7 @@ export default function Compare() {
             </tbody>
           </table>
           <div className="p-4 bg-gray-50 border-t border-gray-200 text-xs text-gray-500">
-            💡 预估费用按默认住宿方式计算。混合型学校可点击学校名称查看详情，选择不同住宿方式查看对应费用。
+            💡 可为混合型学校选择不同住宿方式，费用会自动重新计算。点击学校名称查看详情。
           </div>
         </div>
       )}
@@ -342,5 +370,44 @@ export default function Compare() {
         />
       )}
     </div>
+  );
+}
+
+// 对比行组件
+function CompareRow({
+  label,
+  values,
+  highlight,
+  bestFn,
+  bestValues,
+}: {
+  label: string;
+  values: string[];
+  highlight?: boolean;
+  bestFn?: "min" | "max";
+  bestValues?: number[];
+}) {
+  return (
+    <tr className="border-b border-gray-50">
+      <td className="p-4 text-sm text-gray-500">{label}</td>
+      {values.map((val, i) => {
+        let isBest = false;
+        if (bestFn && bestValues) {
+          isBest = bestFn === "min"
+            ? bestValues[i] === Math.min(...bestValues)
+            : bestValues[i] === Math.max(...bestValues);
+        }
+        return (
+          <td
+            key={i}
+            className={`text-center p-4 text-sm border-l border-gray-100 ${
+              isBest ? "font-semibold text-green-600" : highlight ? "font-semibold text-gray-900" : "text-gray-900"
+            }`}
+          >
+            {val}
+          </td>
+        );
+      })}
+    </tr>
   );
 }
