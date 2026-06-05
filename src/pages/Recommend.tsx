@@ -273,7 +273,7 @@ export default function Recommend() {
                 />
                 <p className="text-xs text-gray-400 mt-1">
                   {profile.schoolType === "public"
-                    ? "💡 百分制，顶尖校建议 90+，优秀校建议 85+。此处为系统匹配用，实际申请需提交完整成绩单"
+                    ? "💡 按实际成绩填写，顶尖校建议 90%+，优秀校建议 85%+"
                     : "💡 4.0 为满分，顶尖校建议 3.7+，优秀校建议 3.5+"}
                 </p>
               </div>
