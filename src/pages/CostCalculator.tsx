@@ -27,10 +27,9 @@ export default function CostCalculator() {
 
   // 根据学校类型判断住宿费用
   const isBoarding = selectedSchool.type === "寄宿" || selectedSchool.type === "寄宿/走读";
-  const boardingNote = isBoarding
-    ? "含住宿和餐饮"
-    : "不含住宿，需另找寄宿家庭";
-  const hostFamilyCost = isBoarding ? 0 : 15000; // 走读学校需寄宿家庭
+  // 寄宿学校住宿费估算（约占学费的 20-25%）
+  const estimatedRoomBoard = isBoarding ? Math.round(selectedSchool.tuition * 0.22) : 0;
+  const hostFamilyCost = isBoarding ? 0 : 15000;
 
   // 年度费用
   const annualCosts: CostItem[] = useMemo(
@@ -38,7 +37,9 @@ export default function CostCalculator() {
       {
         name: "学费（Tuition）",
         amount: selectedSchool.tuition,
-        note: boardingNote,
+        note: isBoarding
+          ? `含住宿（约 $${estimatedRoomBoard.toLocaleString()}）和餐饮`
+          : "不含住宿，需另找寄宿家庭",
       },
       ...(!isBoarding
         ? [
@@ -282,6 +283,34 @@ export default function CostCalculator() {
                 </div>
               </div>
             </div>
+
+            {/* 住宿费说明 */}
+            {isBoarding && (
+              <div className="mt-4 bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <h4 className="text-sm font-semibold text-blue-900 mb-2">🏠 住宿费说明</h4>
+                <div className="space-y-1.5 text-sm text-blue-800">
+                  <div className="flex justify-between">
+                    <span>学费总额</span>
+                    <span className="font-medium">${selectedSchool.tuition.toLocaleString()}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>其中：住宿费（估算）</span>
+                    <span className="font-medium">≈ ${estimatedRoomBoard.toLocaleString()}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>其中：餐饮费（估算）</span>
+                    <span className="font-medium">≈ ${Math.round(selectedSchool.tuition * 0.1).toLocaleString()}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>其中：学术课程（估算）</span>
+                    <span className="font-medium">≈ ${(selectedSchool.tuition - estimatedRoomBoard - Math.round(selectedSchool.tuition * 0.1)).toLocaleString()}</span>
+                  </div>
+                </div>
+                <p className="text-xs text-blue-600 mt-2">
+                  💡 以上为估算值，实际比例因学校而异，仅供参考
+                </p>
+              </div>
+            )}
           </div>
 
           {/* 一次性费用明细 */}
