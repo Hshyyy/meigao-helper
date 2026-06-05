@@ -336,7 +336,7 @@ const colorMap: Record<
 export default function Timeline() {
   const [system, setSystem] = useState<SystemKey>("chinese");
   const [grade, setGrade] = useState("C9");
-  const [enrollYear, setEnrollYear] = useState(2026);
+  const [enrollYear, setEnrollYear] = useState(new Date().getFullYear() + 1);
   const [checkedTasks, setCheckedTasks] = useState<Record<string, string>>(() => {
     try {
       const saved = localStorage.getItem("timelineProgress");
@@ -703,6 +703,9 @@ export default function Timeline() {
             <p className="text-xs text-gray-400 mt-1">
               ⭐ = 主要入学点 | 已毕业学生可选"第五年（PG）"
             </p>
+            <p className="text-xs text-gray-300 mt-1">
+              💡 大部分学校申请截止 1 月中旬，具体以学校官网为准
+            </p>
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -713,9 +716,14 @@ export default function Timeline() {
               onChange={(e) => setEnrollYear(Number(e.target.value))}
               className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
             >
-              <option value={2026}>2026 年秋季</option>
-              <option value={2027}>2027 年秋季</option>
-              <option value={2028}>2028 年秋季</option>
+              {[1, 2, 3].map((offset) => {
+                const year = new Date().getFullYear() + offset;
+                return (
+                  <option key={year} value={year}>
+                    {year} 年秋季
+                  </option>
+                );
+              })}
             </select>
           </div>
         </div>
