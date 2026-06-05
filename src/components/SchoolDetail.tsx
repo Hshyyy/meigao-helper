@@ -80,6 +80,64 @@ export default function SchoolDetail({ school, onClose, profile }: Props) {
             <InfoItem label="Acceptance Rate" value={`${school.acceptanceRate}%`} />
           </div>
 
+          {/* 你的匹配分析 */}
+          {profile && (
+            <div>
+              <h3 className="font-semibold text-gray-900 mb-3">📊 你的匹配分析</h3>
+              <div className="bg-gray-50 rounded-xl p-4 space-y-3">
+                <MatchItem
+                  label="托福"
+                  value={profile.toefl}
+                  required={school.toeflMin}
+                  unit="分"
+                  higher
+                />
+                <MatchItem
+                  label="SSAT"
+                  value={profile.ssat}
+                  required={school.ssatPercentile}
+                  unit="%"
+                  higher
+                />
+                <MatchItem
+                  label="GPA"
+                  value={profile.gpa}
+                  required={school.gpaMin}
+                  unit=""
+                  higher
+                />
+              </div>
+            </div>
+          )}
+
+          {/* 针对你的建议 */}
+          {profile && (
+            <div>
+              <h3 className="font-semibold text-gray-900 mb-3">💡 针对你的建议</h3>
+              <ul className="space-y-2">
+                {getPersonalizedAdvice(profile, school).map((tip, i) => (
+                  <li key={i} className="text-sm text-gray-600 flex items-start gap-2">
+                    <span className="text-blue-500 mt-0.5">•</span>
+                    {tip}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {/* 学校申请特点 */}
+          <div>
+            <h3 className="font-semibold text-gray-900 mb-3">📋 学校申请特点</h3>
+            <ul className="space-y-2">
+              {school.applicationTips.map((item) => (
+                <li key={item} className="text-sm text-gray-600 flex items-start gap-2">
+                  <span className="text-orange-500 mt-0.5">•</span>
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+
           {/* 录取要求 */}
           <div>
             <h3 className="font-semibold text-gray-900 mb-3">📊 Admission</h3>
@@ -218,64 +276,6 @@ export default function SchoolDetail({ school, onClose, profile }: Props) {
               {school.collegePrep.map((item) => (
                 <li key={item} className="text-sm text-gray-600 flex items-start gap-2">
                   <span className="text-purple-500 mt-0.5">•</span>
-                  {item}
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* 你的匹配分析 */}
-          {profile && (
-            <div>
-              <h3 className="font-semibold text-gray-900 mb-3">📊 你的匹配分析</h3>
-              <div className="bg-gray-50 rounded-xl p-4 space-y-3">
-                <MatchItem
-                  label="托福"
-                  value={profile.toefl}
-                  required={school.toeflMin}
-                  unit="分"
-                  higher
-                />
-                <MatchItem
-                  label="SSAT"
-                  value={profile.ssat}
-                  required={school.ssatPercentile}
-                  unit="%"
-                  higher
-                />
-                <MatchItem
-                  label="GPA"
-                  value={profile.gpa}
-                  required={school.gpaMin}
-                  unit=""
-                  higher
-                />
-              </div>
-            </div>
-          )}
-
-          {/* 针对你的建议 */}
-          {profile && (
-            <div>
-              <h3 className="font-semibold text-gray-900 mb-3">💡 针对你的建议</h3>
-              <ul className="space-y-2">
-                {getPersonalizedAdvice(profile, school).map((tip, i) => (
-                  <li key={i} className="text-sm text-gray-600 flex items-start gap-2">
-                    <span className="text-blue-500 mt-0.5">•</span>
-                    {tip}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-
-          {/* 学校申请特点 */}
-          <div>
-            <h3 className="font-semibold text-gray-900 mb-3">📋 学校申请特点</h3>
-            <ul className="space-y-2">
-              {school.applicationTips.map((item) => (
-                <li key={item} className="text-sm text-gray-600 flex items-start gap-2">
-                  <span className="text-orange-500 mt-0.5">•</span>
                   {item}
                 </li>
               ))}

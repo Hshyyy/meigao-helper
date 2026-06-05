@@ -74,15 +74,10 @@ export default function SchoolCard({
           <span>📊 预估总费用 ${displayCost.toLocaleString()}/年</span>
           <span>录取率 {school.acceptanceRate}%</span>
         </div>
-        {school.type === "寄宿" && (
-          <p className="text-xs text-green-600">✅ 纯寄宿学校，点击查看详情</p>
-        )}
-        {school.type === "寄宿/走读" && (
-          <p className="text-xs text-blue-500">💡 点击查看详情，可选住宿方式</p>
-        )}
-        {school.type === "走读" && (
-          <p className="text-xs text-blue-500">💡 点击查看详情，选择住宿方案</p>
-        )}
+        <p className="text-xs text-blue-500">
+          💡 点击查看：匹配分析 · 申请建议 ·{" "}
+          {school.type === "寄宿" ? "寄宿详情" : school.type === "寄宿/走读" ? "住宿选择" : "住宿方案"}
+        </p>
       </div>
 
       {/* 标签 + 操作按钮 */}
