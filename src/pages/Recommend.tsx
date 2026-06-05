@@ -199,11 +199,18 @@ export default function Recommend() {
   const safeSchools = results?.filter((r) => r.type === "保底校") || [];
 
   // IB/A-Level 未填 SSAT 时，分两组
+  // 免 SSAT 学校：所有匹配的
   const ssatFreeSchools = canSkipSSAT
     ? results?.filter((r) => !r.school.ssatRequired) || []
     : [];
+  // 需要 SSAT 的学校：只显示托福和GPA达标或接近的（即使SSAT满分也够不上的不显示）
   const ssatRequiredSchools = canSkipSSAT
-    ? results?.filter((r) => r.school.ssatRequired) || []
+    ? results?.filter((r) => {
+        if (!r.school.ssatRequired) return false;
+        const toeflOk = profile.toefl >= r.school.toeflMin - 10;
+        const gpaOk = profile.gpa >= r.school.gpaMin - 0.3;
+        return toeflOk && gpaOk;
+      }) || []
     : [];
 
   return (
