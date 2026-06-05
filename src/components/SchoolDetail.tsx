@@ -418,12 +418,26 @@ function getPersonalizedAdvice(
   }
 
   // GPA 建议
-  if (gpaDiff >= 0.3) {
-    tips.push(`GPA ${profile.gpa} 超出要求，是你的优势，文书和面试中要重点提及`);
-  } else if (gpaDiff >= 0) {
-    tips.push(`GPA ${profile.gpa} 达标，保持稳定即可`);
+  if (profile.schoolType === "public") {
+    // 体制内学生用百分比
+    const requiredPercent = gpaToPercent(school.gpaMin);
+    const percentDiff = profile.gpa - requiredPercent;
+    if (percentDiff >= 5) {
+      tips.push(`成绩 ${profile.gpa}% 超出要求（约 ${requiredPercent}%+），是你的优势，文书和面试中要重点提及`);
+    } else if (percentDiff >= 0) {
+      tips.push(`成绩 ${profile.gpa}% 达标（要求约 ${requiredPercent}%+），保持稳定即可`);
+    } else {
+      tips.push(`成绩 ${profile.gpa}% 略低于要求（约 ${requiredPercent}%+），建议通过课外活动和文书来弥补`);
+    }
   } else {
-    tips.push(`GPA ${profile.gpa} 略低于要求，建议通过课外活动和文书来弥补`);
+    // 国际学校学生用 GPA
+    if (gpaDiff >= 0.3) {
+      tips.push(`GPA ${profile.gpa} 超出要求，是你的优势，文书和面试中要重点提及`);
+    } else if (gpaDiff >= 0) {
+      tips.push(`GPA ${profile.gpa} 达标，保持稳定即可`);
+    } else {
+      tips.push(`GPA ${profile.gpa} 略低于要求，建议通过课外活动和文书来弥补`);
+    }
   }
 
   // 体系特定建议
