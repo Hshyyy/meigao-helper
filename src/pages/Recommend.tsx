@@ -58,9 +58,14 @@ function matchSchools(profile: StudentProfile): MatchResult[] {
     // SSAT 匹配 (30%)
     const canSkipSSAT = (profile.schoolType === "ib" || profile.schoolType === "alevel") && profile.ssat === 0;
     if (canSkipSSAT) {
-      // IB/A-Level 学生未填 SSAT，给基础分并标注
-      score += 15;
-      reasons.push("可用课程成绩替代 SSAT");
+      // IB/A-Level 学生未填 SSAT
+      if (!school.ssatRequired) {
+        score += 20;
+        reasons.push("可用课程成绩替代 SSAT");
+      } else {
+        score += 5;
+        reasons.push("该校要求 SSAT，建议补充成绩");
+      }
     } else {
       const ssatDiff = profile.ssat - school.ssatPercentile;
       if (ssatDiff >= 5) {

@@ -24,6 +24,7 @@ export interface School {
   collegePrep: string[]; // 升学走向
   applicationTips: string[]; // 申请建议
   tags: string[]; // 特色标签
+  ssatRequired: boolean; // 是否必须考 SSAT（false = 可用 IB/A-Level/GCSE 替代）
   website: string;
 }
 
@@ -90,6 +91,7 @@ export const schools: School[] = [
       "国际生可申请Need-blind经济援助，不影响录取",
     ],
     tags: ["STEM强", "文科强", "小班教学", "国际生友好", "领导力培养", "Need-blind"],
+    ssatRequired: true,
     website: "https://www.andover.edu",
   },
   {
@@ -140,6 +142,7 @@ export const schools: School[] = [
       "国际生可申请Need-blind经济援助，建议同时准备",
     ],
     tags: ["STEM强", "文科强", "小班教学", "国际生友好", "Need-blind"],
+    ssatRequired: true,
     website: "https://www.exeter.edu",
   },
   {
@@ -190,6 +193,7 @@ export const schools: School[] = [
       "国际生比例高，学校有完善的国际生支持体系",
     ],
     tags: ["STEM强", "文科强", "艺术强", "国际生友好", "领导力培养"],
+    ssatRequired: true,
     website: "https://www.choate.edu",
   },
   {
@@ -240,6 +244,7 @@ export const schools: School[] = [
       "学校重视传统和荣誉感，文书可体现这些价值观",
     ],
     tags: ["文科强", "体育强", "校园优美", "领导力培养"],
+    ssatRequired: true,
     website: "https://deerfield.edu",
   },
   {
@@ -290,6 +295,7 @@ export const schools: School[] = [
       "国际生比例高（18%），学校有完善的国际生支持",
     ],
     tags: ["文科强", "艺术强", "宗教背景", "校园优美", "国际生友好"],
+    ssatRequired: true,
     website: "https://www.sps.edu",
   },
   {
@@ -340,6 +346,7 @@ export const schools: School[] = [
       "学校规模较大，希望学生能主动融入社区",
     ],
     tags: ["STEM强", "文科强", "小班教学", "领导力培养", "校园优美"],
+    ssatRequired: true,
     website: "https://www.lawrenceville.org",
   },
   {
@@ -390,6 +397,7 @@ export const schools: School[] = [
       "校园湖景优美，学校重视户外活动和体育",
     ],
     tags: ["STEM强", "艺术强", "校园优美"],
+    ssatRequired: true,
     website: "https://www.hotchkiss.org",
   },
   {
@@ -440,6 +448,7 @@ export const schools: School[] = [
       "100%寄宿制，学校希望学生能适应紧密的社区生活",
     ],
     tags: ["文科强", "小班教学", "宗教背景", "领导力培养"],
+    ssatRequired: true,
     website: "https://www.groton.org",
   },
   {
@@ -490,6 +499,7 @@ export const schools: School[] = [
       "小班教学，学校希望学生能积极参与课堂讨论",
     ],
     tags: ["文科强", "艺术强", "小班教学", "校园优美"],
+    ssatRequired: true,
     website: "https://www.mxschool.edu",
   },
   {
@@ -540,6 +550,7 @@ export const schools: School[] = [
       "课外活动极其丰富，有特长的学生更受青睐",
     ],
     tags: ["STEM强", "文科强", "艺术强", "体育强"],
+    ssatRequired: true,
     website: "https://www.milton.edu",
   },
   {
@@ -590,6 +601,7 @@ export const schools: School[] = [
       "小班教学，学校希望学生能融入紧密的社区",
     ],
     tags: ["小班教学", "体育强", "校园优美"],
+    ssatRequired: true,
     website: "https://www.thacher.org",
   },
   {
@@ -640,6 +652,7 @@ export const schools: School[] = [
       "体育特长生录取结果突出，尤其是游泳和田径",
     ],
     tags: ["STEM强", "国际生友好", "体育强"],
+    ssatRequired: true,
     website: "https://www.peddie.org",
   },
   {
@@ -690,6 +703,7 @@ export const schools: School[] = [
       "加州气候宜人，喜欢户外活动的学生更受欢迎",
     ],
     tags: ["小班教学", "文科强", "校园优美"],
+    ssatRequired: true,
     website: "https://www.cate.org",
   },
   {
@@ -740,6 +754,7 @@ export const schools: School[] = [
       "社区包容多元，有开放心态的学生更适应",
     ],
     tags: ["文科强", "艺术强", "小班教学", "国际生友好"],
+    ssatRequired: true,
     website: "https://www.concordacademy.org",
   },
   {
@@ -790,6 +805,7 @@ export const schools: School[] = [
       "传统新英格兰风格，喜欢传统氛围的学生更适应",
     ],
     tags: ["体育强", "国际生友好", "校园优美"],
+    ssatRequired: true,
     website: "https://www.taftschool.org",
   },
   {
@@ -840,6 +856,7 @@ export const schools: School[] = [
       "校园环境优美，喜欢宁静学习环境的学生更适应",
     ],
     tags: ["STEM强", "校园优美"],
+    ssatRequired: true,
     website: "https://www.loomischaffee.org",
   },
   {
@@ -890,6 +907,7 @@ export const schools: School[] = [
       "位于Mid-Atlantic地区，交通便利",
     ],
     tags: ["小班教学", "文科强"],
+    ssatRequired: true,
     website: "https://www.standrews-de.org",
   },
   {
@@ -940,6 +958,7 @@ export const schools: School[] = [
       "校园环境优美，喜欢宁静学习环境的学生更适应",
     ],
     tags: ["领导力培养", "体育强", "国际生友好", "校园优美"],
+    ssatRequired: true,
     website: "https://www.blair.edu",
   },
   {
@@ -990,6 +1009,7 @@ export const schools: School[] = [
       "费城地区大学资源丰富，升学选择多",
     ],
     tags: ["国际生友好", "体育强"],
+    ssatRequired: true,
     website: "https://www.thehill.org",
   },
   {
@@ -1040,6 +1060,7 @@ export const schools: School[] = [
       "性价比相对较高，经济压力小",
     ],
     tags: ["艺术强", "体育强", "国际生友好"],
+    ssatRequired: true,
     website: "https://www.mercersburg.edu",
   },
   {
@@ -1090,6 +1111,7 @@ export const schools: School[] = [
       "校园沿河风景优美，喜欢自然环境的学生更适应",
     ],
     tags: ["宗教背景", "体育强", "国际生友好", "校园优美"],
+    ssatRequired: true,
     website: "https://www.kent-school.edu",
   },
   {
@@ -1140,6 +1162,7 @@ export const schools: School[] = [
       "宗教背景但学术开放，尊重不同信仰",
     ],
     tags: ["文科强", "宗教背景", "校园优美"],
+    ssatRequired: true,
     website: "https://www.episcopalhighschool.org",
   },
   {
@@ -1190,6 +1213,7 @@ export const schools: School[] = [
       "女性领导力经历在申请中是独特优势",
     ],
     tags: ["艺术强", "领导力培养", "小班教学"],
+    ssatRequired: true,
     website: "https://www.porters.org",
   },
   {
@@ -1240,6 +1264,7 @@ export const schools: School[] = [
       "加州气候宜人，喜欢户外活动的学生更受欢迎",
     ],
     tags: ["STEM强", "校园优美"],
+    ssatRequired: true,
     website: "https://www.webb.org",
   },
   {
@@ -1290,6 +1315,7 @@ export const schools: School[] = [
       "校园占地1200英亩，喜欢自然和户外活动的学生更适应",
     ],
     tags: ["体育强", "校园优美"],
+    ssatRequired: true,
     website: "https://www.woodberry.org",
   },
   {
@@ -1340,6 +1366,7 @@ export const schools: School[] = [
       "文科特长生有优势，尤其是写作和历史",
     ],
     tags: ["文科强", "小班教学"],
+    ssatRequired: true,
     website: "https://www.stmarksschool.org",
   },
   {
@@ -1390,6 +1417,7 @@ export const schools: School[] = [
       "校园环境优美，喜欢自然环境的学生更适应",
     ],
     tags: ["艺术强", "国际生友好", "校园优美"],
+    ssatRequired: true,
     website: "https://www.pomfretschool.org",
   },
   {
@@ -1440,6 +1468,7 @@ export const schools: School[] = [
       "滑雪项目出色，有滑雪特长的学生更受欢迎",
     ],
     tags: ["国际生友好", "体育强", "STEM强"],
+    ssatRequired: true,
     website: "https://www.suffieldacademy.org",
   },
   {
@@ -1490,6 +1519,7 @@ export const schools: School[] = [
       "校园氛围温馨，喜欢紧密社区的学生更适应",
     ],
     tags: ["体育强", "艺术强", "校园优美"],
+    ssatRequired: true,
     website: "https://www.thegovernorsacademy.org",
   },
   {
@@ -1540,6 +1570,7 @@ export const schools: School[] = [
       "校园紧邻大西洋，喜欢海洋环境的学生更适应",
     ],
     tags: ["STEM强", "体育强", "国际生友好", "校园优美"],
+    ssatRequired: true,
     website: "https://www.taboracademy.org",
   },
 ];
