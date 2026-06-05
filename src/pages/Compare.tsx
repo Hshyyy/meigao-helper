@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { schools, getEstimatedAnnualCost, getHousingNote } from "../data/schools";
 import type { School } from "../data/schools";
+import SchoolDetail from "../components/SchoolDetail";
 
 export default function Compare() {
+  const [selectedSchool, setSelectedSchool] = useState<School | null>(null);
   const [compareIds, setCompareIds] = useState<number[]>(() => {
     try {
       return JSON.parse(localStorage.getItem("compare") || "[]");
@@ -229,9 +231,12 @@ export default function Compare() {
                     key={school.id}
                     className="text-center p-4 border-l border-gray-100"
                   >
-                    <div className="font-semibold text-gray-900">
+                    <button
+                      onClick={() => setSelectedSchool(school)}
+                      className="font-semibold text-gray-900 hover:text-blue-600 hover:underline cursor-pointer bg-transparent border-none"
+                    >
                       {school.nameCn}
-                    </div>
+                    </button>
                     <div className="text-xs text-gray-400">{school.name}</div>
                     <button
                       onClick={() => removeSchool(school.id)}
@@ -324,7 +329,17 @@ export default function Compare() {
               </tr>
             </tbody>
           </table>
+          <div className="p-4 bg-gray-50 border-t border-gray-200 text-xs text-gray-500">
+            💡 预估费用按默认住宿方式计算。混合型学校可点击学校名称查看详情，选择不同住宿方式查看对应费用。
+          </div>
         </div>
+      )}
+
+      {selectedSchool && (
+        <SchoolDetail
+          school={selectedSchool}
+          onClose={() => setSelectedSchool(null)}
+        />
       )}
     </div>
   );
