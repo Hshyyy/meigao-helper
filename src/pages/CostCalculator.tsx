@@ -130,17 +130,22 @@ export default function CostCalculator() {
                   <option key={s.id} value={s.id}>{s.nameCn} (${s.tuition.toLocaleString()})</option>
                 ))}
               </select>
-              <p className="text-xs text-gray-400 mt-1">
-                {isPureBoarding && "✅ 纯寄宿学校，学费含住宿和餐饮"}
-                {isPureDay && "⚠️ 纯走读学校，需自行安排住宿"}
-                {isMixed && "🔄 寄宿/走读可选"}
-              </p>
             </div>
 
-            {/* 混合型：选择寄宿或走读 */}
-            {isMixed && (
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">住宿方式</label>
+            {/* 住宿方式选择 */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">住宿方式</label>
+              {isPureBoarding && (
+                <select disabled className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm bg-gray-50 text-gray-500">
+                  <option>寄宿（住校）— 仅此选项</option>
+                </select>
+              )}
+              {isPureDay && (
+                <select disabled className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm bg-gray-50 text-gray-500">
+                  <option>走读（不住校）— 仅此选项</option>
+                </select>
+              )}
+              {isMixed && (
                 <select
                   value={mixedChoice}
                   onChange={(e) => setMixedChoice(e.target.value as "boarding" | "day")}
@@ -149,8 +154,13 @@ export default function CostCalculator() {
                   <option value="boarding">寄宿（住校）</option>
                   <option value="day">走读（不住校）</option>
                 </select>
-              </div>
-            )}
+              )}
+              <p className="text-xs text-gray-400 mt-1">
+                {isPureBoarding && "✅ 纯寄宿学校，学费含住宿和餐饮"}
+                {isPureDay && "⚠️ 纯走读学校，需自行安排住宿"}
+                {isMixed && "🔄 寄宿/走读可选，国际生通常选寄宿"}
+              </p>
+            </div>
 
             {/* 走读时：选择住宿方案 */}
             {(isPureDay || (isMixed && mixedChoice === "day")) && (
