@@ -5,22 +5,6 @@ import type { School } from "../data/schools";
 import SchoolCard from "../components/SchoolCard";
 import SchoolDetail from "../components/SchoolDetail";
 
-// 住宿方案选项
-const housingOptions = [
-  { value: "boarding", label: "寄宿（住校）", cost: 0 },
-  { value: "hostFamily", label: "寄宿家庭", cost: 15000 },
-  { value: "rent", label: "租房", cost: 12000 },
-  { value: "ownHouse", label: "自有房产", cost: 0 },
-];
-
-// 根据住宿选择计算费用
-function getCostWithHousing(school: School, housingChoice: string): number {
-  const isBoarding = school.type === "寄宿" || (school.type === "寄宿/走读" && housingChoice === "boarding");
-  const housingCost = isBoarding ? 0 : (housingOptions.find(h => h.value === housingChoice)?.cost || 0);
-  const rentExtra = !isBoarding && housingChoice === "rent" ? 4800 : 0;
-  return school.tuition + housingCost + rentExtra + 5300;
-}
-
 interface StudentProfile {
   toefl: number;
   ssat: number;
@@ -163,7 +147,6 @@ export default function Recommend() {
   });
   const [results, setResults] = useState<MatchResult[] | null>(null);
   const [selectedSchool, setSelectedSchool] = useState<School | null>(null);
-  const [housingChoice, setHousingChoice] = useState("boarding");
   const [favorites, setFavorites] = useState<number[]>(() => {
     try {
       return JSON.parse(localStorage.getItem("favorites") || "[]");
@@ -351,27 +334,6 @@ export default function Recommend() {
             </div>
           ) : (
             <div className="space-y-8">
-              {/* 住宿方式选择 */}
-              <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
-                <div className="flex items-center gap-4 flex-wrap">
-                  <label className="text-sm font-medium text-gray-700">🏠 住宿方式：</label>
-                  <select
-                    value={housingChoice}
-                    onChange={(e) => setHousingChoice(e.target.value)}
-                    className="border border-gray-300 rounded-lg px-3 py-1.5 text-sm"
-                  >
-                    {housingOptions.map((h) => (
-                      <option key={h.value} value={h.value}>
-                        {h.label} {h.cost > 0 ? `(+$${h.cost.toLocaleString()}/年)` : ""}
-                      </option>
-                    ))}
-                  </select>
-                  <span className="text-xs text-gray-400">
-                    💡 纯寄宿学校不受此选项影响，费用始终包含住宿
-                  </span>
-                </div>
-              </div>
-
               {/* 冲刺校 */}
               {reachSchools.length > 0 && (
                 <section>
@@ -393,7 +355,7 @@ export default function Recommend() {
                           matchColor="bg-red-500"
                           isFavorited={favorites.includes(r.school.id)}
                           onToggleFavorite={() => toggleFavorite(r.school.id)}
-                          adjustedCost={getCostWithHousing(r.school, housingChoice)}
+
                         />
                         <p className="text-xs text-gray-500 mt-1 px-1">
                           {r.reason}
@@ -425,7 +387,7 @@ export default function Recommend() {
                           matchColor="bg-blue-500"
                           isFavorited={favorites.includes(r.school.id)}
                           onToggleFavorite={() => toggleFavorite(r.school.id)}
-                          adjustedCost={getCostWithHousing(r.school, housingChoice)}
+
                         />
                         <p className="text-xs text-gray-500 mt-1 px-1">
                           {r.reason}
@@ -457,7 +419,7 @@ export default function Recommend() {
                           matchColor="bg-green-500"
                           isFavorited={favorites.includes(r.school.id)}
                           onToggleFavorite={() => toggleFavorite(r.school.id)}
-                          adjustedCost={getCostWithHousing(r.school, housingChoice)}
+
                         />
                         <p className="text-xs text-gray-500 mt-1 px-1">
                           {r.reason}

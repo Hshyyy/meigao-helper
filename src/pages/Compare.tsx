@@ -1,22 +1,6 @@
 import { useState } from "react";
-import { schools, getHousingNote } from "../data/schools";
+import { schools, getEstimatedAnnualCost, getHousingNote } from "../data/schools";
 import type { School } from "../data/schools";
-
-// 住宿方案选项
-const housingOptions = [
-  { value: "boarding", label: "寄宿（住校）", cost: 0 },
-  { value: "hostFamily", label: "寄宿家庭", cost: 15000 },
-  { value: "rent", label: "租房", cost: 12000 },
-  { value: "ownHouse", label: "自有房产", cost: 0 },
-];
-
-// 根据住宿选择计算费用
-function getCostWithHousing(school: School, housingChoice: string): number {
-  const isBoarding = school.type === "寄宿" || (school.type === "寄宿/走读" && housingChoice === "boarding");
-  const housingCost = isBoarding ? 0 : (housingOptions.find(h => h.value === housingChoice)?.cost || 0);
-  const rentExtra = !isBoarding && housingChoice === "rent" ? 4800 : 0; // 租房需额外餐饮
-  return school.tuition + housingCost + rentExtra + 5300; // 5300 = 保险+书本+个人开支+杂费
-}
 
 export default function Compare() {
   const [compareIds, setCompareIds] = useState<number[]>(() => {
@@ -28,7 +12,6 @@ export default function Compare() {
   });
   const [search, setSearch] = useState("");
   const [activeTab, setActiveTab] = useState<"all" | "favorites">("all");
-  const [housingChoice, setHousingChoice] = useState("boarding");
 
   const favorites: number[] = (() => {
     try {
@@ -74,14 +57,13 @@ export default function Compare() {
     localStorage.setItem("compare", JSON.stringify([]));
   };
 
-  // 动态对比字段（根据住宿选择计算费用）
   const compareFields = [
     { label: "排名", key: "ranking", format: (v: number) => `#${v}` },
     { label: "梯队", key: "rankingTier", format: (v: string) => v },
     { label: "学校类型", key: "type", format: (v: string) => v },
     { label: "住宿政策", key: "_housing", format: (_: unknown, s: School) => getHousingNote(s) },
     { label: "年学费", key: "tuition", format: (v: number) => `$${v.toLocaleString()}` },
-    { label: "预估年总费用", key: "_annualCost", format: (_: unknown, s: School) => `$${getCostWithHousing(s, housingChoice).toLocaleString()}` },
+    { label: "预估年总费用", key: "_annualCost", format: (_: unknown, s: School) => `$${getEstimatedAnnualCost(s).toLocaleString()}` },
     { label: "录取率", key: "acceptanceRate", format: (v: number) => `${v}%` },
     { label: "国际生比例", key: "internationalRate", format: (v: number) => `${v}%` },
     { label: "建议托福", key: "toeflMin", format: (v: number) => `${v}+` },
@@ -130,29 +112,6 @@ export default function Compare() {
           </button>
         )}
       </div>
-
-      {/* 住宿方式选择 */}
-      {compareIds.length >= 2 && (
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 mb-6">
-          <div className="flex items-center gap-4">
-            <label className="text-sm font-medium text-gray-700">🏠 住宿方式：</label>
-            <select
-              value={housingChoice}
-              onChange={(e) => setHousingChoice(e.target.value)}
-              className="border border-gray-300 rounded-lg px-3 py-1.5 text-sm"
-            >
-              {housingOptions.map((h) => (
-                <option key={h.value} value={h.value}>
-                  {h.label} {h.cost > 0 ? `(+$${h.cost.toLocaleString()}/年)` : ""}
-                </option>
-              ))}
-            </select>
-            <span className="text-xs text-gray-400">
-              💡 纯寄宿学校不受此选项影响，费用始终包含住宿
-            </span>
-          </div>
-        </div>
-      )}
 
       {/* 添加学校区域 */}
       {compareIds.length < 3 && (
@@ -305,8 +264,8 @@ export default function Compare() {
                           : value === Math.max(...values);
                     }
                     if (field.key === "_annualCost") {
-                      const values = compareSchools.map((s) => getCostWithHousing(s, housingChoice));
-                      isBest = getCostWithHousing(school, housingChoice) === Math.min(...values);
+                      const values = compareSchools.map((s) => getEstimatedAnnualCost(s));
+                      isBest = getEstimatedAnnualCost(school) === Math.min(...values);
                     }
                     return (
                       <td
