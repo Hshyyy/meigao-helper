@@ -19,12 +19,14 @@ function SchoolSection({
   onToggleFavorite,
   favorites,
   ssatNote,
+  profile,
 }: {
   results: MatchResult[];
   onSelect: (s: School) => void;
   onToggleFavorite: (id: number) => void;
   favorites: number[];
   ssatNote?: boolean;
+  profile?: { toefl: number; gpa: number };
 }) {
   const colorMap = {
     "冲刺校": { bg: "bg-red-100 text-red-700", dot: "bg-red-500" },
@@ -66,7 +68,13 @@ function SchoolSection({
                   onToggleFavorite={() => onToggleFavorite(r.school.id)}
                 />
                 <p className={`text-xs mt-1 px-1 ${ssatNote ? "text-amber-600" : "text-gray-500"}`}>
-                  {ssatNote ? "⚠️ 该校要求 SSAT，建议补充成绩后申请" : r.reason}
+                  {ssatNote && profile ? (
+                    <>
+                      ⚠️ 建议 SSAT {r.school.ssatPercentile}%+，
+                      你的托福{profile.toefl >= r.school.toeflMin ? "达标" : `差${r.school.toeflMin - profile.toefl}分`}，
+                      GPA{profile.gpa >= r.school.gpaMin ? "达标" : `差${(r.school.gpaMin - profile.gpa).toFixed(1)}`}
+                    </>
+                  ) : r.reason}
                 </p>
               </div>
             ))}
@@ -484,6 +492,7 @@ export default function Recommend() {
                         onToggleFavorite={toggleFavorite}
                         favorites={favorites}
                         ssatNote
+                        profile={profile}
                       />
                     </section>
                   )}
