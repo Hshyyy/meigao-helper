@@ -165,7 +165,7 @@ export default function Recommend() {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!profile.schoolType) {
       alert("请选择目前就读学校类型");
@@ -271,8 +271,8 @@ export default function Recommend() {
                   <option value="ap">国际学校（美式/AP）</option>
                   <option value="ib">国际学校（IB）</option>
                   <option value="alevel">国际学校（A-Level/英式）</option>
-                  <option value="public_intl">公立学校国际部</option>
-                  <option value="public">公立学校普通班</option>
+                  <option value="public_intl">体制内学校国际部</option>
+                  <option value="public">体制内教育体系</option>
                 </select>
               </div>
 
