@@ -16,6 +16,7 @@ export default function CostCalculator() {
   const [tripsPerYear, setTripsPerYear] = useState(2);
   const [flightCost, setFlightCost] = useState("1500");
   const [applySchools, setApplySchools] = useState("10");
+  const [boardingChoice, setBoardingChoice] = useState<"boarding" | "day">("boarding");
 
   const flightCostNum = Number(flightCost) || 0;
   const applySchoolsNum = Number(applySchools) || 0;
@@ -25,11 +26,17 @@ export default function CostCalculator() {
     [selectedSchoolId]
   );
 
-  // 根据学校类型判断住宿费用
-  const isBoarding = selectedSchool.type === "寄宿" || selectedSchool.type === "寄宿/走读";
-  // 寄宿学校住宿费估算（约占学费的 20-25%）
-  const estimatedRoomBoard = isBoarding ? Math.round(selectedSchool.tuition * 0.22) : 0;
-  const hostFamilyCost = isBoarding ? 0 : 15000;
+  // 学校类型判断
+  const schoolType = selectedSchool.type; // "寄宿" | "走读" | "寄宿/走读"
+  const isPureBoarding = schoolType === "寄宿";
+  const isPureDay = schoolType === "走读";
+  const isMixed = schoolType === "寄宿/走读";
+  // 实际是否寄宿（混合型根据用户选择）
+  const effectiveBoarding = isPureBoarding || (isMixed && boardingChoice === "boarding");
+
+  // 费用估算
+  const estimatedRoomBoard = Math.round(selectedSchool.tuition * 0.22);
+  const hostFamilyCost = 15000;
 
   // 年度费用
   const annualCosts: CostItem[] = useMemo(
@@ -37,16 +44,16 @@ export default function CostCalculator() {
       {
         name: "学费（Tuition）",
         amount: selectedSchool.tuition,
-        note: isBoarding
-          ? `含住宿（约 $${estimatedRoomBoard.toLocaleString()}）和餐饮`
-          : "不含住宿，需另找寄宿家庭",
+        note: effectiveBoarding
+          ? "含住宿和餐饮"
+          : "不含住宿",
       },
-      ...(!isBoarding
+      ...(!effectiveBoarding
         ? [
             {
               name: "寄宿家庭费用",
               amount: hostFamilyCost,
-              note: "走读学校需安排寄宿家庭",
+              note: "走读需安排寄宿家庭",
             },
           ]
         : []),
@@ -161,9 +168,33 @@ export default function CostCalculator() {
                 ))}
               </select>
               <p className="text-xs text-gray-400 mt-1">
-                {isBoarding ? "✅ 寄宿学校，学费含住宿餐饮" : "⚠️ 走读学校，需另找寄宿家庭"}
+                {isPureBoarding && "✅ 纯寄宿学校，学费含住宿和餐饮"}
+                {isPureDay && "⚠️ 纯走读学校，需另找寄宿家庭"}
+                {isMixed && "🔄 寄宿/走读可选，国际生通常选寄宿"}
               </p>
             </div>
+
+            {/* 混合型学校：选择寄宿或走读 */}
+            {isMixed && (
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  住宿方式
+                </label>
+                <select
+                  value={boardingChoice}
+                  onChange={(e) => setBoardingChoice(e.target.value as "boarding" | "day")}
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+                >
+                  <option value="boarding">寄宿（住校）</option>
+                  <option value="day">走读（寄宿家庭）</option>
+                </select>
+                <p className="text-xs text-gray-400 mt-1">
+                  {boardingChoice === "boarding"
+                    ? "学费已含住宿和餐饮"
+                    : "需另找寄宿家庭，费用另计"}
+                </p>
+              </div>
+            )}
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -285,32 +316,30 @@ export default function CostCalculator() {
             </div>
 
             {/* 住宿费说明 */}
-            {isBoarding && (
-              <div className="mt-4 bg-blue-50 border border-blue-200 rounded-lg p-4">
-                <h4 className="text-sm font-semibold text-blue-900 mb-2">🏠 住宿费说明</h4>
+            <div className="mt-4 bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <h4 className="text-sm font-semibold text-blue-900 mb-2">🏠 住宿费说明</h4>
+              {effectiveBoarding ? (
                 <div className="space-y-1.5 text-sm text-blue-800">
                   <div className="flex justify-between">
-                    <span>学费总额</span>
-                    <span className="font-medium">${selectedSchool.tuition.toLocaleString()}</span>
+                    <span>住宿+餐饮费（估算）</span>
+                    <span className="font-medium">≈ ${(estimatedRoomBoard + Math.round(selectedSchool.tuition * 0.1)).toLocaleString()}/年</span>
                   </div>
-                  <div className="flex justify-between">
-                    <span>其中：住宿费（估算）</span>
-                    <span className="font-medium">≈ ${estimatedRoomBoard.toLocaleString()}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>其中：餐饮费（估算）</span>
-                    <span className="font-medium">≈ ${Math.round(selectedSchool.tuition * 0.1).toLocaleString()}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>其中：学术课程（估算）</span>
-                    <span className="font-medium">≈ ${(selectedSchool.tuition - estimatedRoomBoard - Math.round(selectedSchool.tuition * 0.1)).toLocaleString()}</span>
-                  </div>
+                  <p className="text-xs text-blue-600 mt-1">
+                    💡 寄宿学校学费已包含住宿和餐饮，无需额外支付
+                  </p>
                 </div>
-                <p className="text-xs text-blue-600 mt-2">
-                  💡 以上为估算值，实际比例因学校而异，仅供参考
-                </p>
-              </div>
-            )}
+              ) : (
+                <div className="space-y-1.5 text-sm text-blue-800">
+                  <div className="flex justify-between">
+                    <span>寄宿家庭费用（估算）</span>
+                    <span className="font-medium">≈ ${hostFamilyCost.toLocaleString()}/年</span>
+                  </div>
+                  <p className="text-xs text-blue-600 mt-1">
+                    ⚠️ 走读学校需自行安排寄宿家庭，费用另计
+                  </p>
+                </div>
+              )}
+            </div>
           </div>
 
           {/* 一次性费用明细 */}
