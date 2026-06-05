@@ -25,14 +25,30 @@ export default function CostCalculator() {
     [selectedSchoolId]
   );
 
+  // 根据学校类型判断住宿费用
+  const isBoarding = selectedSchool.type === "寄宿" || selectedSchool.type === "寄宿/走读";
+  const boardingNote = isBoarding
+    ? "含住宿和餐饮"
+    : "不含住宿，需另找寄宿家庭";
+  const hostFamilyCost = isBoarding ? 0 : 15000; // 走读学校需寄宿家庭
+
   // 年度费用
   const annualCosts: CostItem[] = useMemo(
     () => [
       {
         name: "学费（Tuition）",
         amount: selectedSchool.tuition,
-        note: "包含住宿和餐饮",
+        note: boardingNote,
       },
+      ...(!isBoarding
+        ? [
+            {
+              name: "寄宿家庭费用",
+              amount: hostFamilyCost,
+              note: "走读学校需安排寄宿家庭",
+            },
+          ]
+        : []),
       {
         name: "医疗保险（Health Insurance）",
         amount: 1800,
@@ -143,6 +159,9 @@ export default function CostCalculator() {
                   </option>
                 ))}
               </select>
+              <p className="text-xs text-gray-400 mt-1">
+                {isBoarding ? "✅ 寄宿学校，学费含住宿餐饮" : "⚠️ 走读学校，需另找寄宿家庭"}
+              </p>
             </div>
 
             <div>
