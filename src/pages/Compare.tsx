@@ -261,8 +261,8 @@ export default function Compare() {
               <CompareRow label="排名" values={compareSchools.map(s => `#${s.ranking}`)} bestFn="min" bestValues={compareSchools.map(s => s.ranking)} />
               {/* 梯队 */}
               <CompareRow label="梯队" values={compareSchools.map(s => s.rankingTier)} />
-              {/* 学校类型 */}
-              <CompareRow label="学校类型" values={compareSchools.map(s => s.type === "寄宿" ? "纯寄宿学校" : s.type === "寄宿/走读" ? "寄宿/走读可选" : "纯走读学校")} />
+              {/* Boarding */}
+              <CompareRow label="Boarding" values={compareSchools.map(s => s.type === "寄宿" ? "纯寄宿学校" : s.type === "寄宿/走读" ? "寄宿/走读可选" : "纯走读学校")} />
               {/* 住宿方式（可选） */}
               <tr className="border-b border-gray-50">
                 <td className="p-4 text-sm text-gray-500">住宿方式</td>

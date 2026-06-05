@@ -64,7 +64,7 @@ export default function SchoolDetail({ school, onClose }: Props) {
           <div className="grid grid-cols-2 gap-3">
             <InfoItem label="地区" value={`${school.state} ${school.city}`} />
             <InfoItem label="排名" value={`#${school.ranking}`} />
-            <InfoItem label="类型" value={school.type === "寄宿" ? "纯寄宿学校" : school.type === "寄宿/走读" ? "寄宿/走读可选" : "纯走读学校"} />
+            <InfoItem label="Boarding" value={school.type === "寄宿" ? "纯寄宿学校" : school.type === "寄宿/走读" ? "寄宿/走读可选" : "纯走读学校"} />
             <InfoItem label="年级" value={school.grades} />
             <InfoItem label="学生总数" value={`${school.studentCount} 人`} />
             <InfoItem label="师生比" value={school.studentTeacherRatio} />
