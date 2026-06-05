@@ -182,7 +182,7 @@ export default function Recommend() {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const matched = matchSchools(profile);
     setResults(matched);
@@ -367,7 +367,7 @@ export default function Recommend() {
                     ))}
                   </select>
                   <span className="text-xs text-gray-400">
-                    💡 费用会根据住宿方式自动调整
+                    💡 纯寄宿学校不受此选项影响，费用始终包含住宿
                   </span>
                 </div>
               </div>

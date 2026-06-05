@@ -148,7 +148,7 @@ export default function Compare() {
               ))}
             </select>
             <span className="text-xs text-gray-400">
-              💡 选择住宿方式后，费用会自动重新计算
+              💡 纯寄宿学校不受此选项影响，费用始终包含住宿
             </span>
           </div>
         </div>
