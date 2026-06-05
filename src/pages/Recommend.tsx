@@ -24,7 +24,6 @@ type MatchResult = {
 function matchSchools(profile: StudentProfile): MatchResult[] {
   const results: MatchResult[] = [];
 
-  // IB/A-Level 学生未填 SSAT 时，只推荐不要求 SSAT 的学校
   const canSkipSSAT = (profile.schoolType === "ib" || profile.schoolType === "alevel") && profile.ssat === 0;
 
   for (const school of schools) {
@@ -35,11 +34,6 @@ function matchSchools(profile: StudentProfile): MatchResult[] {
 
     // 预算筛选
     if (profile.maxBudget > 0 && school.tuition > profile.maxBudget) {
-      continue;
-    }
-
-    // IB/A-Level 未填 SSAT 时，过滤掉要求 SSAT 的学校
-    if (canSkipSSAT && school.ssatRequired) {
       continue;
     }
 
@@ -65,9 +59,13 @@ function matchSchools(profile: StudentProfile): MatchResult[] {
 
     // SSAT 匹配 (30%)
     if (canSkipSSAT) {
-      // IB/A-Level 学生未填 SSAT，已被过滤，这里给基础分
-      score += 20;
-      reasons.push("可用课程成绩替代 SSAT");
+      if (!school.ssatRequired) {
+        score += 25;
+        reasons.push("可用课程成绩替代 SSAT");
+      } else {
+        score += 10;
+        reasons.push("该校要求 SSAT，建议补充成绩");
+      }
     } else {
       const ssatDiff = profile.ssat - school.ssatPercentile;
       if (ssatDiff >= 5) {
@@ -193,9 +191,20 @@ export default function Recommend() {
     setProfile((prev) => ({ ...prev, [key]: value }));
   };
 
+  const canSkipSSAT = (profile.schoolType === "ib" || profile.schoolType === "alevel") && profile.ssat === 0;
+
+  // 正常分类
   const reachSchools = results?.filter((r) => r.type === "冲刺校") || [];
   const matchSchoolsList = results?.filter((r) => r.type === "匹配校") || [];
   const safeSchools = results?.filter((r) => r.type === "保底校") || [];
+
+  // IB/A-Level 未填 SSAT 时，分两组
+  const ssatFreeSchools = canSkipSSAT
+    ? results?.filter((r) => !r.school.ssatRequired) || []
+    : [];
+  const ssatRequiredSchools = canSkipSSAT
+    ? results?.filter((r) => r.school.ssatRequired) || []
+    : [];
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
@@ -243,7 +252,7 @@ export default function Recommend() {
                   max={99}
                   value={profile.ssat || ""}
                   onChange={(e) => update("ssat", Number(e.target.value))}
-                  placeholder={profile.schoolType === "ib" || profile.schoolType === "alevel" ? "不填则只推荐免 SSAT 的学校" : "例如：85"}
+                  placeholder={profile.schoolType === "ib" || profile.schoolType === "alevel" ? "不填则免 SSAT 学校优先，附带需要 SSAT 的学校" : "例如：85"}
                   className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
                   required={profile.schoolType !== "ib" && profile.schoolType !== "alevel"}
                 />
@@ -363,81 +372,144 @@ export default function Recommend() {
             </div>
           ) : (
             <div className="space-y-8">
-              {/* 冲刺校 */}
-              {reachSchools.length > 0 && (
-                <section>
-                  <div className="flex items-center gap-2 mb-4">
-                    <span className="bg-red-100 text-red-700 px-3 py-1 rounded-full text-sm font-medium">
-                      🔥 冲刺校
-                    </span>
-                    <span className="text-sm text-gray-500">
-                      有一定挑战，值得尝试
-                    </span>
-                  </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {reachSchools.map((r) => (
-                      <div key={r.school.id}>
-                        <SchoolCard
-                          school={r.school}
-                          onClick={() => setSelectedSchool(r.school)}
-                          matchScore={r.score}
-                          matchColor="bg-red-500"
-                          isFavorited={favorites.includes(r.school.id)}
-                          onToggleFavorite={() => toggleFavorite(r.school.id)}
-
-                        />
-                        <p className="text-xs text-gray-500 mt-1 px-1">
-                          {r.reason}
-                        </p>
+              {/* IB/A-Level 未填 SSAT 时，分两部分显示 */}
+              {canSkipSSAT ? (
+                <>
+                  {/* 免 SSAT 学校 */}
+                  {ssatFreeSchools.length > 0 && (
+                    <section>
+                      <div className="flex items-center gap-2 mb-4">
+                        <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-medium">
+                          ✅ 免 SSAT 学校
+                        </span>
+                        <span className="text-sm text-gray-500">
+                          可用 IB/A-Level 成绩替代 SSAT
+                        </span>
                       </div>
-                    ))}
-                  </div>
-                </section>
-              )}
-
-              {/* 匹配校 */}
-              {matchSchoolsList.length > 0 && (
-                <section>
-                  <div className="flex items-center gap-2 mb-4">
-                    <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-medium">
-                      ✅ 匹配校
-                    </span>
-                    <span className="text-sm text-gray-500">
-                      与你实力匹配，录取概率较大
-                    </span>
-                  </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {matchSchoolsList.map((r) => (
-                      <div key={r.school.id}>
-                        <SchoolCard
-                          school={r.school}
-                          onClick={() => setSelectedSchool(r.school)}
-                          matchScore={r.score}
-                          matchColor="bg-blue-500"
-                          isFavorited={favorites.includes(r.school.id)}
-                          onToggleFavorite={() => toggleFavorite(r.school.id)}
-
-                        />
-                        <p className="text-xs text-gray-500 mt-1 px-1">
-                          {r.reason}
-                        </p>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {ssatFreeSchools.map((r) => (
+                          <div key={r.school.id}>
+                            <SchoolCard
+                              school={r.school}
+                              onClick={() => setSelectedSchool(r.school)}
+                              matchScore={r.score}
+                              matchColor="bg-green-500"
+                              isFavorited={favorites.includes(r.school.id)}
+                              onToggleFavorite={() => toggleFavorite(r.school.id)}
+                            />
+                            <p className="text-xs text-gray-500 mt-1 px-1">
+                              {r.reason}
+                            </p>
+                          </div>
+                        ))}
                       </div>
-                    ))}
-                  </div>
-                </section>
-              )}
+                    </section>
+                  )}
 
-              {/* 保底校 */}
-              {safeSchools.length > 0 && (
-                <section>
-                  <div className="flex items-center gap-2 mb-4">
-                    <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-medium">
-                      🛡️ 保底校
-                    </span>
-                    <span className="text-sm text-gray-500">
-                      录取把握很大，作为稳妥选择
-                    </span>
-                  </div>
+                  {/* 需要 SSAT 的学校 */}
+                  {ssatRequiredSchools.length > 0 && (
+                    <section>
+                      <div className="flex items-center gap-2 mb-4">
+                        <span className="bg-amber-100 text-amber-700 px-3 py-1 rounded-full text-sm font-medium">
+                          📝 建议考 SSAT 的学校
+                        </span>
+                        <span className="text-sm text-gray-500">
+                          以下学校要求 SSAT，建议考虑参加考试以扩大选择范围
+                        </span>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {ssatRequiredSchools.map((r) => (
+                          <div key={r.school.id}>
+                            <SchoolCard
+                              school={r.school}
+                              onClick={() => setSelectedSchool(r.school)}
+                              matchScore={r.score}
+                              matchColor="bg-amber-500"
+                              isFavorited={favorites.includes(r.school.id)}
+                              onToggleFavorite={() => toggleFavorite(r.school.id)}
+                            />
+                            <p className="text-xs text-amber-600 mt-1 px-1">
+                              ⚠️ 该校要求 SSAT，建议补充成绩后申请
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                    </section>
+                  )}
+                </>
+              ) : (
+                <>
+                  {/* 正常显示：冲刺校、匹配校、保底校 */}
+                  {reachSchools.length > 0 && (
+                    <section>
+                      <div className="flex items-center gap-2 mb-4">
+                        <span className="bg-red-100 text-red-700 px-3 py-1 rounded-full text-sm font-medium">
+                          🔥 冲刺校
+                        </span>
+                        <span className="text-sm text-gray-500">
+                          有一定挑战，值得尝试
+                        </span>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {reachSchools.map((r) => (
+                          <div key={r.school.id}>
+                            <SchoolCard
+                              school={r.school}
+                              onClick={() => setSelectedSchool(r.school)}
+                              matchScore={r.score}
+                              matchColor="bg-red-500"
+                              isFavorited={favorites.includes(r.school.id)}
+                              onToggleFavorite={() => toggleFavorite(r.school.id)}
+                            />
+                            <p className="text-xs text-gray-500 mt-1 px-1">
+                              {r.reason}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                    </section>
+                  )}
+
+                  {matchSchoolsList.length > 0 && (
+                    <section>
+                      <div className="flex items-center gap-2 mb-4">
+                        <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-medium">
+                          ✅ 匹配校
+                        </span>
+                        <span className="text-sm text-gray-500">
+                          与你实力匹配，录取概率较大
+                        </span>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {matchSchoolsList.map((r) => (
+                          <div key={r.school.id}>
+                            <SchoolCard
+                              school={r.school}
+                              onClick={() => setSelectedSchool(r.school)}
+                              matchScore={r.score}
+                              matchColor="bg-blue-500"
+                              isFavorited={favorites.includes(r.school.id)}
+                              onToggleFavorite={() => toggleFavorite(r.school.id)}
+                            />
+                            <p className="text-xs text-gray-500 mt-1 px-1">
+                              {r.reason}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                    </section>
+                  )}
+
+                  {safeSchools.length > 0 && (
+                    <section>
+                      <div className="flex items-center gap-2 mb-4">
+                        <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-medium">
+                          🛡️ 保底校
+                        </span>
+                        <span className="text-sm text-gray-500">
+                          录取把握很大，作为稳妥选择
+                        </span>
+                      </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {safeSchools.map((r) => (
                       <div key={r.school.id}>
@@ -448,7 +520,6 @@ export default function Recommend() {
                           matchColor="bg-green-500"
                           isFavorited={favorites.includes(r.school.id)}
                           onToggleFavorite={() => toggleFavorite(r.school.id)}
-
                         />
                         <p className="text-xs text-gray-500 mt-1 px-1">
                           {r.reason}
@@ -457,6 +528,8 @@ export default function Recommend() {
                     ))}
                   </div>
                 </section>
+              )}
+                </>
               )}
             </div>
           )}
