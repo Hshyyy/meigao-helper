@@ -475,7 +475,7 @@ export default function Timeline() {
       american: { test: "SSAT + TOEFL", advantage: "美式体系学生在课外活动和 GPA 方面有天然优势", special: "保持 GPA 3.5+，深入发展课外活动" },
       british: { test: "IELTS 或 TOEFL", advantage: "英式体系学生在写作和批判性思维方面有优势", special: "部分学校接受 GCSE 替代 SSAT，先确认目标学校要求" },
       ib: { test: "TOEFL 或 IELTS", advantage: "IB 学生在跨学科思考和国际视野方面有优势", special: "IB 成绩被广泛认可，部分学校免 SSAT" },
-      chinese: { test: "SSAT + TOEFL", advantage: "国内学生基础扎实，数理化成绩通常优秀", special: "重点提升英语能力，SSAT 词汇和阅读是关键" },
+      chinese: { test: "SSAT + TOEFL", advantage: "国内学生基础扎实，数理化成绩通常优秀", special: "英语是短板，需要重点突破；课外活动记录可能较少，建议通过文书展示个人特质" },
     };
     const sys = systemData[system];
 
