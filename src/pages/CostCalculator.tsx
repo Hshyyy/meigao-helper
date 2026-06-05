@@ -14,8 +14,11 @@ export default function CostCalculator() {
   );
   const [studyYears, setStudyYears] = useState(4);
   const [tripsPerYear, setTripsPerYear] = useState(2);
-  const [flightCost, setFlightCost] = useState(1500);
-  const [applySchools, setApplySchools] = useState(10);
+  const [flightCost, setFlightCost] = useState("1500");
+  const [applySchools, setApplySchools] = useState("10");
+
+  const flightCostNum = Number(flightCost) || 0;
+  const applySchoolsNum = Number(applySchools) || 0;
 
   const selectedSchool = useMemo(
     () => schools.find((s) => s.id === selectedSchoolId) || schools[0],
@@ -47,8 +50,8 @@ export default function CostCalculator() {
       },
       {
         name: "往返机票",
-        amount: flightCost * tripsPerYear,
-        note: `${tripsPerYear} 次/年 × $${flightCost}/次`,
+        amount: flightCostNum * tripsPerYear,
+        note: `${tripsPerYear} 次/年 × $${flightCostNum}/次`,
         adjustable: true,
       },
       {
@@ -80,8 +83,8 @@ export default function CostCalculator() {
       },
       {
         name: "学校申请费",
-        amount: applySchools * 100,
-        note: `${applySchools} 所学校 × $100/所`,
+        amount: applySchoolsNum * 100,
+        note: `${applySchoolsNum} 所学校 × $100/所`,
         adjustable: true,
       },
       {
@@ -180,7 +183,7 @@ export default function CostCalculator() {
               <input
                 type="number"
                 value={flightCost}
-                onChange={(e) => setFlightCost(Number(e.target.value))}
+                onChange={(e) => setFlightCost(e.target.value)}
                 className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
               />
               <p className="text-xs text-gray-400 mt-1">
@@ -197,7 +200,7 @@ export default function CostCalculator() {
                 min={1}
                 max={20}
                 value={applySchools}
-                onChange={(e) => setApplySchools(Number(e.target.value))}
+                onChange={(e) => setApplySchools(e.target.value)}
                 className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
               />
             </div>
