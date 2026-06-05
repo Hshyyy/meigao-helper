@@ -240,26 +240,6 @@ export default function Recommend() {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  GPA（0-4.0）
-                </label>
-                <input
-                  type="number"
-                  min={0}
-                  max={4}
-                  step={0.1}
-                  value={profile.gpa || ""}
-                  onChange={(e) => update("gpa", Number(e.target.value))}
-                  placeholder="例如：3.5"
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
-                  required
-                />
-                <p className="text-xs text-gray-400 mt-1">
-                  💡 4.0 为满分，顶尖校建议 3.7+，优秀校建议 3.5+
-                </p>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
                   目前就读学校类型
                 </label>
                 <select
@@ -274,6 +254,28 @@ export default function Recommend() {
                   <option value="public_intl">体制内学校国际部</option>
                   <option value="public">体制内教育体系</option>
                 </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  {profile.schoolType === "public" ? "校内成绩（百分制）" : "GPA（0-4.0）"}
+                </label>
+                <input
+                  type="number"
+                  min={0}
+                  max={profile.schoolType === "public" ? 100 : 4}
+                  step={profile.schoolType === "public" ? 1 : 0.1}
+                  value={profile.gpa || ""}
+                  onChange={(e) => update("gpa", Number(e.target.value))}
+                  placeholder={profile.schoolType === "public" ? "例如：90" : "例如：3.5"}
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+                  required
+                />
+                <p className="text-xs text-gray-400 mt-1">
+                  {profile.schoolType === "public"
+                    ? "💡 百分制，顶尖校建议 90+，优秀校建议 85+"
+                    : "💡 4.0 为满分，顶尖校建议 3.7+，优秀校建议 3.5+"}
+                </p>
               </div>
 
               <div>
