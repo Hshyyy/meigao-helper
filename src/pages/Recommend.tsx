@@ -235,9 +235,9 @@ export default function Recommend() {
                 />
                 <p className="text-xs text-gray-400 mt-1">
                   {profile.schoolType === "ib"
-                    ? "💡 部分学校接受 IB 成绩替代 SSAT，建议先确认目标学校要求"
+                    ? "💡 部分学校接受 IB 成绩替代 SSAT，我们会在推荐中标注哪些学校可以免 SSAT"
                     : profile.schoolType === "alevel"
-                    ? "💡 部分学校接受 GCSE 替代 SSAT，建议先确认目标学校要求"
+                    ? "💡 部分学校接受 GCSE 替代 SSAT，我们会在推荐中标注哪些学校可以免 SSAT"
                     : "💡 百分位指你超过了百分之多少的考生，顶尖校建议 90%+"}
                 </p>
               </div>
