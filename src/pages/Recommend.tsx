@@ -56,19 +56,26 @@ function matchSchools(profile: StudentProfile): MatchResult[] {
     }
 
     // SSAT 匹配 (30%)
-    const ssatDiff = profile.ssat - school.ssatPercentile;
-    if (ssatDiff >= 5) {
-      score += 30;
-      reasons.push("SSAT 远超要求");
-    } else if (ssatDiff >= 0) {
-      score += 22;
-      reasons.push("SSAT 达到要求");
-    } else if (ssatDiff >= -5) {
-      score += 10;
-      reasons.push("SSAT 略低于要求");
+    const canSkipSSAT = (profile.schoolType === "ib" || profile.schoolType === "alevel") && profile.ssat === 0;
+    if (canSkipSSAT) {
+      // IB/A-Level 学生未填 SSAT，给基础分并标注
+      score += 15;
+      reasons.push("可用课程成绩替代 SSAT");
     } else {
-      score += 3;
-      reasons.push("SSAT 低于要求较多");
+      const ssatDiff = profile.ssat - school.ssatPercentile;
+      if (ssatDiff >= 5) {
+        score += 30;
+        reasons.push("SSAT 远超要求");
+      } else if (ssatDiff >= 0) {
+        score += 22;
+        reasons.push("SSAT 达到要求");
+      } else if (ssatDiff >= -5) {
+        score += 10;
+        reasons.push("SSAT 略低于要求");
+      } else {
+        score += 3;
+        reasons.push("SSAT 低于要求较多");
+      }
     }
 
     // GPA 匹配 (20%)
@@ -229,9 +236,9 @@ export default function Recommend() {
                   max={99}
                   value={profile.ssat || ""}
                   onChange={(e) => update("ssat", Number(e.target.value))}
-                  placeholder="例如：85"
+                  placeholder={profile.schoolType === "ib" || profile.schoolType === "alevel" ? "不填则只推荐免 SSAT 的学校" : "例如：85"}
                   className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
-                  required
+                  required={profile.schoolType !== "ib" && profile.schoolType !== "alevel"}
                 />
                 <p className="text-xs text-gray-400 mt-1">
                   {profile.schoolType === "ib"
