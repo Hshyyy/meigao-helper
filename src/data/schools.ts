@@ -1149,7 +1149,7 @@ export const schools: School[] = [
     state: "康涅狄格州",
     city: "Farmington",
     region: "东北",
-    type: "寄宿",
+    type: "寄宿/走读",
     ranking: 21,
     rankingTier: "热门",
     tuition: 65000,
