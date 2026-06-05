@@ -67,7 +67,7 @@ export default function SchoolDetail({ school, onClose }: Props) {
             <InfoItem label="Boarding" value={school.type === "寄宿" ? "纯寄宿学校" : school.type === "寄宿/走读" ? "寄宿/走读可选" : "纯走读学校"} />
             <InfoItem label="Grades" value={school.grades} />
             <InfoItem label="Enrollment" value={`${school.studentCount} 人`} />
-            <InfoItem label="Ratio" value={school.studentTeacherRatio} />
+            <InfoItem label="Student-Faculty Ratio" value={school.studentTeacherRatio} />
             <InfoItem label="International Students" value={`${school.internationalRate}%`} />
             <InfoItem label="Acceptance" value={`${school.acceptanceRate}%`} />
           </div>
