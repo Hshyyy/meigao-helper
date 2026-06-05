@@ -62,22 +62,22 @@ export default function SchoolDetail({ school, onClose }: Props) {
 
           {/* 基本信息 */}
           <div className="grid grid-cols-2 gap-3">
-            <InfoItem label="地区" value={`${school.state} ${school.city}`} />
-            <InfoItem label="排名" value={`#${school.ranking}`} />
+            <InfoItem label="Location" value={`${school.state} ${school.city}`} />
+            <InfoItem label="Ranking" value={`#${school.ranking}`} />
             <InfoItem label="Boarding" value={school.type === "寄宿" ? "纯寄宿学校" : school.type === "寄宿/走读" ? "寄宿/走读可选" : "纯走读学校"} />
-            <InfoItem label="年级" value={school.grades} />
-            <InfoItem label="学生总数" value={`${school.studentCount} 人`} />
-            <InfoItem label="师生比" value={school.studentTeacherRatio} />
-            <InfoItem label="国际生比例" value={`${school.internationalRate}%`} />
-            <InfoItem label="录取率" value={`${school.acceptanceRate}%`} />
+            <InfoItem label="Grades" value={school.grades} />
+            <InfoItem label="Enrollment" value={`${school.studentCount} 人`} />
+            <InfoItem label="Ratio" value={school.studentTeacherRatio} />
+            <InfoItem label="International" value={`${school.internationalRate}%`} />
+            <InfoItem label="Acceptance" value={`${school.acceptanceRate}%`} />
           </div>
 
           {/* 录取要求 */}
           <div>
-            <h3 className="font-semibold text-gray-900 mb-3">📊 录取要求</h3>
+            <h3 className="font-semibold text-gray-900 mb-3">📊 Admission</h3>
             <div className="bg-gray-50 rounded-xl p-4 space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-600">录取率</span>
+                <span className="text-sm text-gray-600">Acceptance Rate</span>
                 <div className="flex items-center gap-2">
                   <div className="w-32 h-2 bg-gray-200 rounded-full overflow-hidden">
                     <div className="h-full bg-blue-500 rounded-full" style={{ width: `${school.acceptanceRate}%` }} />
@@ -86,15 +86,15 @@ export default function SchoolDetail({ school, onClose }: Props) {
                 </div>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-600">建议托福</span>
+                <span className="text-sm text-gray-600">TOEFL</span>
                 <span className="text-sm font-medium text-gray-900">{school.toeflMin}+</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-600">建议 SSAT 百分位</span>
+                <span className="text-sm text-gray-600">SSAT</span>
                 <span className="text-sm font-medium text-gray-900">{school.ssatPercentile}%+</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-600">建议 GPA</span>
+                <span className="text-sm text-gray-600">GPA</span>
                 <span className="text-sm font-medium text-gray-900">{school.gpaMin}+</span>
               </div>
             </div>
