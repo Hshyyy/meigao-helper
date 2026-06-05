@@ -259,8 +259,8 @@ export default function Compare() {
             <tbody>
               {/* Ranking */}
               <CompareRow label="Ranking" values={compareSchools.map(s => `#${s.ranking}`)} bestFn="min" bestValues={compareSchools.map(s => s.ranking)} />
-              {/* Tier */}
-              <CompareRow label="Tier" values={compareSchools.map(s => s.rankingTier)} />
+              {/* Level */}
+              <CompareRow label="Level" values={compareSchools.map(s => s.rankingTier)} />
               {/* Boarding */}
               <CompareRow label="Boarding" values={compareSchools.map(s => s.type === "寄宿" ? "纯寄宿学校" : s.type === "寄宿/走读" ? "寄宿/走读可选" : "纯走读学校")} />
               {/* Housing */}
@@ -291,9 +291,9 @@ export default function Compare() {
               </tr>
               {/* Tuition */}
               <CompareRow label="Tuition" values={compareSchools.map(s => `$${s.tuition.toLocaleString()}`)} />
-              {/* Est. Annual Cost */}
+              {/* Annual Cost */}
               <CompareRow
-                label="Est. Annual Cost"
+                label="Annual Cost"
                 values={compareSchools.map(s => `$${calcCost(s, getHousingChoice(s)).toLocaleString()}`)}
                 highlight
                 bestFn="min"
@@ -318,7 +318,7 @@ export default function Compare() {
               {/* Location */}
               <CompareRow label="Location" values={compareSchools.map(s => s.state)} />
               <tr className="border-b border-gray-50">
-                <td className="p-4 text-sm text-gray-500">Tags</td>
+                <td className="p-4 text-sm text-gray-500">Specialties</td>
                 {compareSchools.map((school) => (
                   <td
                     key={school.id}
