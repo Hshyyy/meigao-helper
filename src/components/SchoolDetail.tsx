@@ -99,14 +99,37 @@ export default function SchoolDetail({ school, onClose, profile }: Props) {
                   unit="%"
                   higher
                 />
-                <MatchItem
-                  label="GPA"
-                  value={profile.gpa}
-                  required={school.gpaMin}
-                  unit=""
-                  higher
-                />
+                {profile.schoolType === "public" ? (
+                  <MatchItem
+                    label="成绩"
+                    value={profile.gpa}
+                    required={gpaToPercent(school.gpaMin)}
+                    unit="%"
+                    higher
+                  />
+                ) : (
+                  <MatchItem
+                    label="GPA"
+                    value={profile.gpa}
+                    required={school.gpaMin}
+                    unit=""
+                    higher
+                  />
+                )}
               </div>
+              {profile.schoolType === "public" && (
+                <div className="mt-3 bg-blue-50 rounded-lg p-3">
+                  <p className="text-xs font-medium text-blue-800 mb-2">📊 GPA 与百分比换算：</p>
+                  <div className="grid grid-cols-2 gap-1 text-xs text-blue-600">
+                    <span>GPA 4.0 ≈ 93-100%</span>
+                    <span>GPA 3.7 ≈ 90-92%</span>
+                    <span>GPA 3.5 ≈ 87-89%</span>
+                    <span>GPA 3.3 ≈ 83-86%</span>
+                    <span>GPA 3.0 ≈ 80-82%</span>
+                    <span>GPA 2.7 ≈ 77-79%</span>
+                  </div>
+                </div>
+              )}
             </div>
           )}
 
@@ -353,6 +376,17 @@ function MatchItem({
       </div>
     </div>
   );
+}
+
+// GPA 转百分比
+function gpaToPercent(gpa: number): number {
+  if (gpa >= 4.0) return 93;
+  if (gpa >= 3.7) return 90;
+  if (gpa >= 3.5) return 87;
+  if (gpa >= 3.3) return 83;
+  if (gpa >= 3.0) return 80;
+  if (gpa >= 2.7) return 77;
+  return 70;
 }
 
 // 生成个性化建议

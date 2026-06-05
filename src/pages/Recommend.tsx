@@ -384,9 +384,22 @@ export default function Recommend() {
                     : "💡 4.0 为满分，顶尖校建议 3.7+，优秀校建议 3.5+"}
                 </p>
                 {profile.schoolType === "public" && (
-                  <p className="text-xs text-gray-400 mt-0.5">
-                    📌 实际申请时需提交所有科目的完整成绩单
-                  </p>
+                  <>
+                    <p className="text-xs text-gray-400 mt-0.5">
+                      📌 实际申请时需提交所有科目的完整成绩单
+                    </p>
+                    <div className="mt-2 bg-gray-50 rounded-lg p-3">
+                      <p className="text-xs font-medium text-gray-600 mb-2">📊 百分比与 GPA 换算参考：</p>
+                      <div className="grid grid-cols-2 gap-1 text-xs text-gray-500">
+                        <span>93-100% ≈ GPA 4.0</span>
+                        <span>90-92% ≈ GPA 3.7</span>
+                        <span>87-89% ≈ GPA 3.5</span>
+                        <span>83-86% ≈ GPA 3.3</span>
+                        <span>80-82% ≈ GPA 3.0</span>
+                        <span>77-79% ≈ GPA 2.7</span>
+                      </div>
+                    </div>
+                  </>
                 )}
               </div>
 
