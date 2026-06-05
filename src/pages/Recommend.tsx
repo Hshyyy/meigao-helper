@@ -258,7 +258,7 @@ export default function Recommend() {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  {profile.schoolType === "public" ? "校内平均分（百分制）" : "GPA（0-4.0）"}
+                  {profile.schoolType === "public" ? "成绩估算百分比（%）" : "GPA（0-4.0）"}
                 </label>
                 <input
                   type="number"
@@ -267,7 +267,7 @@ export default function Recommend() {
                   step={profile.schoolType === "public" ? 1 : 0.1}
                   value={profile.gpa || ""}
                   onChange={(e) => update("gpa", Number(e.target.value))}
-                  placeholder={profile.schoolType === "public" ? "例如：90" : "例如：3.5"}
+                  placeholder={profile.schoolType === "public" ? "例如：88" : "例如：3.5"}
                   className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
                   required
                 />
