@@ -132,6 +132,7 @@ export default function Map() {
   }, []);
 
   return (
+    <>
     <div className="max-w-6xl mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold text-gray-900 mb-2">学校地图</h1>
       <p className="text-gray-500 mb-6">
@@ -202,8 +203,10 @@ export default function Map() {
           <span>🔄 刷新瓦片</span>
         </div>
       </div>
-
-      {selectedSchool && <SchoolDetail school={selectedSchool} onClose={() => setSelectedSchool(null)} />}
     </div>
+
+    {/* 详情弹窗放在最外层，避免被地图遮挡 */}
+    {selectedSchool && <SchoolDetail school={selectedSchool} onClose={() => setSelectedSchool(null)} />}
+    </>
   );
 }
