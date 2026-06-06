@@ -22,7 +22,7 @@ function SchoolSection({
   profile,
 }: {
   results: MatchResult[];
-  onSelect: (s: School) => void;
+  onSelect: (school: School) => void;
   onToggleFavorite: (id: number) => void;
   favorites: number[];
   ssatNote?: boolean;
