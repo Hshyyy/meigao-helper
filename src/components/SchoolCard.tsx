@@ -86,7 +86,15 @@ export default function SchoolCard({
           <span className="text-xs text-gray-400">{getHousingNote(school)}</span>
         </div>
         <div className="flex justify-between">
-          <span>📊 预估总费用 ${displayCost.toLocaleString()}/年</span>
+          <span className="flex items-center gap-1">
+            📊 预估总费用 ${displayCost.toLocaleString()}/年
+            <span className="relative group cursor-help">
+              <span className="text-xs text-gray-400">ℹ️</span>
+              <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 bg-gray-800 text-white text-xs px-2 py-1 rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
+                Hshy提醒：生活费根据城市指数估算
+              </span>
+            </span>
+          </span>
           <span>录取率 {school.acceptanceRate}%</span>
         </div>
         <p className="text-xs text-blue-500">
