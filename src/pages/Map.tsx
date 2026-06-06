@@ -136,7 +136,7 @@ export default function Map() {
             </div>
           </div>
         )}
-        <MapContainer center={[center.lat, center.lng]} zoom={7} style={{ height: "500px", width: "100%" }}>
+        <MapContainer center={[center.lat, center.lng]} zoom={7} maxZoom={18} style={{ height: "500px", width: "100%" }}>
           {AMAP_KEY ? (
             <TileLayer
               attribution='&copy; <a href="https://www.amap.com/">高德地图</a>'
