@@ -320,16 +320,6 @@ export default function SchoolDetail({ school, onClose, profile }: Props) {
             </div>
           </div>
 
-          {/* 校园照片 */}
-          <a
-            href={school.photoUrl || school.website}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="block w-full text-center bg-green-600 text-white py-3 rounded-xl font-medium hover:bg-green-700 transition-colors no-underline"
-          >
-            📷 查看校园照片
-          </a>
-
           {/* 官网链接 */}
           <a
             href={school.website}
