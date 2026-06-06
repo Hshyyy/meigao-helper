@@ -324,7 +324,7 @@ export const schools: School[] = [
     tags: ["文科强", "艺术强", "宗教背景", "校园优美", "国际生友好"],
     ssatRequired: false,
     website: "https://www.sps.edu",
-    photoUrl: "https://moneyinc.com/wp-content/uploads/2025/05/2012_aerial_IMG_9155@4K-scaled-e1747738000931.jpg",
+    photoUrl: "http://www.yourcampusimage.com/wp-content/uploads/2015/07/09-1670-post/DSC_4300-1024x523.jpg",
   },
   {
     id: 6,
@@ -1612,7 +1612,7 @@ export const schools: School[] = [
     tags: ["国际生友好", "体育强", "STEM强"],
     ssatRequired: false,
     website: "https://www.suffieldacademy.org",
-    photoUrl: "https://images1.privateschoolreview.com/photo/5000/5557/Suffield-Academy-9j8bz20no3k0g8ww8sg0gck0w-1122.jpg",
+    photoUrl: "https://irp.cdn-website.com/839b3a3f/dms3rep/multi/Brewster13.jpg",
   },
   {
     id: 29,
