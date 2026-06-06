@@ -324,7 +324,7 @@ export const schools: School[] = [
     tags: ["文科强", "艺术强", "宗教背景", "校园优美", "国际生友好"],
     ssatRequired: false,
     website: "https://www.sps.edu",
-    photoUrl: "https://images2.boardingschoolreview.com/photo/19/St-Pauls-School-3v2ti18vq9kw0g8gcoo4sg4go-1122.jpg",
+    photoUrl: "https://moneyinc.com/wp-content/uploads/2025/05/2012_aerial_IMG_9155@4K-scaled-e1747738000931.jpg",
   },
   {
     id: 6,
@@ -884,7 +884,7 @@ export const schools: School[] = [
     tags: ["体育强", "国际生友好", "校园优美"],
     ssatRequired: false,
     website: "https://www.taftschool.org",
-    photoUrl: "https://images2.privateschoolreview.com/photo/5000/5580/The-Taft-School-8e2fmp3xpv4sgw8g0w4sw40kw-1122.jpg",
+    photoUrl: "https://www.taftschool.org/uploaded/campuslife/ContentSpotlight/Campus_Map_Bumped_up.jpg",
   },
   {
     id: 16,
@@ -1108,7 +1108,7 @@ export const schools: School[] = [
     tags: ["国际生友好", "体育强"],
     ssatRequired: false,
     website: "https://www.thehill.org",
-    photoUrl: "https://www.boardingedu.in/college_image/school_184_31508736229.jpg",
+    photoUrl: "https://images3.privateschoolreview.com/photo/25000/25032/The-Hill-School-8qpfi85ng2884oww4k48k48o8-1122.jpg",
   },
   {
     id: 20,
@@ -1444,7 +1444,7 @@ export const schools: School[] = [
     tags: ["体育强", "校园优美"],
     ssatRequired: true,
     website: "https://www.woodberry.org",
-    photoUrl: "https://images2.boardingschoolreview.com/photo/171/Woodberry-Forest-School-b1ocilo5idc0kgw8wkg848gwc-1122.jpg",
+    photoUrl: "https://winstanleyarchitects.com/wp-content/uploads/2019/12/Walker-entrance-scaled.jpg",
   },
   {
     id: 26,
@@ -1500,7 +1500,7 @@ export const schools: School[] = [
     tags: ["文科强", "小班教学"],
     ssatRequired: false,
     website: "https://www.stmarksschool.org",
-    photoUrl: "https://images1.privateschoolreview.com/photo/13000/13384/St-Marks-School-ehkjewctzlcs8wwooocgowcw0-1122.jpg",
+    photoUrl: "https://playsightproduction.playsight.com/temp-media/0d6c422591fb466e8b91545a9b0f8bf5-crop-5482c003a1e243f7a17fde80219327cb.png",
   },
   {
     id: 27,
