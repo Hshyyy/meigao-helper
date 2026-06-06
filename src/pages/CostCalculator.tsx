@@ -106,7 +106,7 @@ export default function CostCalculator() {
     );
 
     return costs;
-  }, [selectedSchool, isBoarding, housingOption, housingCost, dayHousingChoice, flightCostNum, tripsPerYear]);
+  }, [selectedSchool, isBoarding, housingOption, housingCost, dayHousingChoice, flightCostNum, tripsPerYear, mult, r]);
 
   // 一次性费用
   const oneTimeCosts: CostItem[] = useMemo(() => [
