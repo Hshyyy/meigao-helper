@@ -100,7 +100,6 @@ export const schools: School[] = [
     tags: ["STEM强", "文科强", "小班教学", "国际生友好", "领导力培养", "Need-blind"],
     ssatRequired: false,
     website: "https://www.andover.edu",
-    photoUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Phillips_Academy_Andover_Samuel_Phillips_Hall.jpg/1280px-Phillips_Academy_Andover_Samuel_Phillips_Hall.jpg",
   },
   {
     id: 2,
@@ -156,7 +155,6 @@ export const schools: School[] = [
     tags: ["STEM强", "文科强", "小班教学", "国际生友好", "Need-blind"],
     ssatRequired: true,
     website: "https://www.exeter.edu",
-    photoUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Phillips_Exeter_Academy_The_Front.jpg/1280px-Phillips_Exeter_Academy_The_Front.jpg",
   },
   {
     id: 3,
@@ -212,7 +210,6 @@ export const schools: School[] = [
     tags: ["STEM强", "文科强", "艺术强", "国际生友好", "领导力培养"],
     ssatRequired: true,
     website: "https://www.choate.edu",
-    photoUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Choate_Rosemary_Hall_Main_Building.jpg/1280px-Choate_Rosemary_Hall_Main_Building.jpg",
   },
   {
     id: 4,
@@ -268,7 +265,6 @@ export const schools: School[] = [
     tags: ["文科强", "体育强", "校园优美", "领导力培养"],
     ssatRequired: false,
     website: "https://deerfield.edu",
-    photoUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Deerfield_Academy.jpg/1280px-Deerfield_Academy.jpg",
   },
   {
     id: 5,
@@ -324,7 +320,6 @@ export const schools: School[] = [
     tags: ["文科强", "艺术强", "宗教背景", "校园优美", "国际生友好"],
     ssatRequired: false,
     website: "https://www.sps.edu",
-    photoUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/St_Paul%27s_School_Concord_NH.jpg/1280px-St_Paul%27s_School_Concord_NH.jpg",
   },
   {
     id: 6,
