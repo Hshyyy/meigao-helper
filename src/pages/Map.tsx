@@ -1,4 +1,5 @@
 import { useState, useCallback, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import { schools } from "../data/schools";
 import type { School } from "../data/schools";
@@ -205,8 +206,11 @@ export default function Map() {
       </div>
     </div>
 
-    {/* 详情弹窗放在最外层，避免被地图遮挡 */}
-    {selectedSchool && <SchoolDetail school={selectedSchool} onClose={() => setSelectedSchool(null)} />}
+    {/* 详情弹窗用 Portal 渲染到 body，确保在地图之上 */}
+    {selectedSchool && createPortal(
+      <SchoolDetail school={selectedSchool} onClose={() => setSelectedSchool(null)} />,
+      document.body
+    )}
     </>
   );
 }
