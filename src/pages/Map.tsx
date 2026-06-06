@@ -12,8 +12,6 @@ import shadowUrl from "leaflet/dist/images/marker-shadow.png";
 
 L.Icon.Default.mergeOptions({ iconUrl, iconRetinaUrl, shadowUrl });
 
-const AMAP_KEY = import.meta.env.VITE_AMAP_KEY || "";
-
 const createSchoolIcon = (tier: string) => {
   const colors: Record<string, string> = { "顶尖": "#ef4444", "优秀": "#3b82f6", "热门": "#22c55e" };
   const color = colors[tier] || "#6b7280";
@@ -137,19 +135,11 @@ export default function Map() {
           </div>
         )}
         <MapContainer center={[center.lat, center.lng]} zoom={7} maxZoom={18} style={{ height: "500px", width: "100%" }}>
-          {/* 高德地图（低缩放级别，加载快） */}
-          <TileLayer
-            attribution='&copy; <a href="https://www.amap.com/">高德地图</a>'
-            url={`https://webrd01.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}&key=${AMAP_KEY}`}
-            maxZoom={12}
-            eventHandlers={{ load: handleTileLoad }}
-          />
-          {/* OpenStreetMap（高缩放级别，细节丰富） */}
           <TileLayer
             attribution='&copy; OpenStreetMap contributors'
             url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
-            minZoom={13}
             maxZoom={18}
+            eventHandlers={{ load: handleTileLoad }}
           />
           <LocationButton />
           <RefreshButton />
