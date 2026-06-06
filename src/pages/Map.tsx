@@ -136,8 +136,9 @@ export default function Map() {
         )}
         <MapContainer center={[center.lat, center.lng]} zoom={7} maxZoom={18} style={{ height: "500px", width: "100%" }}>
           <TileLayer
-            attribution='&copy; OpenStreetMap contributors'
-            url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
+            attribution='&copy; <a href="https://carto.com/">CARTO</a>'
+            url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
+            subdomains={["a", "b", "c", "d"]}
             maxZoom={18}
             eventHandlers={{ load: handleTileLoad }}
           />
