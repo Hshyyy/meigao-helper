@@ -40,7 +40,8 @@ export default function SchoolDetail({ school, onClose, profile }: Props) {
 
   return (
     <div
-      className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
+      className="fixed inset-0 bg-black/50 flex items-center justify-center p-4"
+      style={{ zIndex: 99999 }}
       onClick={onClose}
     >
       <div
