@@ -100,6 +100,7 @@ export const schools: School[] = [
     tags: ["STEM强", "文科强", "小班教学", "国际生友好", "领导力培养", "Need-blind"],
     ssatRequired: false,
     website: "https://www.andover.edu",
+    photoUrl: "https://www.tclf.org/sites/default/files/thumbnails/image/MA_Andover_PhillipsAcademyAndover_byDaderot_2018_002_Sig.jpg",
   },
   {
     id: 2,
