@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import { schools } from "../data/schools";
 import type { School } from "../data/schools";
@@ -30,6 +30,43 @@ const createSchoolIcon = (tier: string) => {
   });
 };
 
+// 控制地图交互的组件
+function MapController({ onReady }: { onReady: () => void }) {
+  const map = useMap();
+
+  useEffect(() => {
+    // 禁用所有交互
+    map.dragging.disable();
+    map.scrollWheelZoom.disable();
+    map.doubleClickZoom.disable();
+    map.touchZoom.disable();
+    map.keyboard.disable();
+
+    // 监听瓦片加载完成
+    const handleLoad = () => {
+      map.dragging.enable();
+      map.scrollWheelZoom.enable();
+      map.doubleClickZoom.enable();
+      map.touchZoom.enable();
+      map.keyboard.enable();
+      onReady();
+    };
+
+    map.on("load", handleLoad);
+
+    // 如果地图已经加载完成
+    if (map.getSize()) {
+      setTimeout(handleLoad, 2000);
+    }
+
+    return () => {
+      map.off("load", handleLoad);
+    };
+  }, [map, onReady]);
+
+  return null;
+}
+
 // 控制按钮组件
 function MapControls({ onRefresh }: { onRefresh: () => void }) {
   const map = useMap();
@@ -49,7 +86,7 @@ function MapControls({ onRefresh }: { onRefresh: () => void }) {
         <button onClick={handleZoomOut} className="bg-white w-9 h-9 rounded-lg shadow-md flex items-center justify-center text-lg hover:bg-gray-50 border border-gray-200" title="缩小">−</button>
         <button onClick={handleReset} className="bg-white w-9 h-9 rounded-lg shadow-md flex items-center justify-center text-lg hover:bg-gray-50 border border-gray-200" title="重置视图">🏠</button>
         <button onClick={handleLocate} className="bg-white w-9 h-9 rounded-lg shadow-md flex items-center justify-center text-lg hover:bg-gray-50 border border-gray-200" title="定位我的位置">📍</button>
-        <button onClick={onRefresh} className="bg-white w-9 h-9 rounded-lg shadow-md flex items-center justify-center text-lg hover:bg-gray-50 border border-gray-200" title="刷新地图（解决瓦片卡住）">🔄</button>
+        <button onClick={onRefresh} className="bg-white w-9 h-9 rounded-lg shadow-md flex items-center justify-center text-lg hover:bg-gray-50 border border-gray-200" title="刷新地图">🔄</button>
       </div>
     </div>
   );
@@ -79,46 +116,11 @@ export default function Map() {
   const [selectedSchool, setSelectedSchool] = useState<School | null>(null);
   const [filterTier, setFilterTier] = useState("全部");
   const [loading, setLoading] = useState(true);
-  const [mapReady, setMapReady] = useState(false);
-  const loadingRef = useRef(true);
-  const mapRef = useRef<any>(null);
-  const initialLoadDone = useRef(false);
 
   const filteredSchools = filterTier === "全部" ? schools : schools.filter((s) => s.rankingTier === filterTier);
 
-  // 首次加载完成
-  const handleInitialLoad = useCallback(() => {
-    if (!initialLoadDone.current) {
-      initialLoadDone.current = true;
-      loadingRef.current = false;
-      setLoading(false);
-      setMapReady(true);
-    }
-  }, []);
-
-  // 刷新地图
-  const handleRefresh = useCallback(() => {
-    if (mapRef.current) {
-      const map = mapRef.current;
-      const center = map.getCenter();
-      const zoom = map.getZoom();
-      initialLoadDone.current = false;
-      loadingRef.current = true;
-      setLoading(true);
-      setMapReady(false);
-      map.eachLayer((layer: any) => {
-        if (layer._url) layer.redraw();
-      });
-      map.invalidateSize();
-      map.setView(center, zoom);
-      // 3秒后强制隐藏loading
-      setTimeout(() => {
-        initialLoadDone.current = true;
-        loadingRef.current = false;
-        setLoading(false);
-        setMapReady(true);
-      }, 3000);
-    }
+  const handleReady = useCallback(() => {
+    setLoading(false);
   }, []);
 
   return (
@@ -146,43 +148,40 @@ export default function Map() {
         ))}
       </div>
 
-      {/* 地图 */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden relative">
+      {/* 地图容器 */}
+      <div className="relative bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        {/* 加载遮罩 - 放在地图外面 */}
         {loading && (
-          <div className="absolute inset-0 flex items-center justify-center bg-gray-50/80" style={{ zIndex: 1000 }}>
+          <div className="absolute inset-0 flex items-center justify-center bg-gray-50/90 rounded-xl" style={{ zIndex: 9999 }}>
             <div className="text-center">
               <div className="animate-spin w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full mx-auto mb-3" />
               <p className="text-sm text-gray-500">地图加载中...</p>
-              <p className="text-xs text-gray-400 mt-1">首次加载可能需要几秒钟</p>
+              <p className="text-xs text-gray-400 mt-1">加载完成前无法缩放</p>
             </div>
           </div>
         )}
+
+        {/* 地图 */}
         <MapContainer
-          ref={mapRef}
           center={INITIAL_CENTER}
           zoom={INITIAL_ZOOM}
           maxZoom={18}
           style={{ height: "500px", width: "100%" }}
-          zoomControl={false}
-          dragging={mapReady}
-          scrollWheelZoom={mapReady}
-          doubleClickZoom={mapReady}
-          touchZoom={mapReady}
         >
+          <MapController onReady={handleReady} />
           <TileLayer
             attribution='&copy; <a href="https://carto.com/">CARTO</a>'
             url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
             subdomains={["a", "b", "c", "d"]}
-            eventHandlers={{ load: handleInitialLoad }}
           />
-          <MapControls onRefresh={handleRefresh} />
+          <MapControls onRefresh={() => {}} />
           {filteredSchools.map((school) => (
             <SchoolMarker key={school.id} school={school} onSelect={setSelectedSchool} />
           ))}
         </MapContainer>
       </div>
 
-      {/* 图例和操作提示 */}
+      {/* 图例 */}
       <div className="mt-4 flex flex-wrap items-center justify-between gap-4">
         <div className="flex items-center gap-6 text-sm text-gray-600">
           <div className="flex items-center gap-2"><div className="w-4 h-4 rounded-full bg-red-500 border-2 border-white shadow" /><span>顶尖</span></div>
