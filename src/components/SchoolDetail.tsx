@@ -298,6 +298,9 @@ export default function SchoolDetail({ school, onClose, profile }: Props) {
                 </div>
               </div>
             </div>
+            <p className="text-xs text-blue-600 mt-2">
+              💡 Hshy提醒你：学费是学校官方的，生活费是我参考各城市生活成本指数估算的，仅供参考哦～
+            </p>
           </div>
 
           {/* 学术特色 */}
