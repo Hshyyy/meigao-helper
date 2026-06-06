@@ -79,6 +79,7 @@ export default function Map() {
   const [selectedSchool, setSelectedSchool] = useState<School | null>(null);
   const [filterTier, setFilterTier] = useState("全部");
   const [loading, setLoading] = useState(true);
+  const [mapReady, setMapReady] = useState(false);
   const loadingRef = useRef(true);
   const mapRef = useRef<any>(null);
   const initialLoadDone = useRef(false);
@@ -91,6 +92,7 @@ export default function Map() {
       initialLoadDone.current = true;
       loadingRef.current = false;
       setLoading(false);
+      setMapReady(true);
     }
   }, []);
 
@@ -103,6 +105,7 @@ export default function Map() {
       initialLoadDone.current = false;
       loadingRef.current = true;
       setLoading(true);
+      setMapReady(false);
       map.eachLayer((layer: any) => {
         if (layer._url) layer.redraw();
       });
@@ -113,6 +116,7 @@ export default function Map() {
         initialLoadDone.current = true;
         loadingRef.current = false;
         setLoading(false);
+        setMapReady(true);
       }, 3000);
     }
   }, []);
@@ -159,6 +163,11 @@ export default function Map() {
           zoom={INITIAL_ZOOM}
           maxZoom={18}
           style={{ height: "500px", width: "100%" }}
+          zoomControl={false}
+          dragging={mapReady}
+          scrollWheelZoom={mapReady}
+          doubleClickZoom={mapReady}
+          touchZoom={mapReady}
         >
           <TileLayer
             attribution='&copy; <a href="https://carto.com/">CARTO</a>'
