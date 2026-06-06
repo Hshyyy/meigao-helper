@@ -32,10 +32,16 @@ export default function SchoolDetail({ school, onClose, profile }: Props) {
     isDay ? "hostFamily" : "boarding"
   );
 
+  // 根据地区调整生活成本
+  const regionMultiplier: Record<string, number> = {
+    "东北": 1.35, "西部": 1.25, "南部": 0.85, "中西部": 0.90,
+  };
+  const mult = regionMultiplier[school.region] || 1.0;
+
   const selectedHousing = housingOptions.find(h => h.value === housing) || housingOptions[0];
   const isEffectiveBoarding = isBoarding || (isMixed && housing === "boarding");
-  const housingCost = isEffectiveBoarding ? 0 : selectedHousing.cost;
-  const rentExtra = !isEffectiveBoarding && housing === "rent" ? 4800 : 0;
+  const housingCost = isEffectiveBoarding ? 0 : Math.round(selectedHousing.cost * mult);
+  const rentExtra = !isEffectiveBoarding && housing === "rent" ? Math.round(4800 * mult) : 0;
   const totalAnnual = school.tuition + housingCost + rentExtra + 5300;
 
   return (
