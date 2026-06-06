@@ -248,7 +248,7 @@ export default function SchoolDetail({ school, onClose, profile }: Props) {
                           <div className="flex-1">
                             <div className="text-sm font-medium text-gray-900">
                               {h.label}
-                              {h.cost > 0 && <span className="text-gray-500 ml-2">+${h.cost.toLocaleString()}/年</span>}
+                              {h.cost > 0 && <span className="text-gray-500 ml-2">+${Math.round(h.cost * mult).toLocaleString()}/年</span>}
                             </div>
                             <div className="text-xs text-gray-500">{h.note}</div>
                           </div>
