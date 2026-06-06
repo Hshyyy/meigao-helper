@@ -63,6 +63,20 @@ export default function SchoolDetail({ school, onClose, profile }: Props) {
         </div>
 
         <div className="p-5 space-y-5">
+          {/* 校园照片 */}
+          {school.photoUrl && (
+            <div className="rounded-xl overflow-hidden">
+              <img
+                src={school.photoUrl}
+                alt={`${school.nameCn} 校园`}
+                className="w-full h-48 object-cover"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).style.display = "none";
+                }}
+              />
+            </div>
+          )}
+
           {/* 学校简介 */}
           <div>
             <h3 className="font-semibold text-gray-900 mb-2">📖 学校简介</h3>
