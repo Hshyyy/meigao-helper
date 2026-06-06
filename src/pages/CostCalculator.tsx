@@ -48,6 +48,13 @@ export default function CostCalculator() {
   const estimatedRoomBoard = Math.round(selectedSchool.tuition * 0.22);
   const housingCost = isBoarding ? 0 : housingOption.cost;
 
+  // 根据地区调整生活成本
+  const regionMultiplier: Record<string, number> = {
+    "东北": 1.2, "西部": 1.1, "南部": 0.9, "中西部": 0.95,
+  };
+  const mult = regionMultiplier[selectedSchool.region] || 1.0;
+  const r = `（${selectedSchool.region}地区）`;
+
   // 年度费用明细
   const annualCosts: CostItem[] = useMemo(() => {
     const costs: CostItem[] = [];
@@ -63,8 +70,8 @@ export default function CostCalculator() {
     if (!isBoarding && housingCost > 0) {
       costs.push({
         name: `住宿：${housingOption.label}`,
-        amount: housingCost,
-        note: housingOption.note,
+        amount: Math.round(housingCost * mult),
+        note: `${housingOption.note} ${r}`,
       });
     }
 
@@ -72,8 +79,8 @@ export default function CostCalculator() {
     if (!isBoarding && dayHousingChoice === "rent") {
       costs.push({
         name: "餐饮费",
-        amount: 4800,
-        note: "自己做饭或外出就餐",
+        amount: Math.round(4800 * mult),
+        note: `自己做饭 ${r}`,
       });
     }
 
@@ -81,10 +88,10 @@ export default function CostCalculator() {
     costs.push(
       { name: "医疗保险", amount: 1800, note: "国际学生必须购买" },
       { name: "书本和学习用品", amount: 800, note: "教科书、文具等" },
-      { name: "个人开支", amount: 1500, note: "衣物、日用品、娱乐等" },
+      { name: "个人开支", amount: Math.round(1500 * mult), note: `衣物、日用品、娱乐 ${r}` },
       { name: "往返机票", amount: flightCostNum * tripsPerYear, note: `${tripsPerYear} 次/年 × $${flightCostNum}/次` },
       { name: "校服和活动费", amount: 500, note: "校服、课外活动费用" },
-      { name: "零用钱", amount: 1200, note: "周末外出、零食等" }
+      { name: "零用钱", amount: Math.round(1200 * mult), note: `周末外出、零食 ${r}` }
     );
 
     return costs;
