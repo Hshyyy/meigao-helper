@@ -79,15 +79,19 @@ export default function Map() {
   const [selectedSchool, setSelectedSchool] = useState<School | null>(null);
   const [filterTier, setFilterTier] = useState("全部");
   const [loading, setLoading] = useState(true);
-  const tileCountRef = useRef(0);
+  const loadingRef = useRef(true);
   const mapRef = useRef<any>(null);
+  const initialLoadDone = useRef(false);
 
   const filteredSchools = filterTier === "全部" ? schools : schools.filter((s) => s.rankingTier === filterTier);
 
-  // 瓦片加载完成
-  const handleTileLoad = useCallback(() => {
-    tileCountRef.current += 1;
-    if (tileCountRef.current >= 10) setLoading(false);
+  // 首次加载完成
+  const handleInitialLoad = useCallback(() => {
+    if (!initialLoadDone.current) {
+      initialLoadDone.current = true;
+      loadingRef.current = false;
+      setLoading(false);
+    }
   }, []);
 
   // 刷新地图
@@ -96,15 +100,20 @@ export default function Map() {
       const map = mapRef.current;
       const center = map.getCenter();
       const zoom = map.getZoom();
-      tileCountRef.current = 0;
+      initialLoadDone.current = false;
+      loadingRef.current = true;
       setLoading(true);
       map.eachLayer((layer: any) => {
         if (layer._url) layer.redraw();
       });
       map.invalidateSize();
       map.setView(center, zoom);
-      // 5秒后如果还没加载完，强制隐藏loading
-      setTimeout(() => setLoading(false), 5000);
+      // 3秒后强制隐藏loading
+      setTimeout(() => {
+        initialLoadDone.current = true;
+        loadingRef.current = false;
+        setLoading(false);
+      }, 3000);
     }
   }, []);
 
@@ -155,7 +164,7 @@ export default function Map() {
             attribution='&copy; <a href="https://carto.com/">CARTO</a>'
             url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
             subdomains={["a", "b", "c", "d"]}
-            eventHandlers={{ load: handleTileLoad }}
+            eventHandlers={{ load: handleInitialLoad }}
           />
           <MapControls onRefresh={handleRefresh} />
           {filteredSchools.map((school) => (
