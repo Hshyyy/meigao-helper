@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import { schools } from "../data/schools";
 import type { School } from "../data/schools";
@@ -12,6 +12,12 @@ import shadowUrl from "leaflet/dist/images/marker-shadow.png";
 
 L.Icon.Default.mergeOptions({ iconUrl, iconRetinaUrl, shadowUrl });
 
+const INITIAL_CENTER: [number, number] = [
+  schools.reduce((sum, s) => sum + s.lat, 0) / schools.length,
+  schools.reduce((sum, s) => sum + s.lng, 0) / schools.length,
+];
+const INITIAL_ZOOM = 7;
+
 const createSchoolIcon = (tier: string) => {
   const colors: Record<string, string> = { "顶尖": "#ef4444", "优秀": "#3b82f6", "热门": "#22c55e" };
   const color = colors[tier] || "#6b7280";
@@ -24,40 +30,26 @@ const createSchoolIcon = (tier: string) => {
   });
 };
 
-function LocationButton() {
+// 控制按钮组件
+function MapControls({ onRefresh }: { onRefresh: () => void }) {
   const map = useMap();
-  const [locating, setLocating] = useState(false);
+
+  const handleZoomIn = () => map.zoomIn();
+  const handleZoomOut = () => map.zoomOut();
+  const handleReset = () => map.setView(INITIAL_CENTER, INITIAL_ZOOM);
   const handleLocate = () => {
-    setLocating(true);
     map.locate({ setView: true, maxZoom: 12 });
-    map.on("locationfound", () => setLocating(false));
-    map.on("locationerror", () => { setLocating(false); alert("无法获取位置，请检查浏览器权限"); });
+    map.on("locationerror", () => alert("无法获取位置，请检查浏览器权限"));
   };
+
   return (
     <div className="leaflet-top leaflet-right" style={{ top: 10, right: 10 }}>
-      <div className="leaflet-control">
-        <button onClick={handleLocate} disabled={locating} className="bg-white w-9 h-9 rounded-lg shadow-md flex items-center justify-center text-lg hover:bg-gray-50 border border-gray-200" title="定位我的位置">
-          {locating ? "⏳" : "📍"}
-        </button>
-      </div>
-    </div>
-  );
-}
-
-function RefreshButton() {
-  const map = useMap();
-  const handleRefresh = () => {
-    const center = map.getCenter();
-    const zoom = map.getZoom();
-    map.invalidateSize();
-    map.setView(center, zoom);
-  };
-  return (
-    <div className="leaflet-top leaflet-right" style={{ top: 50, right: 10 }}>
-      <div className="leaflet-control">
-        <button onClick={handleRefresh} className="bg-white w-9 h-9 rounded-lg shadow-md flex items-center justify-center text-lg hover:bg-gray-50 border border-gray-200" title="刷新地图">
-          🔄
-        </button>
+      <div className="leaflet-control flex flex-col gap-1">
+        <button onClick={handleZoomIn} className="bg-white w-9 h-9 rounded-lg shadow-md flex items-center justify-center text-lg hover:bg-gray-50 border border-gray-200" title="放大">+</button>
+        <button onClick={handleZoomOut} className="bg-white w-9 h-9 rounded-lg shadow-md flex items-center justify-center text-lg hover:bg-gray-50 border border-gray-200" title="缩小">−</button>
+        <button onClick={handleReset} className="bg-white w-9 h-9 rounded-lg shadow-md flex items-center justify-center text-lg hover:bg-gray-50 border border-gray-200" title="重置视图">🏠</button>
+        <button onClick={handleLocate} className="bg-white w-9 h-9 rounded-lg shadow-md flex items-center justify-center text-lg hover:bg-gray-50 border border-gray-200" title="定位我的位置">📍</button>
+        <button onClick={onRefresh} className="bg-white w-9 h-9 rounded-lg shadow-md flex items-center justify-center text-lg hover:bg-gray-50 border border-gray-200" title="刷新地图（解决瓦片卡住）">🔄</button>
       </div>
     </div>
   );
@@ -87,16 +79,33 @@ export default function Map() {
   const [selectedSchool, setSelectedSchool] = useState<School | null>(null);
   const [filterTier, setFilterTier] = useState("全部");
   const [loading, setLoading] = useState(true);
+  const tileCountRef = useRef(0);
+  const mapRef = useRef<any>(null);
 
   const filteredSchools = filterTier === "全部" ? schools : schools.filter((s) => s.rankingTier === filterTier);
 
-  const center = {
-    lat: schools.reduce((sum, s) => sum + s.lat, 0) / schools.length,
-    lng: schools.reduce((sum, s) => sum + s.lng, 0) / schools.length,
-  };
-
   const handleTileLoad = useCallback(() => {
-    setLoading(false);
+    tileCountRef.current += 1;
+    if (tileCountRef.current >= 10) setLoading(false);
+  }, []);
+
+  const handleRefresh = useCallback(() => {
+    if (mapRef.current) {
+      const map = mapRef.current;
+      const center = map.getCenter();
+      const zoom = map.getZoom();
+      setLoading(true);
+      tileCountRef.current = 0;
+      // 强制重新加载瓦片
+      map.eachLayer((layer: any) => {
+        if (layer._url) layer.redraw();
+      });
+      setTimeout(() => {
+        map.invalidateSize();
+        map.setView(center, zoom);
+        setLoading(false);
+      }, 500);
+    }
   }, []);
 
   return (
@@ -127,39 +136,46 @@ export default function Map() {
       {/* 地图 */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden relative">
         {loading && (
-          <div className="absolute inset-0 flex items-center justify-center bg-gray-50 z-10">
+          <div className="absolute inset-0 flex items-center justify-center bg-gray-50/80 z-10">
             <div className="text-center">
               <div className="animate-spin w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full mx-auto mb-3" />
               <p className="text-sm text-gray-500">地图加载中...</p>
+              <p className="text-xs text-gray-400 mt-1">首次加载可能需要几秒钟</p>
             </div>
           </div>
         )}
-        <MapContainer center={[center.lat, center.lng]} zoom={7} maxZoom={18} style={{ height: "500px", width: "100%" }}>
+        <MapContainer
+          ref={mapRef}
+          center={INITIAL_CENTER}
+          zoom={INITIAL_ZOOM}
+          maxZoom={18}
+          style={{ height: "500px", width: "100%" }}
+        >
           <TileLayer
             attribution='&copy; <a href="https://carto.com/">CARTO</a>'
             url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
             subdomains={["a", "b", "c", "d"]}
-            maxZoom={18}
             eventHandlers={{ load: handleTileLoad }}
           />
-          <LocationButton />
-          <RefreshButton />
+          <MapControls onRefresh={handleRefresh} />
           {filteredSchools.map((school) => (
             <SchoolMarker key={school.id} school={school} onSelect={setSelectedSchool} />
           ))}
         </MapContainer>
       </div>
 
-      {/* 图例 */}
+      {/* 图例和操作提示 */}
       <div className="mt-4 flex flex-wrap items-center justify-between gap-4">
         <div className="flex items-center gap-6 text-sm text-gray-600">
           <div className="flex items-center gap-2"><div className="w-4 h-4 rounded-full bg-red-500 border-2 border-white shadow" /><span>顶尖</span></div>
           <div className="flex items-center gap-2"><div className="w-4 h-4 rounded-full bg-blue-500 border-2 border-white shadow" /><span>优秀</span></div>
           <div className="flex items-center gap-2"><div className="w-4 h-4 rounded-full bg-green-500 border-2 border-white shadow" /><span>热门</span></div>
         </div>
-        <p className="text-xs text-gray-400">
-          💡 如果地图显示不完整，点击右上角 🔄 刷新
-        </p>
+        <div className="text-xs text-gray-400 space-x-4">
+          <span>📍 定位</span>
+          <span>🏠 重置视图</span>
+          <span>🔄 刷新瓦片</span>
+        </div>
       </div>
 
       {selectedSchool && <SchoolDetail school={selectedSchool} onClose={() => setSelectedSchool(null)} />}
