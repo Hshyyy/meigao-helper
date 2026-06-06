@@ -111,11 +111,17 @@ export default function Map() {
             </div>
           </div>
         )}
-        <MapContainer center={[center.lat, center.lng]} zoom={7} style={{ height: "500px", width: "100%" }}>
+        <MapContainer
+          center={[center.lat, center.lng]}
+          zoom={6}
+          style={{ height: "500px", width: "100%" }}
+          zoomAnimation={false}
+          markerZoomAnimation={false}
+        >
           <TileLayer
-            attribution='&copy; <a href="https://carto.com/">CARTO</a>'
-            url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
-            subdomains={["a", "b", "c", "d"]}
+            attribution='&copy; OpenStreetMap'
+            url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
+            maxZoom={16}
             eventHandlers={{ load: () => setLoading(false) }}
           />
           <LocationButton />
