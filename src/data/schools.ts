@@ -1108,7 +1108,7 @@ export const schools: School[] = [
     tags: ["国际生友好", "体育强"],
     ssatRequired: false,
     website: "https://www.thehill.org",
-    photoUrl: "https://images3.privateschoolreview.com/photo/25000/25032/The-Hill-School-8qpfi85ng2884oww4k48k48o8-1122.jpg",
+    photoUrl: "https://resources.finalsite.net/images/v1757345539/thehillorg/ccygzfoqzj3jlcu1mmft/2025-Convocation.jpg",
   },
   {
     id: 20,
