@@ -9,6 +9,7 @@ const navItems = [
   { path: "/compare", label: "⚖️ 对比" },
   { path: "/timeline", label: "📅 时间线" },
   { path: "/cost", label: "💰 费用" },
+  { path: "/map", label: "🗺️ 地图" },
 ];
 
 export default function App() {
