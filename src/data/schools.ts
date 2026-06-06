@@ -28,6 +28,7 @@ export interface School {
   tags: string[]; // 特色标签
   ssatRequired: boolean; // 是否必须考 SSAT（false = 可用 IB/A-Level/GCSE 替代）
   website: string;
+  photoUrl?: string; // 校园照片页面链接（可选）
 }
 
 // 所有可选标签
