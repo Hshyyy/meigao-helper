@@ -106,8 +106,11 @@ export default function SchoolList() {
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold text-gray-900 mb-2">学校库</h1>
-      <p className="text-gray-500 mb-8">
+      <p className="text-gray-500 mb-2">
         共收录 {schools.length} 所热门美国寄宿高中
+      </p>
+      <p className="text-xs text-gray-400 mb-8">
+        📊 排名来源：Niche（2024-2025），不同机构排名可能存在差异
       </p>
 
       {/* 搜索框 */}
