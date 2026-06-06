@@ -102,7 +102,7 @@ function MapControls({ onRefresh }: { onRefresh: () => void }) {
 }
 
 const SchoolMarker = ({ school, onSelect }: { school: School; onSelect: (s: School) => void }) => (
-  <Marker position={[school.lat, school.lng]} icon={createSchoolIcon(school.rankingTier, school.nameCn, school.name)} eventHandlers={{ click: () => onSelect(school) }}>
+  <Marker position={[school.lat, school.lng]} icon={createSchoolIcon(school.rankingTier, school.nameCn, school.name)}>
     <Popup>
       <div className="text-center min-w-[180px]">
         <h3 className="font-bold text-gray-900 mb-1">{school.nameCn}</h3>
