@@ -18,18 +18,23 @@ const INITIAL_CENTER: [number, number] = [
 ];
 const INITIAL_ZOOM = 7;
 
-const createSchoolIcon = (tier: string, nameCn: string) => {
+const createSchoolIcon = (tier: string, nameCn: string, nameEn: string) => {
   const colors: Record<string, string> = { "顶尖": "#ef4444", "优秀": "#3b82f6", "热门": "#22c55e" };
   const color = colors[tier] || "#6b7280";
+  // 截断英文名，避免太长
+  const shortName = nameEn.length > 20 ? nameEn.substring(0, 18) + "..." : nameEn;
   return L.divIcon({
     className: "school-marker",
     html: `<div style="display:flex;flex-direction:column;align-items:center;transform:translateY(-10px);">
       <div style="background:${color};width:22px;height:22px;border-radius:50%;border:2px solid white;box-shadow:0 2px 4px rgba(0,0,0,0.3);display:flex;align-items:center;justify-content:center;font-size:11px;color:white;font-weight:bold;">🎓</div>
-      <div style="background:white;padding:1px 4px;border-radius:3px;font-size:10px;color:#333;white-space:nowrap;margin-top:2px;box-shadow:0 1px 2px rgba(0,0,0,0.1);max-width:80px;overflow:hidden;text-overflow:ellipsis;">${nameCn}</div>
+      <div style="background:white;padding:2px 6px;border-radius:4px;margin-top:2px;box-shadow:0 1px 3px rgba(0,0,0,0.15);text-align:center;max-width:120px;">
+        <div style="font-size:11px;font-weight:600;color:#333;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${nameCn}</div>
+        <div style="font-size:9px;color:#888;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${shortName}</div>
+      </div>
     </div>`,
-    iconSize: [80, 36],
-    iconAnchor: [11, 36],
-    popupAnchor: [0, -36],
+    iconSize: [120, 48],
+    iconAnchor: [11, 48],
+    popupAnchor: [0, -48],
   });
 };
 
@@ -96,7 +101,7 @@ function MapControls({ onRefresh }: { onRefresh: () => void }) {
 }
 
 const SchoolMarker = ({ school, onSelect }: { school: School; onSelect: (s: School) => void }) => (
-  <Marker position={[school.lat, school.lng]} icon={createSchoolIcon(school.rankingTier, school.nameCn)} eventHandlers={{ click: () => onSelect(school) }}>
+  <Marker position={[school.lat, school.lng]} icon={createSchoolIcon(school.rankingTier, school.nameCn, school.name)} eventHandlers={{ click: () => onSelect(school) }}>
     <Popup>
       <div className="text-center min-w-[180px]">
         <h3 className="font-bold text-gray-900 mb-1">{school.nameCn}</h3>
