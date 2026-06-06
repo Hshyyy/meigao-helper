@@ -294,6 +294,13 @@ export default function CostCalculator() {
             </div>
           </div>
 
+          {/* 费用说明 */}
+          <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
+            <p className="text-sm text-amber-800">
+              💡 Hshy提醒你：学费是学校官方的，生活费是我参考各城市生活成本指数估算的，仅供参考哦～
+            </p>
+          </div>
+
           {/* 一次性费用明细 */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
             <h3 className="font-semibold text-gray-900 mb-4">📋 一次性费用（申请阶段）</h3>
