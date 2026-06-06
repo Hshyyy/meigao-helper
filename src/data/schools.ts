@@ -156,6 +156,7 @@ export const schools: School[] = [
     tags: ["STEM强", "文科强", "小班教学", "国际生友好", "Need-blind"],
     ssatRequired: true,
     website: "https://www.exeter.edu",
+    photoUrl: "https://youvis.it/QNHRTZ",
   },
   {
     id: 3,
