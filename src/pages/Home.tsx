@@ -60,6 +60,12 @@ export default function Home() {
             >
               💰 费用计算
             </Link>
+            <Link
+              to="/map"
+              className="border-2 border-white/60 text-white/80 px-6 py-2.5 rounded-xl font-medium text-base hover:bg-white/10 transition-colors no-underline"
+            >
+              🗺️ 学校地图
+            </Link>
           </div>
         </div>
       </section>
