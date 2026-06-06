@@ -36,7 +36,22 @@ export default function SchoolCard({
       onClick={onClick}
       className="bg-white rounded-xl shadow-sm border border-gray-200 p-5 cursor-pointer hover:shadow-md hover:border-blue-300 transition-all"
     >
-      <div className="flex items-start justify-between mb-3">
+      <div className="flex items-start gap-3 mb-3">
+        {/* 校园照片 */}
+        {school.photoUrl ? (
+          <img
+            src={school.photoUrl}
+            alt={school.nameCn}
+            className="w-16 h-16 rounded-lg object-cover shrink-0"
+            onError={(e) => {
+              (e.target as HTMLImageElement).style.display = "none";
+            }}
+          />
+        ) : (
+          <div className="w-16 h-16 rounded-lg bg-gray-100 shrink-0 flex items-center justify-center text-2xl">
+            🏫
+          </div>
+        )}
         <div className="flex-1 min-w-0">
           <h3 className="font-semibold text-gray-900 text-base truncate">
             {school.nameCn}
