@@ -48,15 +48,15 @@ export default function CostCalculator() {
   const estimatedRoomBoard = Math.round(selectedSchool.tuition * 0.22);
   const housingCost = isBoarding ? 0 : housingOption.cost;
 
-  // 根据地区调整生活成本（差异更明显）
-  const regionMultiplier: Record<string, number> = {
-    "东北": 1.35,  // 波士顿、纽约附近，最贵
-    "西部": 1.25,  // 加州，很贵
-    "南部": 0.85,  // 较便宜
-    "中西部": 0.90, // 中等偏低
+  // 根据州调整生活成本（更精确）
+  const stateMultiplier: Record<string, number> = {
+    "马萨诸塞州": 1.35, "康涅狄格州": 1.30, "新罕布什尔州": 1.20,
+    "新泽西州": 1.25, "纽约州": 1.40, "宾夕法尼亚州": 1.15,
+    "加利福尼亚州": 1.30, "弗吉尼亚州": 1.10, "特拉华州": 1.10,
+    "马里兰州": 1.20, "华盛顿特区": 1.35, "密歇根州": 1.00,
   };
-  const mult = regionMultiplier[selectedSchool.region] || 1.0;
-  const r = `（${selectedSchool.region}地区）`;
+  const mult = stateMultiplier[selectedSchool.state] || 1.1;
+  const r = `（${selectedSchool.state}）`;
 
   // 年度费用明细
   const annualCosts: CostItem[] = useMemo(() => {

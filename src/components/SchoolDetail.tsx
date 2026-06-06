@@ -32,11 +32,14 @@ export default function SchoolDetail({ school, onClose, profile }: Props) {
     isDay ? "hostFamily" : "boarding"
   );
 
-  // 根据地区调整生活成本
-  const regionMultiplier: Record<string, number> = {
-    "东北": 1.35, "西部": 1.25, "南部": 0.85, "中西部": 0.90,
+  // 根据州调整生活成本（更精确）
+  const stateMultiplier: Record<string, number> = {
+    "马萨诸塞州": 1.35, "康涅狄格州": 1.30, "新罕布什尔州": 1.20,
+    "新泽西州": 1.25, "纽约州": 1.40, "宾夕法尼亚州": 1.15,
+    "加利福尼亚州": 1.30, "弗吉尼亚州": 1.10, "特拉华州": 1.10,
+    "马里兰州": 1.20, "华盛顿特区": 1.35, "密歇根州": 1.00,
   };
-  const mult = regionMultiplier[school.region] || 1.0;
+  const mult = stateMultiplier[school.state] || 1.1;
 
   const selectedHousing = housingOptions.find(h => h.value === housing) || housingOptions[0];
   const isEffectiveBoarding = isBoarding || (isMixed && housing === "boarding");
@@ -250,7 +253,7 @@ export default function SchoolDetail({ school, onClose, profile }: Props) {
                               {h.label}
                               {h.cost > 0 && <span className="text-gray-500 ml-2">+${Math.round(h.cost * mult).toLocaleString()}/年</span>}
                             </div>
-                            <div className="text-xs text-gray-500">{h.note}</div>
+                            <div className="text-xs text-gray-500">{h.note}（{school.state}）</div>
                           </div>
                         </label>
                       );
