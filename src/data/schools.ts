@@ -212,6 +212,7 @@ export const schools: School[] = [
     tags: ["STEM强", "文科强", "艺术强", "国际生友好", "领导力培养"],
     ssatRequired: true,
     website: "https://www.choate.edu",
+    photoUrl: "https://smapse.com/storage/2017/07/converted/825_585_choate-rosemary-hall-15.jpg",
   },
   {
     id: 4,
@@ -267,6 +268,7 @@ export const schools: School[] = [
     tags: ["文科强", "体育强", "校园优美", "领导力培养"],
     ssatRequired: false,
     website: "https://deerfield.edu",
+    photoUrl: "https://smapse.com/storage/2016/09/deerfield-academy-6.jpg",
   },
   {
     id: 5,
@@ -322,6 +324,7 @@ export const schools: School[] = [
     tags: ["文科强", "艺术强", "宗教背景", "校园优美", "国际生友好"],
     ssatRequired: false,
     website: "https://www.sps.edu",
+    photoUrl: "https://images2.boardingschoolreview.com/photo/19/St-Pauls-School-3v2ti18vq9kw0g8gcoo4sg4go-1122.jpg",
   },
   {
     id: 6,
@@ -377,6 +380,7 @@ export const schools: School[] = [
     tags: ["STEM强", "文科强", "小班教学", "领导力培养", "校园优美"],
     ssatRequired: false,
     website: "https://www.lawrenceville.org",
+    photoUrl: "https://resources.finalsite.net/images/v1617409352/lawrencevilleorg/ag3bo4sd76ysxolvvxw3/news-2020-06-10_1.jpg",
   },
   {
     id: 7,
@@ -432,6 +436,7 @@ export const schools: School[] = [
     tags: ["STEM强", "艺术强", "校园优美"],
     ssatRequired: false,
     website: "https://www.hotchkiss.org",
+    photoUrl: "https://cdn.imweb.me/thumbnail/20250308/9d74269cc2203.jpg",
   },
   {
     id: 8,
@@ -487,6 +492,7 @@ export const schools: School[] = [
     tags: ["文科强", "小班教学", "宗教背景", "领导力培养"],
     ssatRequired: true,
     website: "https://www.groton.org",
+    photoUrl: "http://www.earthedu.com/Schools/Upload_Schools/201512/20151222111724734.jpg",
   },
   {
     id: 9,
@@ -542,6 +548,7 @@ export const schools: School[] = [
     tags: ["文科强", "艺术强", "小班教学", "校园优美"],
     ssatRequired: true,
     website: "https://www.mxschool.edu",
+    photoUrl: "https://middlesexcollege.edu/about/wp-content/uploads/sites/3/2023/10/edison-campus.jpg",
   },
   {
     id: 10,
@@ -597,6 +604,7 @@ export const schools: School[] = [
     tags: ["STEM强", "文科强", "艺术强", "体育强"],
     ssatRequired: false,
     website: "https://www.milton.edu",
+    photoUrl: "https://www.milton.edu/wp-content/uploads/2015/09/01-1024x683.jpg",
   },
   {
     id: 11,
@@ -652,6 +660,7 @@ export const schools: School[] = [
     tags: ["小班教学", "体育强", "校园优美"],
     ssatRequired: true,
     website: "https://www.thacher.org",
+    photoUrl: "https://bbird.com/wp-content/uploads/2021/01/ThacherDining_013.jpg",
   },
   {
     id: 12,
@@ -707,6 +716,7 @@ export const schools: School[] = [
     tags: ["STEM强", "国际生友好", "体育强"],
     ssatRequired: true,
     website: "https://www.peddie.org",
+    photoUrl: "https://www.talkedu.com.tw/archive/image/article10/images/peddie-campus-pic07.jpg",
   },
   {
     id: 13,
@@ -762,6 +772,7 @@ export const schools: School[] = [
     tags: ["小班教学", "文科强", "校园优美"],
     ssatRequired: true,
     website: "https://www.cate.org",
+    photoUrl: "https://www.cate.org/wp-content/uploads/2021/08/cate-og-share.jpg",
   },
   {
     id: 14,
@@ -817,6 +828,7 @@ export const schools: School[] = [
     tags: ["文科强", "艺术强", "小班教学", "国际生友好"],
     ssatRequired: false,
     website: "https://www.concordacademy.org",
+    photoUrl: "https://concordacademy.org/wp-content/uploads/2024/06/230831_registrationPrep_SELECT_03_small-640x427@2x.jpg",
   },
   {
     id: 15,
@@ -872,6 +884,7 @@ export const schools: School[] = [
     tags: ["体育强", "国际生友好", "校园优美"],
     ssatRequired: false,
     website: "https://www.taftschool.org",
+    photoUrl: "https://images2.privateschoolreview.com/photo/5000/5580/The-Taft-School-8e2fmp3xpv4sgw8g0w4sw40kw-1122.jpg",
   },
   {
     id: 16,
@@ -927,6 +940,7 @@ export const schools: School[] = [
     tags: ["STEM强", "校园优美"],
     ssatRequired: false,
     website: "https://www.loomischaffee.org",
+    photoUrl: "https://live.staticflickr.com/4136/4789903286_986cde28b6_b.jpg",
   },
   {
     id: 17,
@@ -982,6 +996,7 @@ export const schools: School[] = [
     tags: ["小班教学", "文科强"],
     ssatRequired: true,
     website: "https://www.standrews-de.org",
+    photoUrl: "https://usboardingschools.com/wp-content/uploads/2015/05/680297_548041098543328_712796166_o.jpg",
   },
   {
     id: 18,
@@ -1037,6 +1052,7 @@ export const schools: School[] = [
     tags: ["领导力培养", "体育强", "国际生友好", "校园优美"],
     ssatRequired: false,
     website: "https://www.blair.edu",
+    photoUrl: "https://www.blair.edu/uploaded/Homepage_Images/Quicklinks_Buttons/20151020_BlairAerial006.jpg",
   },
   {
     id: 19,
@@ -1092,6 +1108,7 @@ export const schools: School[] = [
     tags: ["国际生友好", "体育强"],
     ssatRequired: false,
     website: "https://www.thehill.org",
+    photoUrl: "https://www.boardingedu.in/college_image/school_184_31508736229.jpg",
   },
   {
     id: 20,
@@ -1147,6 +1164,7 @@ export const schools: School[] = [
     tags: ["艺术强", "体育强", "国际生友好"],
     ssatRequired: false,
     website: "https://www.mercersburg.edu",
+    photoUrl: "https://cdn.globaldialog.ru/_/manager/files/53d/e60915da57/Mercersburg_Academy2.jpg",
   },
   {
     id: 21,
@@ -1202,6 +1220,7 @@ export const schools: School[] = [
     tags: ["宗教背景", "体育强", "国际生友好", "校园优美"],
     ssatRequired: false,
     website: "https://www.kent-school.edu",
+    photoUrl: "https://images.squarespace-cdn.com/content/v1/5c34df3ff2e6b173ea5be309/1736430270624-1PKC3Y7R5C12GH43HGOC/Kent+School+1.jpeg",
   },
   {
     id: 22,
@@ -1257,6 +1276,7 @@ export const schools: School[] = [
     tags: ["文科强", "宗教背景", "校园优美"],
     ssatRequired: false,
     website: "https://www.episcopalhighschool.org",
+    photoUrl: "https://assets.testinnovators.com/wp-content/uploads/2022/03/Episcopal-High-School-Alexandria-Virginia-1024x557.jpg",
   },
   {
     id: 23,
@@ -1312,6 +1332,7 @@ export const schools: School[] = [
     tags: ["艺术强", "领导力培养", "小班教学"],
     ssatRequired: false,
     website: "https://www.porters.org",
+    photoUrl: "https://www.porters.org/wp-content/uploads/MPS_Campus_00011-1-scaled.jpg",
   },
   {
     id: 24,
@@ -1367,6 +1388,7 @@ export const schools: School[] = [
     tags: ["STEM强", "校园优美"],
     ssatRequired: false,
     website: "https://www.webb.org",
+    photoUrl: "https://budlong.com/wp-content/uploads/2021/03/Webb-Schools.jpg",
   },
   {
     id: 25,
@@ -1422,6 +1444,7 @@ export const schools: School[] = [
     tags: ["体育强", "校园优美"],
     ssatRequired: true,
     website: "https://www.woodberry.org",
+    photoUrl: "https://images2.boardingschoolreview.com/photo/171/Woodberry-Forest-School-b1ocilo5idc0kgw8wkg848gwc-1122.jpg",
   },
   {
     id: 26,
@@ -1477,6 +1500,7 @@ export const schools: School[] = [
     tags: ["文科强", "小班教学"],
     ssatRequired: false,
     website: "https://www.stmarksschool.org",
+    photoUrl: "https://images1.privateschoolreview.com/photo/13000/13384/St-Marks-School-ehkjewctzlcs8wwooocgowcw0-1122.jpg",
   },
   {
     id: 27,
@@ -1532,6 +1556,7 @@ export const schools: School[] = [
     tags: ["艺术强", "国际生友好", "校园优美"],
     ssatRequired: false,
     website: "https://www.pomfretschool.org",
+    photoUrl: "https://smapse.com/storage/2018/03/pomfret-school-map-1.jpg",
   },
   {
     id: 28,
@@ -1587,6 +1612,7 @@ export const schools: School[] = [
     tags: ["国际生友好", "体育强", "STEM强"],
     ssatRequired: false,
     website: "https://www.suffieldacademy.org",
+    photoUrl: "https://images1.privateschoolreview.com/photo/5000/5557/Suffield-Academy-9j8bz20no3k0g8ww8sg0gck0w-1122.jpg",
   },
   {
     id: 29,
@@ -1642,6 +1668,7 @@ export const schools: School[] = [
     tags: ["体育强", "艺术强", "校园优美"],
     ssatRequired: true,
     website: "https://www.thegovernorsacademy.org",
+    photoUrl: "https://images.squarespace-cdn.com/content/v1/5e9737180d92ba206d5b0777/1591116488536-52SMPVOO25DGTVZLNP6D/Governor's.jpg",
   },
   {
     id: 30,
@@ -1697,6 +1724,7 @@ export const schools: School[] = [
     tags: ["STEM强", "体育强", "国际生友好", "校园优美"],
     ssatRequired: false,
     website: "https://www.taboracademy.org",
+    photoUrl: "https://images.squarespace-cdn.com/content/v1/5e9737180d92ba206d5b0777/1589213086529-IHAOEX50HIEYCLEFP6P9/CampusDrone.jpg",
   },
 ];
 
