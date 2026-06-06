@@ -84,27 +84,27 @@ export default function Map() {
 
   const filteredSchools = filterTier === "全部" ? schools : schools.filter((s) => s.rankingTier === filterTier);
 
+  // 瓦片加载完成
   const handleTileLoad = useCallback(() => {
     tileCountRef.current += 1;
     if (tileCountRef.current >= 10) setLoading(false);
   }, []);
 
+  // 刷新地图
   const handleRefresh = useCallback(() => {
     if (mapRef.current) {
       const map = mapRef.current;
       const center = map.getCenter();
       const zoom = map.getZoom();
-      setLoading(true);
       tileCountRef.current = 0;
-      // 强制重新加载瓦片
+      setLoading(true);
       map.eachLayer((layer: any) => {
         if (layer._url) layer.redraw();
       });
-      setTimeout(() => {
-        map.invalidateSize();
-        map.setView(center, zoom);
-        setLoading(false);
-      }, 500);
+      map.invalidateSize();
+      map.setView(center, zoom);
+      // 5秒后如果还没加载完，强制隐藏loading
+      setTimeout(() => setLoading(false), 5000);
     }
   }, []);
 
