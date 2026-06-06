@@ -1,37 +1,110 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
+import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import { schools } from "../data/schools";
 import type { School } from "../data/schools";
 import SchoolDetail from "../components/SchoolDetail";
+import "leaflet/dist/leaflet.css";
 
-// 美国地图坐标转换（将经纬度转换为图片上的百分比位置）
-function coordToPercent(lat: number, lng: number) {
-  // 美国大陆范围：纬度 24-50，经度 -125 到 -67
-  const x = ((lng - (-125)) / ((-67) - (-125))) * 100;
-  const y = ((50 - lat) / (50 - 24)) * 100;
-  return { x: Math.max(0, Math.min(100, x)), y: Math.max(0, Math.min(100, y)) };
+import L from "leaflet";
+import iconUrl from "leaflet/dist/images/marker-icon.png";
+import iconRetinaUrl from "leaflet/dist/images/marker-icon-2x.png";
+import shadowUrl from "leaflet/dist/images/marker-shadow.png";
+
+L.Icon.Default.mergeOptions({ iconUrl, iconRetinaUrl, shadowUrl });
+
+const createSchoolIcon = (tier: string) => {
+  const colors: Record<string, string> = { "顶尖": "#ef4444", "优秀": "#3b82f6", "热门": "#22c55e" };
+  const color = colors[tier] || "#6b7280";
+  return L.divIcon({
+    className: "school-marker",
+    html: `<div style="background:${color};width:22px;height:22px;border-radius:50%;border:2px solid white;box-shadow:0 2px 4px rgba(0,0,0,0.3);display:flex;align-items:center;justify-content:center;font-size:11px;color:white;font-weight:bold;">🎓</div>`,
+    iconSize: [22, 22],
+    iconAnchor: [11, 11],
+    popupAnchor: [0, -11],
+  });
+};
+
+function LocationButton() {
+  const map = useMap();
+  const [locating, setLocating] = useState(false);
+  const handleLocate = () => {
+    setLocating(true);
+    map.locate({ setView: true, maxZoom: 12 });
+    map.on("locationfound", () => setLocating(false));
+    map.on("locationerror", () => { setLocating(false); alert("无法获取位置，请检查浏览器权限"); });
+  };
+  return (
+    <div className="leaflet-top leaflet-right" style={{ top: 10, right: 10 }}>
+      <div className="leaflet-control">
+        <button onClick={handleLocate} disabled={locating} className="bg-white w-9 h-9 rounded-lg shadow-md flex items-center justify-center text-lg hover:bg-gray-50 border border-gray-200" title="定位我的位置">
+          {locating ? "⏳" : "📍"}
+        </button>
+      </div>
+    </div>
+  );
 }
 
-const tierColors: Record<string, string> = {
-  "顶尖": "bg-red-500",
-  "优秀": "bg-blue-500",
-  "热门": "bg-green-500",
-};
+// 刷新按钮
+function RefreshButton() {
+  const map = useMap();
+  const handleRefresh = () => {
+    const center = map.getCenter();
+    const zoom = map.getZoom();
+    map.setView([0, 0], 1);
+    setTimeout(() => map.setView(center, zoom), 100);
+  };
+  return (
+    <div className="leaflet-top leaflet-right" style={{ top: 50, right: 10 }}>
+      <div className="leaflet-control">
+        <button onClick={handleRefresh} className="bg-white w-9 h-9 rounded-lg shadow-md flex items-center justify-center text-lg hover:bg-gray-50 border border-gray-200" title="刷新地图">
+          🔄
+        </button>
+      </div>
+    </div>
+  );
+}
+
+const SchoolMarker = ({ school, onSelect }: { school: School; onSelect: (s: School) => void }) => (
+  <Marker position={[school.lat, school.lng]} icon={createSchoolIcon(school.rankingTier)} eventHandlers={{ click: () => onSelect(school) }}>
+    <Popup>
+      <div className="text-center min-w-[180px]">
+        <h3 className="font-bold text-gray-900 mb-1">{school.nameCn}</h3>
+        <p className="text-xs text-gray-400 mb-2">{school.name}</p>
+        <div className="space-y-1 text-sm text-gray-600">
+          <div>📍 {school.state} {school.city}</div>
+          <div>🏆 #{school.ranking} · {school.rankingTier}</div>
+          <div>💰 ${school.tuition.toLocaleString()}/年</div>
+          <div>📊 录取率 {school.acceptanceRate}%</div>
+        </div>
+        <button onClick={() => onSelect(school)} className="mt-3 bg-blue-600 text-white text-xs px-4 py-1.5 rounded-lg hover:bg-blue-700">
+          查看详情
+        </button>
+      </div>
+    </Popup>
+  </Marker>
+);
 
 export default function Map() {
   const [selectedSchool, setSelectedSchool] = useState<School | null>(null);
   const [filterTier, setFilterTier] = useState("全部");
-  const [hoveredSchool, setHoveredSchool] = useState<School | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  const filteredSchools =
-    filterTier === "全部"
-      ? schools
-      : schools.filter((s) => s.rankingTier === filterTier);
+  const filteredSchools = filterTier === "全部" ? schools : schools.filter((s) => s.rankingTier === filterTier);
+
+  const center = {
+    lat: schools.reduce((sum, s) => sum + s.lat, 0) / schools.length,
+    lng: schools.reduce((sum, s) => sum + s.lng, 0) / schools.length,
+  };
+
+  const handleTileLoad = useCallback(() => {
+    setLoading(false);
+  }, []);
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold text-gray-900 mb-2">学校地图</h1>
       <p className="text-gray-500 mb-6">
-        查看 {schools.length} 所学校的地理位置分布
+        在地图上查看 {schools.length} 所学校的地理位置，点击标记查看详情
       </p>
 
       {/* 筛选栏 */}
@@ -45,109 +118,49 @@ export default function Map() {
           <button
             key={key}
             onClick={() => setFilterTier(key)}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-              filterTier === key
-                ? "bg-blue-600 text-white"
-                : "bg-white text-gray-600 border border-gray-300 hover:bg-gray-50"
-            }`}
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${filterTier === key ? "bg-blue-600 text-white" : "bg-white text-gray-600 border border-gray-300 hover:bg-gray-50"}`}
           >
             {label}（{count}）
           </button>
         ))}
       </div>
 
-      {/* 地图区域 */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-        <div className="relative" style={{ paddingBottom: "60%", backgroundColor: "#e8f4f8" }}>
-          {/* 美国地图背景 */}
-          <img
-            src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Map_of_USA_with_state_names.svg/1200px-Map_of_USA_with_state_names.svg.png"
-            alt="美国地图"
-            className="absolute inset-0 w-full h-full object-contain p-4"
-            onError={(e) => {
-              // 如果图片加载失败，显示纯色背景
-              (e.target as HTMLImageElement).style.display = "none";
-            }}
+      {/* 地图 */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden relative">
+        {loading && (
+          <div className="absolute inset-0 flex items-center justify-center bg-gray-50 z-10">
+            <div className="text-center">
+              <div className="animate-spin w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full mx-auto mb-3" />
+              <p className="text-sm text-gray-500">地图加载中...</p>
+              <p className="text-xs text-gray-400 mt-1">首次加载可能需要几秒钟</p>
+            </div>
+          </div>
+        )}
+        <MapContainer center={[center.lat, center.lng]} zoom={7} style={{ height: "500px", width: "100%" }}>
+          <TileLayer
+            attribution='&copy; <a href="https://carto.com/">CARTO</a>'
+            url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
+            subdomains={["a", "b", "c", "d"]}
+            eventHandlers={{ load: handleTileLoad }}
           />
-
-          {/* 学校标记 */}
-          {filteredSchools.map((school) => {
-            const pos = coordToPercent(school.lat, school.lng);
-            const isHovered = hoveredSchool?.id === school.id;
-            return (
-              <div
-                key={school.id}
-                className="absolute transform -translate-x-1/2 -translate-y-1/2 cursor-pointer group"
-                style={{ left: `${pos.x}%`, top: `${pos.y}%` }}
-                onClick={() => setSelectedSchool(school)}
-                onMouseEnter={() => setHoveredSchool(school)}
-                onMouseLeave={() => setHoveredSchool(null)}
-              >
-                {/* 标记点 */}
-                <div
-                  className={`w-5 h-5 rounded-full ${tierColors[school.rankingTier]} border-2 border-white shadow-md transition-transform ${
-                    isHovered ? "scale-150" : "hover:scale-125"
-                  }`}
-                />
-
-                {/* 悬停提示 */}
-                {isHovered && (
-                  <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 bg-white rounded-lg shadow-lg p-3 min-w-[200px] z-10">
-                    <p className="font-bold text-gray-900 text-sm">{school.nameCn}</p>
-                    <p className="text-xs text-gray-400">{school.name}</p>
-                    <div className="text-xs text-gray-600 mt-1 space-y-0.5">
-                      <div>📍 {school.state}</div>
-                      <div>💰 ${school.tuition.toLocaleString()}/年</div>
-                      <div>📊 录取率 {school.acceptanceRate}%</div>
-                    </div>
-                    <p className="text-xs text-blue-600 mt-2">点击查看详情</p>
-                  </div>
-                )}
-              </div>
-            );
-          })}
-        </div>
+          <LocationButton />
+          <RefreshButton />
+          {filteredSchools.map((school) => (
+            <SchoolMarker key={school.id} school={school} onSelect={setSelectedSchool} />
+          ))}
+        </MapContainer>
       </div>
 
-      {/* 图例 */}
+      {/* 图例和提示 */}
       <div className="mt-4 flex flex-wrap items-center justify-between gap-4">
         <div className="flex items-center gap-6 text-sm text-gray-600">
-          <div className="flex items-center gap-2">
-            <div className="w-4 h-4 rounded-full bg-red-500 border-2 border-white shadow" />
-            <span>顶尖</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="w-4 h-4 rounded-full bg-blue-500 border-2 border-white shadow" />
-            <span>优秀</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="w-4 h-4 rounded-full bg-green-500 border-2 border-white shadow" />
-            <span>热门</span>
-          </div>
+          <div className="flex items-center gap-2"><div className="w-4 h-4 rounded-full bg-red-500 border-2 border-white shadow" /><span>顶尖</span></div>
+          <div className="flex items-center gap-2"><div className="w-4 h-4 rounded-full bg-blue-500 border-2 border-white shadow" /><span>优秀</span></div>
+          <div className="flex items-center gap-2"><div className="w-4 h-4 rounded-full bg-green-500 border-2 border-white shadow" /><span>热门</span></div>
         </div>
         <p className="text-xs text-gray-400">
-          💡 悬停查看学校信息，点击查看详情
+          💡 如果地图显示不完整，点击右上角 🔄 刷新
         </p>
-      </div>
-
-      {/* 已选学校列表 */}
-      <div className="mt-6 bg-white rounded-xl shadow-sm border border-gray-200 p-4">
-        <h3 className="font-semibold text-gray-900 mb-3">📍 学校列表</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
-          {filteredSchools.map((school) => (
-            <button
-              key={school.id}
-              onClick={() => setSelectedSchool(school)}
-              className="text-left p-2 rounded-lg hover:bg-gray-50 border border-gray-100 text-sm transition-colors"
-            >
-              <div className="flex items-center gap-2">
-                <div className={`w-3 h-3 rounded-full ${tierColors[school.rankingTier]}`} />
-                <span className="font-medium text-gray-900 truncate">{school.nameCn}</span>
-              </div>
-              <div className="text-xs text-gray-400 ml-5">{school.state} · #{school.ranking}</div>
-            </button>
-          ))}
-        </div>
       </div>
 
       {selectedSchool && <SchoolDetail school={selectedSchool} onClose={() => setSelectedSchool(null)} />}
