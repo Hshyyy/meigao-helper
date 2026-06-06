@@ -48,9 +48,12 @@ export default function CostCalculator() {
   const estimatedRoomBoard = Math.round(selectedSchool.tuition * 0.22);
   const housingCost = isBoarding ? 0 : housingOption.cost;
 
-  // 根据地区调整生活成本
+  // 根据地区调整生活成本（差异更明显）
   const regionMultiplier: Record<string, number> = {
-    "东北": 1.2, "西部": 1.1, "南部": 0.9, "中西部": 0.95,
+    "东北": 1.35,  // 波士顿、纽约附近，最贵
+    "西部": 1.25,  // 加州，很贵
+    "南部": 0.85,  // 较便宜
+    "中西部": 0.90, // 中等偏低
   };
   const mult = regionMultiplier[selectedSchool.region] || 1.0;
   const r = `（${selectedSchool.region}地区）`;
