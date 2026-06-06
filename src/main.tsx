@@ -12,6 +12,7 @@ import Timeline from "./pages/Timeline";
 import CostCalculator from "./pages/CostCalculator";
 import NotFound from "./pages/NotFound";
 
+// eslint-disable-next-line react-refresh/only-export-components
 const Map = lazy(() => import("./pages/Map"));
 
 createRoot(document.getElementById("root")!).render(
