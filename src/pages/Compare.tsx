@@ -13,11 +13,29 @@ const housingOptions = {
 
 type HousingChoice = "boarding" | "hostFamily" | "rent" | "ownHouse";
 
+// 城市生活成本系数
+const cityMultiplier: Record<string, number> = {
+  "Andover": 1.38, "Deerfield": 1.25, "Concord": 1.35, "Groton": 1.28,
+  "Milton": 1.40, "Southborough": 1.32, "Byfield": 1.25, "Marion": 1.22,
+  "Wallingford": 1.28, "Lakeville": 1.25, "Watertown": 1.22, "Windsor": 1.20,
+  "Kent": 1.22, "Farmington": 1.28, "Pomfret": 1.18, "Suffield": 1.20,
+  "Exeter": 1.22, "Lawrenceville": 1.30, "Hightstown": 1.25, "Blairstown": 1.18,
+  "Pottstown": 1.15, "Mercersburg": 1.08, "Ojai": 1.28, "Carpinteria": 1.30,
+  "Claremont": 1.25, "Alexandria": 1.35, "Woodberry Forest": 1.05, "Middletown": 1.12,
+};
+const stateMultiplier: Record<string, number> = {
+  "马萨诸塞州": 1.35, "康涅狄格州": 1.30, "新罕布什尔州": 1.20,
+  "新泽西州": 1.25, "宾夕法尼亚州": 1.15, "加利福尼亚州": 1.30,
+  "弗吉尼亚州": 1.10, "特拉华州": 1.10,
+};
+
 // 计算费用
 function calcCost(school: School, choice: HousingChoice): number {
+  const mult = cityMultiplier[school.city] || stateMultiplier[school.state] || 1.1;
   const isBoarding = school.type === "寄宿" || (school.type === "寄宿/走读" && choice === "boarding");
-  const housingCost = isBoarding ? 0 : housingOptions[choice].cost;
-  return school.tuition + housingCost + 5300;
+  const housingCost = isBoarding ? 0 : Math.round(housingOptions[choice].cost * mult);
+  const rentFood = !isBoarding && choice === "rent" ? Math.round(4800 * mult) : 0;
+  return school.tuition + housingCost + rentFood + Math.round(5300 * mult);
 }
 
 export default function Compare() {
