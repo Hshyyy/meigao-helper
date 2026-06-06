@@ -145,7 +145,7 @@ export default function Map() {
       {/* 地图 */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden relative">
         {loading && (
-          <div className="absolute inset-0 flex items-center justify-center bg-gray-50/80 z-10">
+          <div className="absolute inset-0 flex items-center justify-center bg-gray-50/80" style={{ zIndex: 1000 }}>
             <div className="text-center">
               <div className="animate-spin w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full mx-auto mb-3" />
               <p className="text-sm text-gray-500">地图加载中...</p>
