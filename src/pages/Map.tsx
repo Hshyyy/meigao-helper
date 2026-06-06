@@ -1,4 +1,4 @@
-import { useState, memo } from "react";
+import { useState, useCallback } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import { schools } from "../data/schools";
 import type { School } from "../data/schools";
@@ -44,7 +44,27 @@ function LocationButton() {
   );
 }
 
-const SchoolMarker = memo(({ school, onSelect }: { school: School; onSelect: (s: School) => void }) => (
+// 刷新按钮
+function RefreshButton() {
+  const map = useMap();
+  const handleRefresh = () => {
+    const center = map.getCenter();
+    const zoom = map.getZoom();
+    map.setView([0, 0], 1);
+    setTimeout(() => map.setView(center, zoom), 100);
+  };
+  return (
+    <div className="leaflet-top leaflet-right" style={{ top: 50, right: 10 }}>
+      <div className="leaflet-control">
+        <button onClick={handleRefresh} className="bg-white w-9 h-9 rounded-lg shadow-md flex items-center justify-center text-lg hover:bg-gray-50 border border-gray-200" title="刷新地图">
+          🔄
+        </button>
+      </div>
+    </div>
+  );
+}
+
+const SchoolMarker = ({ school, onSelect }: { school: School; onSelect: (s: School) => void }) => (
   <Marker position={[school.lat, school.lng]} icon={createSchoolIcon(school.rankingTier)} eventHandlers={{ click: () => onSelect(school) }}>
     <Popup>
       <div className="text-center min-w-[180px]">
@@ -62,7 +82,7 @@ const SchoolMarker = memo(({ school, onSelect }: { school: School; onSelect: (s:
       </div>
     </Popup>
   </Marker>
-));
+);
 
 export default function Map() {
   const [selectedSchool, setSelectedSchool] = useState<School | null>(null);
@@ -75,6 +95,10 @@ export default function Map() {
     lat: schools.reduce((sum, s) => sum + s.lat, 0) / schools.length,
     lng: schools.reduce((sum, s) => sum + s.lng, 0) / schools.length,
   };
+
+  const handleTileLoad = useCallback(() => {
+    setLoading(false);
+  }, []);
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
@@ -108,35 +132,35 @@ export default function Map() {
             <div className="text-center">
               <div className="animate-spin w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full mx-auto mb-3" />
               <p className="text-sm text-gray-500">地图加载中...</p>
+              <p className="text-xs text-gray-400 mt-1">首次加载可能需要几秒钟</p>
             </div>
           </div>
         )}
-        <MapContainer
-          center={[center.lat, center.lng]}
-          zoom={7}
-          style={{ height: "500px", width: "100%" }}
-        >
+        <MapContainer center={[center.lat, center.lng]} zoom={7} style={{ height: "500px", width: "100%" }}>
           <TileLayer
             attribution='&copy; <a href="https://carto.com/">CARTO</a>'
             url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
             subdomains={["a", "b", "c", "d"]}
-            eventHandlers={{ load: () => setLoading(false) }}
+            eventHandlers={{ load: handleTileLoad }}
           />
           <LocationButton />
+          <RefreshButton />
           {filteredSchools.map((school) => (
             <SchoolMarker key={school.id} school={school} onSelect={setSelectedSchool} />
           ))}
         </MapContainer>
       </div>
 
-      {/* 图例 */}
+      {/* 图例和提示 */}
       <div className="mt-4 flex flex-wrap items-center justify-between gap-4">
         <div className="flex items-center gap-6 text-sm text-gray-600">
           <div className="flex items-center gap-2"><div className="w-4 h-4 rounded-full bg-red-500 border-2 border-white shadow" /><span>顶尖</span></div>
           <div className="flex items-center gap-2"><div className="w-4 h-4 rounded-full bg-blue-500 border-2 border-white shadow" /><span>优秀</span></div>
           <div className="flex items-center gap-2"><div className="w-4 h-4 rounded-full bg-green-500 border-2 border-white shadow" /><span>热门</span></div>
         </div>
-        <p className="text-xs text-gray-400">💡 点击标记查看学校信息，右上角 📍 可定位你的位置</p>
+        <p className="text-xs text-gray-400">
+          💡 如果地图显示不完整，点击右上角 🔄 刷新
+        </p>
       </div>
 
       {selectedSchool && <SchoolDetail school={selectedSchool} onClose={() => setSelectedSchool(null)} />}
