@@ -92,6 +92,8 @@ interface StudentProfile {
   region: string;
   maxBudget: number;
   schoolType: string;
+  interests: string[]; // 兴趣方向：STEM、文科、艺术、体育、公益
+  schoolSize: string; // 学校规模偏好：small、medium、large、不限
 }
 
 function matchSchools(profile: StudentProfile): MatchResult[] {
@@ -197,6 +199,27 @@ function matchSchools(profile: StudentProfile): MatchResult[] {
       reasons.push("公立学校背景，需加强英语准备");
     }
 
+    // 兴趣方向匹配
+    const interestMatch = profile.interests.filter((i) =>
+      school.tags.some((tag) => tag.includes(i))
+    );
+    if (profile.interests.length > 0 && interestMatch.length > 0) {
+      score += 3;
+      reasons.push(`${interestMatch.join("/")} 方向匹配`);
+    }
+
+    // 学校规模偏好
+    if (profile.schoolSize) {
+      const sizeMatch =
+        (profile.schoolSize === "small" && school.studentCount < 400) ||
+        (profile.schoolSize === "medium" && school.studentCount >= 400 && school.studentCount <= 700) ||
+        (profile.schoolSize === "large" && school.studentCount > 700);
+      if (sizeMatch) {
+        score += 2;
+        reasons.push("学校规模符合偏好");
+      }
+    }
+
     // 分类
     let type: "冲刺校" | "匹配校" | "保底校";
     if (score >= 75) {
@@ -229,6 +252,8 @@ export default function Recommend() {
     region: "全部",
     maxBudget: 0,
     schoolType: "",
+    interests: [],
+    schoolSize: "",
   });
   const [results, setResults] = useState<MatchResult[] | null>(null);
   const [selectedSchool, setSelectedSchool] = useState<School | null>(null);
@@ -260,7 +285,7 @@ export default function Recommend() {
     setResults(matched);
   };
 
-  const update = (key: keyof StudentProfile, value: string | number) => {
+  const update = (key: keyof StudentProfile, value: string | number | string[]) => {
     setProfile((prev) => ({ ...prev, [key]: value }));
   };
 
@@ -434,6 +459,54 @@ export default function Recommend() {
                   <option value={63000}>$63,000 以下</option>
                   <option value={65000}>$65,000 以下</option>
                   <option value={70000}>$70,000 以下</option>
+                </select>
+              </div>
+
+              {/* 兴趣方向（可选多选） */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  🎯 兴趣方向（可多选，可不选）
+                </label>
+                <div className="flex flex-wrap gap-2">
+                  {["STEM", "文科", "艺术", "体育", "公益"].map((item) => (
+                    <button
+                      key={item}
+                      type="button"
+                      onClick={() => {
+                        const next = profile.interests.includes(item)
+                          ? profile.interests.filter((i) => i !== item)
+                          : [...profile.interests, item];
+                        update("interests", next);
+                      }}
+                      className={`px-3 py-1.5 rounded-lg text-sm transition-colors ${
+                        profile.interests.includes(item)
+                          ? "bg-blue-600 text-white"
+                          : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                      }`}
+                    >
+                      {item}
+                    </button>
+                  ))}
+                </div>
+                <p className="text-xs text-gray-400 mt-1">
+                  💡 选择你最有深度的方向，匹配相关学校
+                </p>
+              </div>
+
+              {/* 学校规模偏好 */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  📏 学校规模偏好
+                </label>
+                <select
+                  value={profile.schoolSize}
+                  onChange={(e) => update("schoolSize", e.target.value)}
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+                >
+                  <option value="">不限</option>
+                  <option value="small">小型（400人以下）</option>
+                  <option value="medium">中型（400-700人）</option>
+                  <option value="large">大型（700人以上）</option>
                 </select>
               </div>
             </div>
