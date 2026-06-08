@@ -273,10 +273,36 @@ export default function Recommend() {
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">🎯 兴趣方向（可多选）</label>
                 <div className="flex flex-wrap gap-2">
+                  <button
+                    type="button"
+                    onClick={() => update("interests", [])}
+                    className={`px-3 py-1.5 rounded-lg text-sm transition-colors ${
+                      profile.interests.length === 0 ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                    }`}
+                  >
+                    不限
+                  </button>
                   {["STEM", "文科", "艺术", "体育", "公益"].map((item) => (
-                    <button key={item} type="button" onClick={() => update("interests", profile.interests.includes(item) ? profile.interests.filter((i) => i !== item) : [...profile.interests, item])} className={`px-3 py-1.5 rounded-lg text-sm transition-colors ${profile.interests.includes(item) ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200"}`}>{item}</button>
+                    <button
+                      key={item}
+                      type="button"
+                      onClick={() =>
+                        update(
+                          "interests",
+                          profile.interests.includes(item)
+                            ? profile.interests.filter((i) => i !== item)
+                            : [...profile.interests.filter((i) => i !== ""), item]
+                        )
+                      }
+                      className={`px-3 py-1.5 rounded-lg text-sm transition-colors ${
+                        profile.interests.includes(item) ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                      }`}
+                    >
+                      {item}
+                    </button>
                   ))}
                 </div>
+                <p className="text-xs text-gray-400 mt-1">💡 选择你最有深度的方向，匹配相关学校</p>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">📏 学校规模偏好</label>
