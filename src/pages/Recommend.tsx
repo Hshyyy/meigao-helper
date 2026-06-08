@@ -13,7 +13,7 @@ type MatchResult = {
 };
 
 function SchoolSection({
-  results, onSelect, onToggleFavorite, favorites, ssatNote, profile,
+  results, onSelect, onToggleFavorite, favorites, ssatNote, profile, interests,
 }: {
   results: MatchResult[];
   onSelect: (school: School) => void;
@@ -21,6 +21,7 @@ function SchoolSection({
   favorites: number[];
   ssatNote?: boolean;
   profile?: { toefl: number; gpa: number };
+  interests?: string[];
 }) {
   const colorMap = {
     "冲刺校": { bg: "bg-red-100 text-red-700", dot: "bg-red-500" },
@@ -58,9 +59,12 @@ function SchoolSection({
                   onToggleFavorite={() => onToggleFavorite(r.school.id)}
                 />
                 <p className={`text-xs mt-1 px-1 ${ssatNote ? "text-amber-600" : "text-gray-500"}`}>
+                  {interests && interests.length > 0 && interests.some(i => r.school.tags.some(tag => tag.includes(i))) && (
+                    <span className="text-green-600 mr-1">🎯 兴趣匹配</span>
+                  )}
                   {ssatNote && profile ? (
                     <>⚠️ 建议 SSAT {r.school.ssatPercentile}%+，你的托福{profile.toefl >= r.school.toeflMin ? "达标" : `差${r.school.toeflMin - profile.toefl}分`}，GPA{profile.gpa >= r.school.gpaMin ? "达标" : `差${(r.school.gpaMin - profile.gpa).toFixed(1)}`}</>
-                  ) : r.reason}
+                  ) : !interests?.length ? r.reason : interests.some(i => r.school.tags.some(tag => tag.includes(i))) ? r.reason : r.reason}
                 </p>
               </div>
             ))}
@@ -187,20 +191,12 @@ export default function Recommend() {
   };
 
   const canSkipSSAT = (profile.schoolType === "ib" || profile.schoolType === "alevel") && profile.ssat === 0;
-  const hasInterests = profile.interests.length > 0;
-
   const ssatFreeSchools = canSkipSSAT ? results?.filter((r) => !r.school.ssatRequired) || [] : [];
   const ssatRequiredSchools = canSkipSSAT
     ? results?.filter((r) => {
         if (!r.school.ssatRequired) return false;
         return profile.toefl >= r.school.toeflMin - 10 && profile.gpa >= r.school.gpaMin - 0.3;
       }) || []
-    : [];
-  const interestMatchSchools = hasInterests
-    ? results?.filter((r) => profile.interests.some((i) => r.school.tags.some((tag) => tag.includes(i)))) || []
-    : [];
-  const interestNoMatchSchools = hasInterests
-    ? results?.filter((r) => !profile.interests.some((i) => r.school.tags.some((tag) => tag.includes(i)))) || []
     : [];
 
   return (
@@ -290,86 +286,30 @@ export default function Recommend() {
             </div>
           ) : (
             <div className="space-y-8">
-              {/* IB/A-Level 未填 SSAT 时，按 SSAT + 兴趣双维度分组 */}
+              {/* IB/A-Level 未填 SSAT 时，按 SSAT 分组 */}
               {canSkipSSAT ? (
                 <>
-                  {/* 免 SSAT + 符合兴趣 */}
-                  {hasInterests && ssatFreeSchools.filter(r => profile.interests.some(i => r.school.tags.some(tag => tag.includes(i)))).length > 0 && (
-                    <section>
-                      <div className="flex items-center gap-2 mb-4">
-                        <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-medium">🎯 免 SSAT + 符合兴趣</span>
-                      </div>
-                      <SchoolSection results={ssatFreeSchools.filter(r => profile.interests.some(i => r.school.tags.some(tag => tag.includes(i))))} onSelect={setSelectedSchool} onToggleFavorite={toggleFavorite} favorites={favorites} />
-                    </section>
-                  )}
-                  {/* 免 SSAT + 兴趣不匹配 */}
-                  {hasInterests && ssatFreeSchools.filter(r => !profile.interests.some(i => r.school.tags.some(tag => tag.includes(i)))).length > 0 && (
-                    <section>
-                      <div className="flex items-center gap-2 mb-4">
-                        <span className="bg-green-50 text-green-600 px-3 py-1 rounded-full text-sm font-medium">✅ 免 SSAT，方向不匹配</span>
-                      </div>
-                      <SchoolSection results={ssatFreeSchools.filter(r => !profile.interests.some(i => r.school.tags.some(tag => tag.includes(i))))} onSelect={setSelectedSchool} onToggleFavorite={toggleFavorite} favorites={favorites} />
-                    </section>
-                  )}
-                  {/* 免 SSAT（未选兴趣时全部显示） */}
-                  {!hasInterests && ssatFreeSchools.length > 0 && (
+                  {ssatFreeSchools.length > 0 && (
                     <section>
                       <div className="flex items-center gap-2 mb-4">
                         <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-medium">✅ 免 SSAT 学校</span>
+                        <span className="text-sm text-gray-500">可用 IB/A-Level 成绩替代</span>
                       </div>
-                      <SchoolSection results={ssatFreeSchools} onSelect={setSelectedSchool} onToggleFavorite={toggleFavorite} favorites={favorites} />
+                      <SchoolSection results={ssatFreeSchools} onSelect={setSelectedSchool} onToggleFavorite={toggleFavorite} favorites={favorites} interests={profile.interests} />
                     </section>
                   )}
-                  {/* 建议考 SSAT + 符合兴趣 */}
-                  {hasInterests && ssatRequiredSchools.filter(r => profile.interests.some(i => r.school.tags.some(tag => tag.includes(i)))).length > 0 && (
-                    <section>
-                      <div className="flex items-center gap-2 mb-4">
-                        <span className="bg-amber-100 text-amber-700 px-3 py-1 rounded-full text-sm font-medium">📝 建议考 SSAT + 符合兴趣</span>
-                      </div>
-                      <SchoolSection results={ssatRequiredSchools.filter(r => profile.interests.some(i => r.school.tags.some(tag => tag.includes(i))))} onSelect={setSelectedSchool} onToggleFavorite={toggleFavorite} favorites={favorites} ssatNote profile={profile} />
-                    </section>
-                  )}
-                  {/* 建议考 SSAT + 兴趣不匹配 */}
-                  {hasInterests && ssatRequiredSchools.filter(r => !profile.interests.some(i => r.school.tags.some(tag => tag.includes(i)))).length > 0 && (
-                    <section>
-                      <div className="flex items-center gap-2 mb-4">
-                        <span className="bg-amber-50 text-amber-600 px-3 py-1 rounded-full text-sm font-medium">📝 建议考 SSAT，方向不匹配</span>
-                      </div>
-                      <SchoolSection results={ssatRequiredSchools.filter(r => !profile.interests.some(i => r.school.tags.some(tag => tag.includes(i))))} onSelect={setSelectedSchool} onToggleFavorite={toggleFavorite} favorites={favorites} ssatNote profile={profile} />
-                    </section>
-                  )}
-                  {/* 建议考 SSAT（未选兴趣时全部显示） */}
-                  {!hasInterests && ssatRequiredSchools.length > 0 && (
+                  {ssatRequiredSchools.length > 0 && (
                     <section>
                       <div className="flex items-center gap-2 mb-4">
                         <span className="bg-amber-100 text-amber-700 px-3 py-1 rounded-full text-sm font-medium">📝 建议考 SSAT</span>
+                        <span className="text-sm text-gray-500">以下学校要求 SSAT</span>
                       </div>
-                      <SchoolSection results={ssatRequiredSchools} onSelect={setSelectedSchool} onToggleFavorite={toggleFavorite} favorites={favorites} ssatNote profile={profile} />
-                    </section>
-                  )}
-                </>
-              ) : hasInterests ? (
-                <>
-                  {/* 普通模式：按兴趣分组 */}
-                  {interestMatchSchools.length > 0 && (
-                    <section>
-                      <div className="flex items-center gap-2 mb-4">
-                        <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-medium">🎯 符合兴趣方向</span>
-                      </div>
-                      <SchoolSection results={interestMatchSchools} onSelect={setSelectedSchool} onToggleFavorite={toggleFavorite} favorites={favorites} />
-                    </section>
-                  )}
-                  {interestNoMatchSchools.length > 0 && (
-                    <section>
-                      <div className="flex items-center gap-2 mb-4">
-                        <span className="bg-gray-100 text-gray-600 px-3 py-1 rounded-full text-sm font-medium">📋 成绩符合，方向不匹配</span>
-                      </div>
-                      <SchoolSection results={interestNoMatchSchools} onSelect={setSelectedSchool} onToggleFavorite={toggleFavorite} favorites={favorites} />
+                      <SchoolSection results={ssatRequiredSchools} onSelect={setSelectedSchool} onToggleFavorite={toggleFavorite} favorites={favorites} ssatNote profile={profile} interests={profile.interests} />
                     </section>
                   )}
                 </>
               ) : (
-                <SchoolSection results={results} onSelect={setSelectedSchool} onToggleFavorite={toggleFavorite} favorites={favorites} />
+                <SchoolSection results={results} onSelect={setSelectedSchool} onToggleFavorite={toggleFavorite} favorites={favorites} interests={profile.interests} />
               )}
             </div>
           )}
