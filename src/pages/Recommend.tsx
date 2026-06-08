@@ -10,6 +10,8 @@ type MatchResult = {
   type: "冲刺校" | "匹配校" | "保底校";
   score: number;
   reason: string;
+  hasInterestMatch: boolean;
+  sizeMatch: boolean;
 };
 
 function SchoolSection({
@@ -135,20 +137,21 @@ function matchSchools(profile: StudentProfile): MatchResult[] {
     else if (profile.schoolType === "public_intl") { reasons.push("公立国际部背景，课程衔接良好"); }
     else if (profile.schoolType === "public") { reasons.push("公立学校背景，需加强英语准备"); }
 
-    // 兴趣匹配
+    // 兴趣匹配（不影响分数，只做标记）
     const interestMatch = profile.interests.filter((i) => school.tags.some((tag) => tag.includes(i)));
-    if (profile.interests.length > 0 && interestMatch.length > 0) {
-      score += 3;
+    const hasInterestMatch = profile.interests.length > 0 && interestMatch.length > 0;
+    if (hasInterestMatch) {
       reasons.push(`${interestMatch.join("/")} 方向匹配`);
     }
 
-    // 学校规模
-    if (profile.schoolSize) {
-      const sizeMatch =
-        (profile.schoolSize === "small" && school.studentCount < 400) ||
+    // 学校规模（不影响分数，只做标记）
+    const sizeMatch = profile.schoolSize
+      ? (profile.schoolSize === "small" && school.studentCount < 400) ||
         (profile.schoolSize === "medium" && school.studentCount >= 400 && school.studentCount <= 700) ||
-        (profile.schoolSize === "large" && school.studentCount > 700);
-      if (sizeMatch) { score += 2; reasons.push("学校规模符合偏好"); }
+        (profile.schoolSize === "large" && school.studentCount > 700)
+      : false;
+    if (sizeMatch) {
+      reasons.push("学校规模符合偏好");
     }
 
     let type: "冲刺校" | "匹配校" | "保底校";
@@ -156,10 +159,23 @@ function matchSchools(profile: StudentProfile): MatchResult[] {
     else if (score >= 50) type = "匹配校";
     else type = "冲刺校";
 
-    results.push({ school, type, score: Math.min(score, 100), reason: reasons.join("；") });
+    results.push({
+      school,
+      type,
+      score: Math.min(score, 100),
+      reason: reasons.join("；"),
+      hasInterestMatch,
+      sizeMatch,
+    });
   }
 
-  return results.sort((a, b) => b.score - a.score);
+  // 排序：成绩优先，成绩相同时兴趣优先，兴趣相同时规模优先
+  return results.sort((a, b) => {
+    if (b.score !== a.score) return b.score - a.score;
+    if (a.hasInterestMatch !== b.hasInterestMatch) return a.hasInterestMatch ? -1 : 1;
+    if (a.sizeMatch !== b.sizeMatch) return a.sizeMatch ? -1 : 1;
+    return 0;
+  });
 }
 
 export default function Recommend() {
