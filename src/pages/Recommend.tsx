@@ -215,25 +215,6 @@ export default function Recommend() {
       }) || []
     : [];
 
-  // 学校规模筛选
-  const hasSizePref = !!profile.schoolSize;
-  const sizeMatchSchools = hasSizePref
-    ? results?.filter((r) => {
-        if (profile.schoolSize === "small") return r.school.studentCount < 400;
-        if (profile.schoolSize === "medium") return r.school.studentCount >= 400 && r.school.studentCount <= 700;
-        if (profile.schoolSize === "large") return r.school.studentCount > 700;
-        return true;
-      }) || []
-    : [];
-  const sizeNoMatchSchools = hasSizePref
-    ? results?.filter((r) => {
-        if (profile.schoolSize === "small") return r.school.studentCount >= 400;
-        if (profile.schoolSize === "medium") return r.school.studentCount < 400 || r.school.studentCount > 700;
-        if (profile.schoolSize === "large") return r.school.studentCount <= 700;
-        return false;
-      }) || []
-    : [];
-
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold text-gray-900 mb-2">智能选校推荐</h1>
@@ -321,124 +302,25 @@ export default function Recommend() {
             </div>
           ) : (
             <div className="space-y-8">
-              {/* IB/A-Level 未填 SSAT 时，按 SSAT 分组，每组内按规模筛选 */}
+              {/* IB/A-Level 未填 SSAT 时，按 SSAT 分组 */}
               {canSkipSSAT ? (
                 <>
-                  {/* 免 SSAT 学校 */}
                   {ssatFreeSchools.length > 0 && (
                     <section>
                       <div className="flex items-center gap-2 mb-4">
                         <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-medium">✅ 免 SSAT 学校</span>
                         <span className="text-sm text-gray-500">可用 IB/A-Level 成绩替代</span>
                       </div>
-                      {hasSizePref ? (
-                        <>
-                          {ssatFreeSchools.filter(r => {
-                            if (profile.schoolSize === "small") return r.school.studentCount < 400;
-                            if (profile.schoolSize === "medium") return r.school.studentCount >= 400 && r.school.studentCount <= 700;
-                            if (profile.schoolSize === "large") return r.school.studentCount > 700;
-                            return true;
-                          }).length > 0 && (
-                            <div className="mb-4">
-                              <span className="bg-blue-100 text-blue-600 px-2 py-0.5 rounded text-xs mb-2 inline-block">📏 符合规模偏好</span>
-                              <SchoolSection results={ssatFreeSchools.filter(r => {
-                                if (profile.schoolSize === "small") return r.school.studentCount < 400;
-                                if (profile.schoolSize === "medium") return r.school.studentCount >= 400 && r.school.studentCount <= 700;
-                                if (profile.schoolSize === "large") return r.school.studentCount > 700;
-                                return true;
-                              })} onSelect={setSelectedSchool} onToggleFavorite={toggleFavorite} favorites={favorites} interests={profile.interests} />
-                            </div>
-                          )}
-                          {ssatFreeSchools.filter(r => {
-                            if (profile.schoolSize === "small") return r.school.studentCount >= 400;
-                            if (profile.schoolSize === "medium") return r.school.studentCount < 400 || r.school.studentCount > 700;
-                            if (profile.schoolSize === "large") return r.school.studentCount <= 700;
-                            return false;
-                          }).length > 0 && (
-                            <div className="mb-4">
-                              <span className="bg-gray-100 text-gray-500 px-2 py-0.5 rounded text-xs mb-2 inline-block">📋 其他规模</span>
-                              <SchoolSection results={ssatFreeSchools.filter(r => {
-                                if (profile.schoolSize === "small") return r.school.studentCount >= 400;
-                                if (profile.schoolSize === "medium") return r.school.studentCount < 400 || r.school.studentCount > 700;
-                                if (profile.schoolSize === "large") return r.school.studentCount <= 700;
-                                return false;
-                              })} onSelect={setSelectedSchool} onToggleFavorite={toggleFavorite} favorites={favorites} interests={profile.interests} />
-                            </div>
-                          )}
-                        </>
-                      ) : (
-                        <SchoolSection results={ssatFreeSchools} onSelect={setSelectedSchool} onToggleFavorite={toggleFavorite} favorites={favorites} interests={profile.interests} />
-                      )}
+                      <SchoolSection results={ssatFreeSchools} onSelect={setSelectedSchool} onToggleFavorite={toggleFavorite} favorites={favorites} interests={profile.interests} />
                     </section>
                   )}
-                  {/* 建议考 SSAT */}
                   {ssatRequiredSchools.length > 0 && (
                     <section>
                       <div className="flex items-center gap-2 mb-4">
                         <span className="bg-amber-100 text-amber-700 px-3 py-1 rounded-full text-sm font-medium">📝 建议考 SSAT</span>
                         <span className="text-sm text-gray-500">以下学校要求 SSAT</span>
                       </div>
-                      {hasSizePref ? (
-                        <>
-                          {ssatRequiredSchools.filter(r => {
-                            if (profile.schoolSize === "small") return r.school.studentCount < 400;
-                            if (profile.schoolSize === "medium") return r.school.studentCount >= 400 && r.school.studentCount <= 700;
-                            if (profile.schoolSize === "large") return r.school.studentCount > 700;
-                            return true;
-                          }).length > 0 && (
-                            <div className="mb-4">
-                              <span className="bg-blue-100 text-blue-600 px-2 py-0.5 rounded text-xs mb-2 inline-block">📏 符合规模偏好</span>
-                              <SchoolSection results={ssatRequiredSchools.filter(r => {
-                                if (profile.schoolSize === "small") return r.school.studentCount < 400;
-                                if (profile.schoolSize === "medium") return r.school.studentCount >= 400 && r.school.studentCount <= 700;
-                                if (profile.schoolSize === "large") return r.school.studentCount > 700;
-                                return true;
-                              })} onSelect={setSelectedSchool} onToggleFavorite={toggleFavorite} favorites={favorites} ssatNote profile={profile} interests={profile.interests} />
-                            </div>
-                          )}
-                          {ssatRequiredSchools.filter(r => {
-                            if (profile.schoolSize === "small") return r.school.studentCount >= 400;
-                            if (profile.schoolSize === "medium") return r.school.studentCount < 400 || r.school.studentCount > 700;
-                            if (profile.schoolSize === "large") return r.school.studentCount <= 700;
-                            return false;
-                          }).length > 0 && (
-                            <div className="mb-4">
-                              <span className="bg-gray-100 text-gray-500 px-2 py-0.5 rounded text-xs mb-2 inline-block">📋 其他规模</span>
-                              <SchoolSection results={ssatRequiredSchools.filter(r => {
-                                if (profile.schoolSize === "small") return r.school.studentCount >= 400;
-                                if (profile.schoolSize === "medium") return r.school.studentCount < 400 || r.school.studentCount > 700;
-                                if (profile.schoolSize === "large") return r.school.studentCount <= 700;
-                                return false;
-                              })} onSelect={setSelectedSchool} onToggleFavorite={toggleFavorite} favorites={favorites} ssatNote profile={profile} interests={profile.interests} />
-                            </div>
-                          )}
-                        </>
-                      ) : (
-                        <SchoolSection results={ssatRequiredSchools} onSelect={setSelectedSchool} onToggleFavorite={toggleFavorite} favorites={favorites} ssatNote profile={profile} interests={profile.interests} />
-                      )}
-                    </section>
-                  )}
-                </>
-              ) : hasSizePref ? (
-                <>
-                  {sizeMatchSchools.length > 0 && (
-                    <section>
-                      <div className="flex items-center gap-2 mb-4">
-                        <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-medium">📏 符合规模偏好</span>
-                        <span className="text-sm text-gray-500">
-                          {profile.schoolSize === "small" ? "400人以下" : profile.schoolSize === "medium" ? "400-700人" : "700人以上"}
-                        </span>
-                      </div>
-                      <SchoolSection results={sizeMatchSchools} onSelect={setSelectedSchool} onToggleFavorite={toggleFavorite} favorites={favorites} interests={profile.interests} />
-                    </section>
-                  )}
-                  {sizeNoMatchSchools.length > 0 && (
-                    <section>
-                      <div className="flex items-center gap-2 mb-4">
-                        <span className="bg-gray-100 text-gray-600 px-3 py-1 rounded-full text-sm font-medium">📋 其他符合成绩的学校</span>
-                        <span className="text-sm text-gray-500">不符合规模偏好，但成绩符合</span>
-                      </div>
-                      <SchoolSection results={sizeNoMatchSchools} onSelect={setSelectedSchool} onToggleFavorite={toggleFavorite} favorites={favorites} interests={profile.interests} />
+                      <SchoolSection results={ssatRequiredSchools} onSelect={setSelectedSchool} onToggleFavorite={toggleFavorite} favorites={favorites} ssatNote profile={profile} interests={profile.interests} />
                     </section>
                   )}
                 </>
