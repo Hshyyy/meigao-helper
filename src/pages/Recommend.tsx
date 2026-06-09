@@ -11,6 +11,7 @@ type MatchResult = {
   score: number;
   reason: string;
   hasInterestMatch: boolean;
+  interestMatchCount: number;
   sizeMatch: boolean;
 };
 
@@ -144,9 +145,10 @@ function matchSchools(profile: StudentProfile): MatchResult[] {
     else if (profile.schoolType === "public_intl") { reasons.push("公立国际部背景，课程衔接良好"); }
     else if (profile.schoolType === "public") { reasons.push("公立学校背景，需加强英语准备"); }
 
-    // 兴趣匹配（不影响分数，只做标记）
+    // 兴趣匹配（不影响分数，只做标记和排序）
     const interestMatch = profile.interests.filter((i) => school.tags.some((tag) => tag.includes(i)));
     const hasInterestMatch = profile.interests.length > 0 && interestMatch.length > 0;
+    const interestMatchCount = interestMatch.length;
     if (hasInterestMatch) {
       reasons.push(`${interestMatch.join("/")} 方向匹配`);
     }
@@ -172,14 +174,15 @@ function matchSchools(profile: StudentProfile): MatchResult[] {
       score: Math.min(score, 100),
       reason: reasons.join("；"),
       hasInterestMatch,
+      interestMatchCount,
       sizeMatch,
     });
   }
 
-  // 排序：成绩优先，成绩相同时兴趣优先，兴趣相同时规模优先
+  // 排序：成绩优先，成绩相同时兴趣匹配多的优先，兴趣相同时规模优先
   return results.sort((a, b) => {
     if (b.score !== a.score) return b.score - a.score;
-    if (a.hasInterestMatch !== b.hasInterestMatch) return a.hasInterestMatch ? -1 : 1;
+    if (a.interestMatchCount !== b.interestMatchCount) return b.interestMatchCount - a.interestMatchCount;
     if (a.sizeMatch !== b.sizeMatch) return a.sizeMatch ? -1 : 1;
     return 0;
   });
