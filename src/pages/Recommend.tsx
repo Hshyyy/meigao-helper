@@ -253,8 +253,9 @@ export default function Recommend() {
   ) => {
     // 检查小数位数
     if (maxDecimals !== undefined && value !== 0) {
-      const decimalStr = value.toString().split('.')[1];
-      if (decimalStr && decimalStr.length > maxDecimals) {
+      const str = value.toString();
+      const parts = str.split('.');
+      if (parts[1] && parts[1].length > maxDecimals) {
         const rounded = Number(value.toFixed(maxDecimals));
         showToast(`Chris很chill：${label}只填到小数点后 ${maxDecimals} 位就好啦～`);
         update(key, rounded);
