@@ -4,7 +4,7 @@ import type { School } from "../data/schools";
 interface StudentProfile {
   toefl: number;
   ssat: number;
-  gpa: number;
+  gpa: number | string;
   schoolType: string;
 }
 
@@ -134,7 +134,7 @@ export default function SchoolDetail({ school, onClose, profile }: Props) {
                 {profile.schoolType === "public" ? (
                   <MatchItem
                     label="成绩"
-                    value={profile.gpa}
+                    value={Number(profile.gpa)}
                     required={gpaToPercent(school.gpaMin)}
                     unit="%"
                     higher
@@ -142,7 +142,7 @@ export default function SchoolDetail({ school, onClose, profile }: Props) {
                 ) : (
                   <MatchItem
                     label="GPA"
-                    value={profile.gpa}
+                    value={Number(profile.gpa)}
                     required={school.gpaMin}
                     unit=""
                     higher
@@ -428,13 +428,14 @@ function gpaToPercent(gpa: number): number {
 
 // 生成个性化建议
 function getPersonalizedAdvice(
-  profile: { toefl: number; ssat: number; gpa: number; schoolType: string },
+  profile: { toefl: number; ssat: number; gpa: number | string; schoolType: string },
   school: School
 ): string[] {
   const tips: string[] = [];
   const toeflDiff = profile.toefl - school.toeflMin;
   const ssatDiff = profile.ssat - school.ssatPercentile;
-  const gpaDiff = profile.gpa - school.gpaMin;
+  const gpaNum = Number(profile.gpa) || 0;
+  const gpaDiff = gpaNum - school.gpaMin;
 
   // 托福建议
   if (toeflDiff >= 10) {
@@ -458,7 +459,7 @@ function getPersonalizedAdvice(
   if (profile.schoolType === "public") {
     // 体制内学生用百分比
     const requiredPercent = gpaToPercent(school.gpaMin);
-    const percentDiff = profile.gpa - requiredPercent;
+    const percentDiff = gpaNum - requiredPercent;
     if (percentDiff >= 5) {
       tips.push(`成绩 ${profile.gpa}% 超出要求（约 ${requiredPercent}%+），是你的优势，文书和面试中要重点提及`);
     } else if (percentDiff >= 0) {

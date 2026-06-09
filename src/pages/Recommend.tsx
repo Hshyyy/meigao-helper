@@ -23,7 +23,7 @@ function SchoolSection({
   onToggleFavorite: (id: number) => void;
   favorites: number[];
   ssatNote?: boolean;
-  profile?: { toefl: number; gpa: number; schoolSize?: string[] };
+  profile?: { toefl: number; gpa: number | string; schoolSize?: string[] };
   interests?: string[];
 }) {
   const colorMap = {
@@ -73,7 +73,7 @@ function SchoolSection({
                       : <span className="text-red-400 mr-1">❌ 规模不匹配</span>
                   )}
                   {ssatNote && profile ? (
-                    <>⚠️ 建议 SSAT {r.school.ssatPercentile}%+，你的托福{profile.toefl >= r.school.toeflMin ? "达标" : `差${r.school.toeflMin - profile.toefl}分`}，GPA{profile.gpa >= r.school.gpaMin ? "达标" : `差${(r.school.gpaMin - profile.gpa).toFixed(1)}`}</>
+                    <>⚠️ 建议 SSAT {r.school.ssatPercentile}%+，你的托福{profile.toefl >= r.school.toeflMin ? "达标" : `差${r.school.toeflMin - profile.toefl}分`}，GPA{Number(profile.gpa) >= r.school.gpaMin ? "达标" : `差${(r.school.gpaMin - Number(profile.gpa)).toFixed(1)}`}</>
                   ) : r.reason}
                 </p>
               </div>
@@ -88,7 +88,7 @@ function SchoolSection({
 interface StudentProfile {
   toefl: number;
   ssat: number;
-  gpa: number;
+  gpa: string;
   region: string;
   maxBudget: number;
   schoolType: string;
@@ -137,14 +137,15 @@ function matchSchools(profile: StudentProfile): MatchResult[] {
       return 70;
     };
 
+    const gpaNum = Number(profile.gpa) || 0;
     let gpaDiff: number;
     let gpaLabel: string;
     if (profile.schoolType === "public") {
       const requiredPercent = gpaToPercent(school.gpaMin);
-      gpaDiff = profile.gpa - requiredPercent;
+      gpaDiff = gpaNum - requiredPercent;
       gpaLabel = `${profile.gpa}% / 要求约 ${requiredPercent}%`;
     } else {
-      gpaDiff = profile.gpa - school.gpaMin;
+      gpaDiff = gpaNum - school.gpaMin;
       gpaLabel = `GPA ${profile.gpa} / 要求 ${school.gpaMin}`;
     }
 
@@ -210,7 +211,7 @@ function matchSchools(profile: StudentProfile): MatchResult[] {
 
 export default function Recommend() {
   const [profile, setProfile] = useState<StudentProfile>({
-    toefl: 0, ssat: 0, gpa: 0, region: "全部", maxBudget: 0, schoolType: "", interests: [], schoolSize: [],
+    toefl: 0, ssat: 0, gpa: "", region: "全部", maxBudget: 0, schoolType: "", interests: [], schoolSize: [],
   });
   const [results, setResults] = useState<MatchResult[] | null>(null);
   const [selectedSchool, setSelectedSchool] = useState<School | null>(null);
@@ -275,6 +276,7 @@ export default function Recommend() {
         }
         if (maxDecimals > 0 && parts[1].length > maxDecimals) {
           const corrected = Number(value.toFixed(maxDecimals));
+          // 强制刷新：先清空再设置
           update(key, "");
           setTimeout(() => update(key, corrected), 10);
           showToast(`Chris很chill：${label}最多只能填到小数点后 ${maxDecimals} 位哦~`, true);
@@ -298,7 +300,7 @@ export default function Recommend() {
   const ssatRequiredSchools = canSkipSSAT
     ? results?.filter((r) => {
         if (!r.school.ssatRequired) return false;
-        return profile.toefl >= r.school.toeflMin - 10 && profile.gpa >= r.school.gpaMin - 0.3;
+        return profile.toefl >= r.school.toeflMin - 10 && Number(profile.gpa) >= r.school.gpaMin - 0.3;
       }) || []
     : [];
 
