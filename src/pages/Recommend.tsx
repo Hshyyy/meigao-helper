@@ -221,7 +221,7 @@ export default function Recommend() {
 
   const showToast = (msg: string) => {
     setToast(msg);
-    setTimeout(() => setToast(null), 3000);
+    setTimeout(() => setToast(null), 4000);
   };
 
   const toggleFavorite = (id: number) => {
