@@ -217,6 +217,12 @@ export default function Recommend() {
   const [favorites, setFavorites] = useState<number[]>(() => {
     try { return JSON.parse(localStorage.getItem("favorites") || "[]"); } catch { return []; }
   });
+  const [toast, setToast] = useState<string | null>(null);
+
+  const showToast = (msg: string) => {
+    setToast(msg);
+    setTimeout(() => setToast(null), 3000);
+  };
 
   const toggleFavorite = (id: number) => {
     setFavorites((prev) => {
@@ -228,7 +234,7 @@ export default function Recommend() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!profile.schoolType) { alert("请选择目前就读学校类型"); return; }
+    if (!profile.schoolType) { showToast("Chris提醒你：还没选学校类型呢～"); return; }
     setResults(matchSchools(profile));
   };
 
@@ -245,10 +251,10 @@ export default function Recommend() {
     label: string
   ) => {
     if (value > max) {
-      alert(`${label}最大值为 ${max}`);
+      showToast(`Chris提醒你：${label}满分 ${max}，超过就牛逼过头咯～`);
       update(key, max);
     } else if (value < min && value !== 0) {
-      alert(`${label}最小值为 ${min}`);
+      showToast(`Chris提醒你：${label}不能低于 ${min} 哦～`);
       update(key, min);
     } else {
       update(key, value);
@@ -440,6 +446,13 @@ export default function Recommend() {
 
       {selectedSchool && <SchoolDetail school={selectedSchool} onClose={() => setSelectedSchool(null)} profile={profile} />}
       <Link to="/compare" className="fixed bottom-6 right-6 bg-purple-600 text-white w-14 h-14 rounded-full shadow-lg flex items-center justify-center text-2xl hover:bg-purple-700 transition-colors no-underline z-30" title="学校对比">⚖️</Link>
+
+      {/* Toast 提示 */}
+      {toast && (
+        <div className="fixed top-4 right-4 bg-gray-800 text-white px-4 py-3 rounded-lg shadow-lg z-50 text-sm max-w-xs animate-fade-in">
+          {toast}
+        </div>
+      )}
     </div>
   );
 }
