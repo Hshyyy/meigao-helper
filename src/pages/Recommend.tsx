@@ -256,8 +256,10 @@ export default function Recommend() {
       const str = value.toString();
       const parts = str.split('.');
       if (parts[1] && parts[1].length > maxDecimals) {
+        const corrected = maxDecimals === 0 ? Math.floor(value) : Number(value.toFixed(maxDecimals));
         showToast(`Chris很chill：${label}${maxDecimals === 0 ? "是整数哦！" : `只填到小数点后 ${maxDecimals} 位就好啦～`}`);
-        return; // 不更新值，保持原样
+        update(key, corrected);
+        return;
       }
     }
     if (value > max) {
