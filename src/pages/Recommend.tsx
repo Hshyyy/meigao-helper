@@ -335,10 +335,41 @@ export default function Recommend() {
                 <p className="text-xs text-gray-400 mt-1">💡 选择你最有深度的方向，匹配相关学校</p>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">📏 学校规模偏好</label>
-                <select value={profile.schoolSize} onChange={(e) => update("schoolSize", e.target.value)} className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm">
-                  <option value="">不限</option><option value="small">小型（400人以下）</option><option value="medium">中型（400-700人）</option><option value="large">大型（700人以上）</option>
-                </select>
+                <label className="block text-sm font-medium text-gray-700 mb-1">📏 学校规模偏好（可多选）</label>
+                <div className="flex flex-wrap gap-2">
+                  <button
+                    type="button"
+                    onClick={() => update("schoolSize", [])}
+                    className={`px-3 py-1.5 rounded-lg text-sm transition-colors ${
+                      profile.schoolSize.length === 0 ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                    }`}
+                  >
+                    不限
+                  </button>
+                  {[
+                    { value: "small", label: "小型（400人以下）" },
+                    { value: "medium", label: "中型（400-700人）" },
+                    { value: "large", label: "大型（700人以上）" },
+                  ].map((item) => (
+                    <button
+                      key={item.value}
+                      type="button"
+                      onClick={() =>
+                        update(
+                          "schoolSize",
+                          profile.schoolSize.includes(item.value)
+                            ? profile.schoolSize.filter((s) => s !== item.value)
+                            : [...profile.schoolSize.filter((s) => s !== ""), item.value]
+                        )
+                      }
+                      className={`px-3 py-1.5 rounded-lg text-sm transition-colors ${
+                        profile.schoolSize.includes(item.value) ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                      }`}
+                    >
+                      {item.label}
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
             <button type="submit" className="w-full mt-6 bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors">🎯 开始匹配</button>
