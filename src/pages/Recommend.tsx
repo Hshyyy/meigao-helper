@@ -267,13 +267,16 @@ export default function Recommend() {
       if (parts[1] !== undefined) {
         if (maxDecimals === 0 && parts[1].length > 0) {
           const corrected = Math.floor(value);
-          update(key, corrected);
+          // 强制刷新：先清空再设置
+          update(key, "");
+          setTimeout(() => update(key, corrected), 10);
           showToast(`Chris很chill：${label}是整数哦！`, true);
           return;
         }
         if (maxDecimals > 0 && parts[1].length > maxDecimals) {
           const corrected = Number(value.toFixed(maxDecimals));
-          update(key, corrected);
+          update(key, "");
+          setTimeout(() => update(key, corrected), 10);
           showToast(`Chris很chill：${label}最多只能填到小数点后 ${maxDecimals} 位哦~`, true);
           return;
         }
