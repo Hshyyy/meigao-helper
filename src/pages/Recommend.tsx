@@ -61,10 +61,15 @@ function SchoolSection({
                   onToggleFavorite={() => onToggleFavorite(r.school.id)}
                 />
                 <p className={`text-xs mt-1 px-1 ${ssatNote ? "text-amber-600" : "text-gray-500"}`}>
-                  {r.hasInterestMatch && <span className="text-green-600 mr-1">🎯 兴趣匹配</span>}
-                  {r.sizeMatch && <span className="text-blue-600 mr-1">📏 规模匹配</span>}
-                  {!r.hasInterestMatch && !r.sizeMatch && (interests?.length || profile?.schoolSize) && (
-                    <span className="text-gray-400 mr-1">偏好不匹配</span>
+                  {interests && interests.length > 0 && (
+                    r.hasInterestMatch
+                      ? <span className="text-green-600 mr-1">🎯 兴趣匹配</span>
+                      : <span className="text-red-400 mr-1">❌ 兴趣不匹配</span>
+                  )}
+                  {profile?.schoolSize && (
+                    r.sizeMatch
+                      ? <span className="text-blue-600 mr-1">📏 规模匹配</span>
+                      : <span className="text-red-400 mr-1">❌ 规模不匹配</span>
                   )}
                   {ssatNote && profile ? (
                     <>⚠️ 建议 SSAT {r.school.ssatPercentile}%+，你的托福{profile.toefl >= r.school.toeflMin ? "达标" : `差${r.school.toeflMin - profile.toefl}分`}，GPA{profile.gpa >= r.school.gpaMin ? "达标" : `差${(r.school.gpaMin - profile.gpa).toFixed(1)}`}</>
