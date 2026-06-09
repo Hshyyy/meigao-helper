@@ -449,7 +449,7 @@ export default function Recommend() {
 
       {/* Toast 提示 */}
       {toast && (
-        <div className="fixed top-4 right-4 bg-gray-800 text-white px-4 py-3 rounded-lg shadow-lg z-50 text-sm max-w-xs animate-fade-in">
+        <div className="fixed top-20 left-1/2 -translate-x-1/2 bg-gray-800 text-white px-5 py-3 rounded-lg shadow-lg z-50 text-sm max-w-md animate-fade-in">
           {toast}
         </div>
       )}
