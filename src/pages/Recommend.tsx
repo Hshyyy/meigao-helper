@@ -126,12 +126,32 @@ function matchSchools(profile: StudentProfile): MatchResult[] {
       else { score += 3; reasons.push(`SSAT ${profile.ssat}%，低于要求 ${Math.abs(ssatDiff)}%`); }
     }
 
-    // GPA
-    const gpaDiff = profile.gpa - school.gpaMin;
-    if (gpaDiff >= 0.3) { score += 20; reasons.push(`GPA ${profile.gpa}，超出要求 ${gpaDiff.toFixed(1)}`); }
-    else if (gpaDiff >= 0) { score += 15; reasons.push(`GPA ${profile.gpa}，刚好达标`); }
-    else if (gpaDiff >= -0.2) { score += 8; reasons.push(`GPA ${profile.gpa}，低于要求 ${Math.abs(gpaDiff).toFixed(1)}`); }
-    else { score += 3; reasons.push(`GPA ${profile.gpa}，低于要求 ${Math.abs(gpaDiff).toFixed(1)}`); }
+    // GPA（体制内学生用百分比比较）
+    const gpaToPercent = (gpa: number): number => {
+      if (gpa >= 4.0) return 93;
+      if (gpa >= 3.7) return 90;
+      if (gpa >= 3.5) return 87;
+      if (gpa >= 3.3) return 83;
+      if (gpa >= 3.0) return 80;
+      if (gpa >= 2.7) return 77;
+      return 70;
+    };
+
+    let gpaDiff: number;
+    let gpaLabel: string;
+    if (profile.schoolType === "public") {
+      const requiredPercent = gpaToPercent(school.gpaMin);
+      gpaDiff = profile.gpa - requiredPercent;
+      gpaLabel = `${profile.gpa}% / 要求约 ${requiredPercent}%`;
+    } else {
+      gpaDiff = profile.gpa - school.gpaMin;
+      gpaLabel = `GPA ${profile.gpa} / 要求 ${school.gpaMin}`;
+    }
+
+    if (gpaDiff >= 5) { score += 20; reasons.push(`${gpaLabel}，超出要求`); }
+    else if (gpaDiff >= 0) { score += 15; reasons.push(`${gpaLabel}，刚好达标`); }
+    else if (gpaDiff >= -3) { score += 8; reasons.push(`${gpaLabel}，略低于要求`); }
+    else { score += 3; reasons.push(`${gpaLabel}，低于要求较多`); }
 
     // 录取率
     if (school.acceptanceRate >= 30) score += 10;
