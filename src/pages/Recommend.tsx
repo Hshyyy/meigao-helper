@@ -275,10 +275,10 @@ export default function Recommend() {
           return;
         }
         if (maxDecimals > 0 && parts[1].length > maxDecimals) {
-          const corrected = Number(value.toFixed(maxDecimals));
+          const correctedStr = value.toFixed(maxDecimals);
           // 强制刷新：先清空再设置
           update(key, "");
-          setTimeout(() => update(key, corrected), 10);
+          setTimeout(() => update(key, correctedStr), 10);
           showToast(`Chris很chill：${label}最多只能填到小数点后 ${maxDecimals} 位哦~`, true);
           return;
         }
