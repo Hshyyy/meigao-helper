@@ -23,7 +23,7 @@ function SchoolSection({
   onToggleFavorite: (id: number) => void;
   favorites: number[];
   ssatNote?: boolean;
-  profile?: { toefl: number; gpa: number; schoolSize?: string };
+  profile?: { toefl: number; gpa: number; schoolSize?: string[] };
   interests?: string[];
 }) {
   const colorMap = {
@@ -93,7 +93,7 @@ interface StudentProfile {
   maxBudget: number;
   schoolType: string;
   interests: string[];
-  schoolSize: string;
+  schoolSize: string[];
 }
 
 function matchSchools(profile: StudentProfile): MatchResult[] {
@@ -174,10 +174,10 @@ function matchSchools(profile: StudentProfile): MatchResult[] {
     }
 
     // 学校规模（不影响分数，只做标记）
-    const sizeMatch = profile.schoolSize
-      ? (profile.schoolSize === "small" && school.studentCount < 400) ||
-        (profile.schoolSize === "medium" && school.studentCount >= 400 && school.studentCount <= 700) ||
-        (profile.schoolSize === "large" && school.studentCount > 700)
+    const sizeMatch = profile.schoolSize.length > 0
+      ? (profile.schoolSize.includes("small") && school.studentCount < 400) ||
+        (profile.schoolSize.includes("medium") && school.studentCount >= 400 && school.studentCount <= 700) ||
+        (profile.schoolSize.includes("large") && school.studentCount > 700)
       : false;
     if (sizeMatch) {
       reasons.push("学校规模符合偏好");
@@ -210,7 +210,7 @@ function matchSchools(profile: StudentProfile): MatchResult[] {
 
 export default function Recommend() {
   const [profile, setProfile] = useState<StudentProfile>({
-    toefl: 0, ssat: 0, gpa: 0, region: "全部", maxBudget: 0, schoolType: "", interests: [], schoolSize: "",
+    toefl: 0, ssat: 0, gpa: 0, region: "全部", maxBudget: 0, schoolType: "", interests: [], schoolSize: [],
   });
   const [results, setResults] = useState<MatchResult[] | null>(null);
   const [selectedSchool, setSelectedSchool] = useState<School | null>(null);
