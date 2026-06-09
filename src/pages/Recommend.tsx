@@ -344,7 +344,7 @@ export default function Recommend() {
                         <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-medium">✅ 免 SSAT 学校</span>
                         <span className="text-sm text-gray-500">可用 IB/A-Level 成绩替代</span>
                       </div>
-                      <SchoolSection results={ssatFreeSchools} onSelect={setSelectedSchool} onToggleFavorite={toggleFavorite} favorites={favorites} interests={profile.interests} />
+                      <SchoolSection results={ssatFreeSchools} onSelect={setSelectedSchool} onToggleFavorite={toggleFavorite} favorites={favorites} interests={profile.interests} profile={profile} />
                     </section>
                   )}
                   {ssatRequiredSchools.length > 0 && (
@@ -358,7 +358,7 @@ export default function Recommend() {
                   )}
                 </>
               ) : (
-                <SchoolSection results={results} onSelect={setSelectedSchool} onToggleFavorite={toggleFavorite} favorites={favorites} interests={profile.interests} />
+                <SchoolSection results={results} onSelect={setSelectedSchool} onToggleFavorite={toggleFavorite} favorites={favorites} interests={profile.interests} profile={profile} />
               )}
             </div>
           )}
