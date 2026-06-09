@@ -242,7 +242,7 @@ export default function Recommend() {
     setProfile((prev) => ({ ...prev, [key]: value }));
   };
 
-  // 输入验证：超出范围时弹出提示并恢复为最大值
+  // 输入验证：超出范围时弹出提示
   const handleNumberInput = (
     key: keyof StudentProfile,
     value: number,
@@ -256,10 +256,8 @@ export default function Recommend() {
       const str = value.toString();
       const parts = str.split('.');
       if (parts[1] && parts[1].length > maxDecimals) {
-        const rounded = Number(value.toFixed(maxDecimals));
-        showToast(`Chris很chill：${label}只填到小数点后 ${maxDecimals} 位就好啦～`);
-        update(key, rounded);
-        return;
+        showToast(`Chris很chill：${label}${maxDecimals === 0 ? "是整数哦！" : `只填到小数点后 ${maxDecimals} 位就好啦～`}`);
+        return; // 不更新值，保持原样
       }
     }
     if (value > max) {
