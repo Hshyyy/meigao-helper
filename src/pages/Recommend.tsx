@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import { schools } from "../data/schools";
 import type { School } from "../data/schools";
@@ -218,9 +218,15 @@ export default function Recommend() {
     try { return JSON.parse(localStorage.getItem("favorites") || "[]"); } catch { return []; }
   });
   const [toast, setToast] = useState<string | null>(null);
+  const toastCooldown = useRef(false);
 
-  const showToast = (msg: string) => {
+  const showToast = (msg: string, isDecimal?: boolean) => {
+    if (toastCooldown.current) return;
     setToast(msg);
+    if (isDecimal) {
+      toastCooldown.current = true;
+      setTimeout(() => { toastCooldown.current = false; }, 4000);
+    }
     setTimeout(() => setToast(null), 4000);
   };
 
@@ -257,7 +263,7 @@ export default function Recommend() {
       const parts = str.split('.');
       if (parts[1] && parts[1].length > maxDecimals) {
         const corrected = maxDecimals === 0 ? Math.floor(value) : Number(value.toFixed(maxDecimals));
-        showToast(`Chris很chill：${label}${maxDecimals === 0 ? "是整数哦！" : `最多只能填到小数点后 ${maxDecimals} 位哦~`}`);
+        showToast(`Chris很chill：${label}${maxDecimals === 0 ? "是整数哦！" : `最多只能填到小数点后 ${maxDecimals} 位哦~`}`, true);
         update(key, corrected);
         return;
       }
