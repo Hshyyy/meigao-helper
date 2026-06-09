@@ -22,7 +22,7 @@ function SchoolSection({
   onToggleFavorite: (id: number) => void;
   favorites: number[];
   ssatNote?: boolean;
-  profile?: { toefl: number; gpa: number };
+  profile?: { toefl: number; gpa: number; schoolSize?: string };
   interests?: string[];
 }) {
   const colorMap = {
@@ -61,10 +61,9 @@ function SchoolSection({
                   onToggleFavorite={() => onToggleFavorite(r.school.id)}
                 />
                 <p className={`text-xs mt-1 px-1 ${ssatNote ? "text-amber-600" : "text-gray-500"}`}>
-                  {interests && interests.length > 0 && interests.some(i => r.school.tags.some(tag => tag.includes(i))) && (
-                    <span className="text-green-600 mr-1">🎯 兴趣匹配</span>
-                  )}
-                  {r.hasInterestMatch === false && r.sizeMatch === false && interests && interests.length > 0 && (
+                  {r.hasInterestMatch && <span className="text-green-600 mr-1">🎯 兴趣匹配</span>}
+                  {r.sizeMatch && <span className="text-blue-600 mr-1">📏 规模匹配</span>}
+                  {!r.hasInterestMatch && !r.sizeMatch && (interests?.length || profile?.schoolSize) && (
                     <span className="text-gray-400 mr-1">偏好不匹配</span>
                   )}
                   {ssatNote && profile ? (
