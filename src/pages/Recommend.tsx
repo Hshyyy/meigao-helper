@@ -64,9 +64,12 @@ function SchoolSection({
                   {interests && interests.length > 0 && interests.some(i => r.school.tags.some(tag => tag.includes(i))) && (
                     <span className="text-green-600 mr-1">🎯 兴趣匹配</span>
                   )}
+                  {r.hasInterestMatch === false && r.sizeMatch === false && interests && interests.length > 0 && (
+                    <span className="text-gray-400 mr-1">偏好不匹配</span>
+                  )}
                   {ssatNote && profile ? (
                     <>⚠️ 建议 SSAT {r.school.ssatPercentile}%+，你的托福{profile.toefl >= r.school.toeflMin ? "达标" : `差${r.school.toeflMin - profile.toefl}分`}，GPA{profile.gpa >= r.school.gpaMin ? "达标" : `差${(r.school.gpaMin - profile.gpa).toFixed(1)}`}</>
-                  ) : !interests?.length ? r.reason : interests.some(i => r.school.tags.some(tag => tag.includes(i))) ? r.reason : r.reason}
+                  ) : r.reason}
                 </p>
               </div>
             ))}
