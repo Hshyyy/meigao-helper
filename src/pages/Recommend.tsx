@@ -257,20 +257,23 @@ export default function Recommend() {
     label: string,
     maxDecimals?: number
   ) => {
+    // 冷却期内不处理
+    if (toastCooldown.current) return;
+
     // 检查小数位数
     if (maxDecimals !== undefined && value !== 0) {
       const str = value.toString();
       const parts = str.split('.');
       if (parts[1] && parts[1].length > maxDecimals) {
         const corrected = maxDecimals === 0 ? Math.floor(value) : Number(value.toFixed(maxDecimals));
-        showToast(`Chris很chill：${label}${maxDecimals === 0 ? "是整数哦！" : `最多只能填到小数点后 ${maxDecimals} 位哦~`}`, true);
         update(key, corrected);
+        showToast(`Chris很chill：${label}${maxDecimals === 0 ? "是整数哦！" : `最多只能填到小数点后 ${maxDecimals} 位哦~`}`, true);
         return;
       }
     }
     if (value > max) {
-      showToast(`Chris提醒你：${label}满分 ${max}，超过就牛逼过头咯～`);
       update(key, max);
+      showToast(`Chris提醒你：${label}满分 ${max}，超过就牛逼过头咯～`);
     } else if (value < min && value !== 0) {
       showToast(`Chris提醒你：${label}不能低于 ${min} 哦～`);
       update(key, min);
