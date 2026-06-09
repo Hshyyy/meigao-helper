@@ -255,21 +255,28 @@ export default function Recommend() {
     min: number,
     max: number,
     label: string,
-    maxDecimals?: number
+    maxDecimals?: number,
+    rawValue?: string
   ) => {
     // 冷却期内不处理
     if (toastCooldown.current) return;
 
-    // 检查小数位数
-    if (maxDecimals !== undefined && value !== 0) {
-      const str = value.toString();
-      const parts = str.split('.');
-      // 有小数部分且长度超过限制，或者是整数限制但输入了小数点
-      if (parts[1] && (parts[1].length > maxDecimals || (maxDecimals === 0 && parts[1].length > 0))) {
-        const corrected = maxDecimals === 0 ? Math.floor(value) : Number(value.toFixed(maxDecimals));
-        update(key, corrected);
-        showToast(`Chris很chill：${label}${maxDecimals === 0 ? "是整数哦！" : `最多只能填到小数点后 ${maxDecimals} 位哦~`}`, true);
-        return;
+    // 检查小数位数（用原始字符串判断）
+    if (maxDecimals !== undefined && rawValue) {
+      const parts = rawValue.split('.');
+      if (parts[1] !== undefined) {
+        if (maxDecimals === 0 && parts[1].length > 0) {
+          const corrected = Math.floor(value);
+          update(key, corrected);
+          showToast(`Chris很chill：${label}是整数哦！`, true);
+          return;
+        }
+        if (maxDecimals > 0 && parts[1].length > maxDecimals) {
+          const corrected = Number(value.toFixed(maxDecimals));
+          update(key, corrected);
+          showToast(`Chris很chill：${label}最多只能填到小数点后 ${maxDecimals} 位哦~`, true);
+          return;
+        }
       }
     }
     if (value > max) {
@@ -304,12 +311,12 @@ export default function Recommend() {
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">托福成绩（0-120）</label>
-                <input type="number" min={0} max={120} value={profile.toefl || ""} onChange={(e) => handleNumberInput("toefl", Number(e.target.value), 0, 120, "托福成绩", 0)} placeholder="例如：100" className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm" required />
+                <input type="number" min={0} max={120} value={profile.toefl || ""} onChange={(e) => handleNumberInput("toefl", Number(e.target.value), 0, 120, "托福成绩", 0, e.target.value)} placeholder="例如：100" className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm" required />
                 <p className="text-xs text-gray-400 mt-1">💡 顶尖校建议 105+，优秀校建议 95+，热门校建议 85+</p>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">SSAT 百分位（0-99）</label>
-                <input type="number" min={0} max={99} value={profile.ssat || ""} onChange={(e) => handleNumberInput("ssat", Number(e.target.value), 0, 99, "SSAT 百分位", 0)} placeholder={canSkipSSAT ? "不填则免 SSAT 学校优先" : "例如：85"} className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm" required={!canSkipSSAT} />
+                <input type="number" min={0} max={99} value={profile.ssat || ""} onChange={(e) => handleNumberInput("ssat", Number(e.target.value), 0, 99, "SSAT 百分位", 0, e.target.value)} placeholder={canSkipSSAT ? "不填则免 SSAT 学校优先" : "例如：85"} className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm" required={!canSkipSSAT} />
                 <p className="text-xs text-gray-400 mt-1">
                   {profile.schoolType === "ib" ? "💡 部分学校接受 IB 成绩替代 SSAT" : profile.schoolType === "alevel" ? "💡 部分学校接受 GCSE 替代 SSAT" : "💡 百分位指你超过了百分之多少的考生，顶尖校建议 90%+"}
                 </p>
@@ -329,7 +336,7 @@ export default function Recommend() {
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   {profile.schoolType === "public" ? "成绩估算百分比（%）" : "GPA（0-4.0）"}
                 </label>
-                <input type="number" min={0} max={profile.schoolType === "public" ? 100 : 4} step={profile.schoolType === "public" ? 0.01 : 0.1} value={profile.gpa || ""} onChange={(e) => handleNumberInput("gpa", Number(e.target.value), 0, profile.schoolType === "public" ? 100 : 4, profile.schoolType === "public" ? "成绩百分比" : "GPA", profile.schoolType === "public" ? 2 : 1)} placeholder={profile.schoolType === "public" ? "例如：88.5" : "例如：3.5"} className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm" required />
+                <input type="number" min={0} max={profile.schoolType === "public" ? 100 : 4} step={profile.schoolType === "public" ? 0.01 : 0.1} value={profile.gpa || ""} onChange={(e) => handleNumberInput("gpa", Number(e.target.value), 0, profile.schoolType === "public" ? 100 : 4, profile.schoolType === "public" ? "成绩百分比" : "GPA", profile.schoolType === "public" ? 2 : 1, e.target.value)} placeholder={profile.schoolType === "public" ? "例如：88.5" : "例如：3.5"} className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm" required />
                 <p className="text-xs text-gray-400 mt-1">
                   {profile.schoolType === "public" ? "💡 按实际成绩填写，顶尖校建议 90%+，优秀校建议 85%+" : "💡 4.0 为满分，顶尖校建议 3.7+，优秀校建议 3.5+"}
                 </p>
