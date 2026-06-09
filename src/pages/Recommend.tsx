@@ -234,7 +234,7 @@ export default function Recommend() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!profile.schoolType) { showToast("Chris提醒你：还没选学校类型呢～"); return; }
+    if (!profile.schoolType) { showToast("Chris说：你忘记告诉哥你学的是啥体系的啦！"); return; }
     setResults(matchSchools(profile));
   };
 
@@ -449,7 +449,7 @@ export default function Recommend() {
 
       {/* Toast 提示 */}
       {toast && (
-        <div className="fixed top-20 left-1/2 -translate-x-1/2 bg-gray-800 text-white px-5 py-3 rounded-lg shadow-lg z-50 text-sm max-w-md animate-fade-in">
+        <div className="fixed top-20 left-1/2 -translate-x-1/2 bg-gray-800 text-white px-5 py-3 rounded-lg shadow-lg z-50 text-sm animate-fade-in whitespace-nowrap">
           {toast}
         </div>
       )}
