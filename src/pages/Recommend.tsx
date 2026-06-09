@@ -257,7 +257,7 @@ export default function Recommend() {
       const parts = str.split('.');
       if (parts[1] && parts[1].length > maxDecimals) {
         const corrected = maxDecimals === 0 ? Math.floor(value) : Number(value.toFixed(maxDecimals));
-        showToast(`Chris很chill：${label}${maxDecimals === 0 ? "是整数哦！" : `只填到小数点后 ${maxDecimals} 位就好啦～`}`);
+        showToast(`Chris很chill：${label}${maxDecimals === 0 ? "是整数哦！" : `最多只能填到小数点后 ${maxDecimals} 位哦~`}`);
         update(key, corrected);
         return;
       }
@@ -319,7 +319,7 @@ export default function Recommend() {
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   {profile.schoolType === "public" ? "成绩估算百分比（%）" : "GPA（0-4.0）"}
                 </label>
-                <input type="number" min={0} max={profile.schoolType === "public" ? 100 : 4} step={profile.schoolType === "public" ? 1 : 0.1} value={profile.gpa || ""} onChange={(e) => handleNumberInput("gpa", Number(e.target.value), 0, profile.schoolType === "public" ? 100 : 4, profile.schoolType === "public" ? "成绩百分比" : "GPA", profile.schoolType === "public" ? 0 : 1)} placeholder={profile.schoolType === "public" ? "例如：88" : "例如：3.5"} className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm" required />
+                <input type="number" min={0} max={profile.schoolType === "public" ? 100 : 4} step={profile.schoolType === "public" ? 0.01 : 0.1} value={profile.gpa || ""} onChange={(e) => handleNumberInput("gpa", Number(e.target.value), 0, profile.schoolType === "public" ? 100 : 4, profile.schoolType === "public" ? "成绩百分比" : "GPA", profile.schoolType === "public" ? 2 : 1)} placeholder={profile.schoolType === "public" ? "例如：88.5" : "例如：3.5"} className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm" required />
                 <p className="text-xs text-gray-400 mt-1">
                   {profile.schoolType === "public" ? "💡 按实际成绩填写，顶尖校建议 90%+，优秀校建议 85%+" : "💡 4.0 为满分，顶尖校建议 3.7+，优秀校建议 3.5+"}
                 </p>
