@@ -67,7 +67,7 @@ function SchoolSection({
                       ? <span className="text-green-600 mr-1">🎯 兴趣匹配</span>
                       : <span className="text-red-400 mr-1">❌ 兴趣不匹配</span>
                   )}
-                  {profile?.schoolSize && (
+                  {profile?.schoolSize && profile.schoolSize.length > 0 && (
                     r.sizeMatch
                       ? <span className="text-blue-600 mr-1">📏 规模匹配</span>
                       : <span className="text-red-400 mr-1">❌ 规模不匹配</span>
