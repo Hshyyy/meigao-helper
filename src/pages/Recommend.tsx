@@ -259,13 +259,7 @@ export default function Recommend() {
     maxDecimals?: number,
     rawValue?: string
   ) => {
-    // 冷却期内只允许删除（值变小），不允许新增
-    if (toastCooldown.current) {
-      const currentValue = Number(profile[key]) || 0;
-      if (value >= currentValue) return; // 不允许增大，允许减小
-    }
-
-    // 检查小数位数（用原始字符串判断）
+    // 1. 先检查小数位数（优先级最高，不受冷却期影响）
     if (maxDecimals !== undefined && rawValue) {
       const parts = rawValue.split('.');
       if (parts[1] !== undefined) {
@@ -287,6 +281,13 @@ export default function Recommend() {
         }
       }
     }
+
+    // 2. 冷却期内只允许删除（值变小），不允许新增
+    if (toastCooldown.current) {
+      const currentValue = Number(profile[key]) || 0;
+      if (value >= currentValue) return;
+    }
+
     if (value > max) {
       update(key, max);
       showToast(`Chris提醒你：${label}满分 ${max}，超过就牛逼过头咯～`);
