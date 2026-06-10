@@ -264,7 +264,9 @@ export default function Recommend() {
       const parts = rawValue.split('.');
       if (parts[1] !== undefined && parts[1].length > maxDecimals) {
         const corrected = maxDecimals === 0 ? Math.floor(value) : Number(value.toFixed(maxDecimals));
-        update(key, corrected);
+        // 强制刷新：先设为空字符串再设为修正值
+        update(key, "");
+        requestAnimationFrame(() => update(key, corrected));
         showToast(`Chris很chill：${label}${maxDecimals === 0 ? "是整数哦！" : `最多只能填到小数点后 ${maxDecimals} 位哦~`}`, true);
         return;
       }
