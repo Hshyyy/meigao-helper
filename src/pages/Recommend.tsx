@@ -265,10 +265,10 @@ export default function Recommend() {
       if (parts[1] !== undefined && parts[1].length > maxDecimals) {
         const corrected = maxDecimals === 0 ? Math.floor(value) : Number(value.toFixed(maxDecimals));
         update(key, corrected);
-        // 小数修正启动冷却期，防止连点触发最大值提示
+        // 先显示提示，再启动冷却期
+        showToast(`Chris很chill：${label}${maxDecimals === 0 ? "是整数哦！" : `最多只能填到小数点后 ${maxDecimals} 位哦~`}`);
         toastCooldown.current = true;
         setTimeout(() => { toastCooldown.current = false; }, 4000);
-        showToast(`Chris很chill：${label}${maxDecimals === 0 ? "是整数哦！" : `最多只能填到小数点后 ${maxDecimals} 位哦~`}`);
         return;
       }
     }
