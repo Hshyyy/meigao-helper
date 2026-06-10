@@ -272,13 +272,7 @@ export default function Recommend() {
       }
     }
 
-    // 2. 冷却期内只允许删除
-    if (toastCooldown.current) {
-      const currentValue = Number(profile[key]) || 0;
-      if (value >= currentValue) return;
-    }
-
-    // 3. 范围检查
+    // 2. 范围检查
     if (value > max) {
       update(key, max);
       showToast(`Chris提醒你：${label}满分 ${max}，超过就牛逼过头咯～`);
