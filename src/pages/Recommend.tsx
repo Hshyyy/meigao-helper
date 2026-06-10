@@ -264,15 +264,20 @@ export default function Recommend() {
       const parts = rawValue.split('.');
       if (parts[1] !== undefined && parts[1].length > maxDecimals) {
         const corrected = maxDecimals === 0 ? Math.floor(value) : Number(value.toFixed(maxDecimals));
-        // 强制刷新：先设为空字符串再设为修正值
+        // 强制刷新并启动冷却期
         update(key, "");
         requestAnimationFrame(() => update(key, corrected));
-        showToast(`Chris很chill：${label}${maxDecimals === 0 ? "是整数哦！" : `最多只能填到小数点后 ${maxDecimals} 位哦~`}`, true);
+        toastCooldown.current = true;
+        setTimeout(() => { toastCooldown.current = false; }, 4000);
+        showToast(`Chris很chill：${label}${maxDecimals === 0 ? "是整数哦！" : `最多只能填到小数点后 ${maxDecimals} 位哦~`}`);
         return;
       }
     }
 
-    // 2. 范围检查
+    // 2. 冷却期内不处理范围检查
+    if (toastCooldown.current) return;
+
+    // 3. 范围检查
     if (value > max) {
       update(key, max);
       showToast(`Chris提醒你：${label}满分 ${max}，超过就牛逼过头咯～`);
