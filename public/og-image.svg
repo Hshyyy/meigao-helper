@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3B82F6"/>
+      <stop offset="100%" style="stop-color:#8B5CF6"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <text x="600" y="250" font-family="Arial, sans-serif" font-size="80" fill="white" text-anchor="middle" font-weight="bold">🎓 美高选校助手</text>
+  <text x="600" y="350" font-family="Arial, sans-serif" font-size="40" fill="white" text-anchor="middle">智能匹配美国寄宿高中</text>
+  <text x="600" y="420" font-family="Arial, sans-serif" font-size="30" fill="rgba(255,255,255,0.8)" text-anchor="middle">帮你找到最适合的学校</text>
+</svg>
