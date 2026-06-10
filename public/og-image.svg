@@ -1,17 +1,15 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
   <defs>
-    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#1E3A8A"/>
-      <stop offset="50%" style="stop-color:#1E40AF"/>
-      <stop offset="100%" style="stop-color:#7C3AED"/>
-    </linearGradient>
     <pattern id="dots" width="30" height="30" patternUnits="userSpaceOnUse">
-      <circle cx="15" cy="15" r="1.5" fill="rgba(255,255,255,0.08)"/>
+      <circle cx="15" cy="15" r="1.5" fill="rgba(255,255,255,0.05)"/>
     </pattern>
   </defs>
 
-  <!-- 背景 -->
-  <rect width="1200" height="630" fill="url(#bg)"/>
+  <!-- 背景图片 -->
+  <image href="/bg.jpg" width="1200" height="630" preserveAspectRatio="xMidYMid slice"/>
+
+  <!-- 半透明遮罩（让文字清晰） -->
+  <rect width="1200" height="630" fill="rgba(0,0,0,0.55)"/>
   <rect width="1200" height="630" fill="url(#dots)"/>
 
   <!-- 装饰线条 -->
@@ -36,7 +34,7 @@
   <text x="600" y="250" font-family="Arial, sans-serif" font-size="85" fill="white" text-anchor="middle" font-weight="bold">🎓 美高选校助手</text>
 
   <!-- 副标题 -->
-  <text x="600" y="320" font-family="Arial, sans-serif" font-size="36" fill="rgba(255,255,255,0.85)" text-anchor="middle">智能匹配美国寄宿高中</text>
+  <text x="600" y="320" font-family="Arial, sans-serif" font-size="36" fill="rgba(255,255,255,0.9)" text-anchor="middle">智能匹配美国寄宿高中</text>
 
   <!-- 分隔线 -->
   <line x1="300" y1="350" x2="900" y2="350" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
