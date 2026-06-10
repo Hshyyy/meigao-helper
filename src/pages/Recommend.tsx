@@ -259,8 +259,11 @@ export default function Recommend() {
     maxDecimals?: number,
     rawValue?: string
   ) => {
-    // 冷却期内不处理
-    if (toastCooldown.current) return;
+    // 冷却期内只允许删除（值变小），不允许新增
+    if (toastCooldown.current) {
+      const currentValue = Number(profile[key]) || 0;
+      if (value >= currentValue) return; // 不允许增大，允许减小
+    }
 
     // 检查小数位数（用原始字符串判断）
     if (maxDecimals !== undefined && rawValue) {
