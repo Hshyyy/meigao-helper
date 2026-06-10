@@ -259,14 +259,13 @@ export default function Recommend() {
     maxDecimals?: number,
     rawValue?: string
   ) => {
-    // 1. 检查小数位数（最高优先级，不受冷却期限制）
+    // 1. 检查小数位数（最高优先级）
     if (maxDecimals !== undefined && rawValue && rawValue.includes('.')) {
       const parts = rawValue.split('.');
       if (parts[1] !== undefined && parts[1].length > maxDecimals) {
         const corrected = maxDecimals === 0 ? Math.floor(value) : Number(value.toFixed(maxDecimals));
-        // 强制刷新并启动冷却期
-        update(key, "");
-        requestAnimationFrame(() => update(key, corrected));
+        update(key, corrected);
+        // 小数修正启动冷却期，防止连点触发最大值提示
         toastCooldown.current = true;
         setTimeout(() => { toastCooldown.current = false; }, 4000);
         showToast(`Chris很chill：${label}${maxDecimals === 0 ? "是整数哦！" : `最多只能填到小数点后 ${maxDecimals} 位哦~`}`);
@@ -274,16 +273,13 @@ export default function Recommend() {
       }
     }
 
-    // 2. 冷却期内不处理范围检查
-    if (toastCooldown.current) return;
-
-    // 3. 范围检查
+    // 2. 范围检查（冷却期内只更新值，不弹提示）
     if (value > max) {
       update(key, max);
-      showToast(`Chris提醒你：${label}满分 ${max}，超过就牛逼过头咯～`);
+      if (!toastCooldown.current) showToast(`Chris提醒你：${label}满分 ${max}，超过就牛逼过头咯～`);
     } else if (value < min && value !== 0) {
-      showToast(`Chris提醒你：${label}不能低于 ${min} 哦～`);
       update(key, min);
+      if (!toastCooldown.current) showToast(`Chris提醒你：${label}不能低于 ${min} 哦～`);
     } else {
       update(key, value);
     }
