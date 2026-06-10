@@ -40,7 +40,7 @@
   <line x1="300" y1="350" x2="900" y2="350" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
 
   <!-- 描述文字 -->
-  <text x="600" y="420" font-family="Arial, sans-serif" font-size="30" fill="#FCD34D" text-anchor="middle">帮你找到适合你的学校，给你Hshy的建议</text>
+  <text x="600" y="420" font-family="Arial, sans-serif" font-size="30" fill="#FCD34D" text-anchor="middle">帮你找到适合你的学校，给你Hshy的建议与规划</text>
   <text x="600" y="470" font-family="Arial, sans-serif" font-size="30" fill="#FCD34D" text-anchor="middle">助力你成功圆梦！！！</text>
 
   <!-- 底部标语 -->
