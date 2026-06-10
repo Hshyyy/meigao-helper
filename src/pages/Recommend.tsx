@@ -306,12 +306,12 @@ export default function Recommend() {
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">托福成绩（0-120）</label>
-                <input type="text" inputMode="numeric" value={profile.toefl || ""} onChange={(e) => handleNumberInput("toefl", Number(e.target.value) || 0, 0, 120, "托福成绩", 0, e.target.value)} onBlur={(e) => { if (e.target.value && Number(e.target.value) > 120) { update("toefl", 120); showToast("Chris提醒你：托福满分 120，超过就牛逼过头咯～"); } }} placeholder="例如：100" className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm" required />
+                <input type="text" inputMode="decimal" value={profile.toefl || ""} onChange={(e) => handleNumberInput("toefl", Number(e.target.value) || 0, 0, 120, "托福成绩", 0, e.target.value)} placeholder="例如：100" className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm" required />
                 <p className="text-xs text-gray-400 mt-1">💡 顶尖校建议 105+，优秀校建议 95+，热门校建议 85+</p>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">SSAT 百分位（0-99）</label>
-                <input type="text" inputMode="numeric" value={profile.ssat || ""} onChange={(e) => handleNumberInput("ssat", Number(e.target.value) || 0, 0, 99, "SSAT 百分位", 0, e.target.value)} onBlur={(e) => { if (e.target.value && Number(e.target.value) > 99) { update("ssat", 99); showToast("Chris提醒你：SSAT 百分位满分 99，超过就牛逼过头咯～"); } }} placeholder={canSkipSSAT ? "不填则免 SSAT 学校优先" : "例如：85"} className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm" required={!canSkipSSAT} />
+                <input type="text" inputMode="decimal" value={profile.ssat || ""} onChange={(e) => handleNumberInput("ssat", Number(e.target.value) || 0, 0, 99, "SSAT 百分位", 0, e.target.value)} placeholder={canSkipSSAT ? "不填则免 SSAT 学校优先" : "例如：85"} className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm" required={!canSkipSSAT} />
                 <p className="text-xs text-gray-400 mt-1">
                   {profile.schoolType === "ib" ? "💡 部分学校接受 IB 成绩替代 SSAT" : profile.schoolType === "alevel" ? "💡 部分学校接受 GCSE 替代 SSAT" : "💡 百分位指你超过了百分之多少的考生，顶尖校建议 90%+"}
                 </p>
