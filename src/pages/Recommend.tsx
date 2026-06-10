@@ -244,9 +244,12 @@ export default function Recommend() {
     e.preventDefault();
     if (!profile.schoolType) { showToast("Chris说：你忘记告诉哥你学的是啥体系的啦！"); return; }
     setResults(matchSchools(profile));
-    // 自动滚动到结果区域
+    // 自动滚动到结果区域（带偏移，避免标题被挡住）
     setTimeout(() => {
-      resultsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      if (resultsRef.current) {
+        const top = resultsRef.current.getBoundingClientRect().top + window.scrollY - 80;
+        window.scrollTo({ top, behavior: "smooth" });
+      }
     }, 100);
   };
 
