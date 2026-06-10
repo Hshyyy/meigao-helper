@@ -259,35 +259,24 @@ export default function Recommend() {
     maxDecimals?: number,
     rawValue?: string
   ) => {
-    // 1. 先检查小数位数（优先级最高，不受冷却期影响）
-    if (maxDecimals !== undefined && rawValue) {
+    // 1. 检查小数位数（最高优先级，不受冷却期限制）
+    if (maxDecimals !== undefined && rawValue && rawValue.includes('.')) {
       const parts = rawValue.split('.');
-      if (parts[1] !== undefined) {
-        if (maxDecimals === 0 && parts[1].length > 0) {
-          const corrected = Math.floor(value);
-          update(key, corrected);
-          toastCooldown.current = true;
-          setTimeout(() => { toastCooldown.current = false; }, 4000);
-          showToast(`Chris很chill：${label}是整数哦！`, true);
-          return;
-        }
-        if (maxDecimals > 0 && parts[1].length > maxDecimals) {
-          const corrected = Number(value.toFixed(maxDecimals));
-          update(key, corrected);
-          toastCooldown.current = true;
-          setTimeout(() => { toastCooldown.current = false; }, 4000);
-          showToast(`Chris很chill：${label}最多只能填到小数点后 ${maxDecimals} 位哦~`, true);
-          return;
-        }
+      if (parts[1] !== undefined && parts[1].length > maxDecimals) {
+        const corrected = maxDecimals === 0 ? Math.floor(value) : Number(value.toFixed(maxDecimals));
+        update(key, corrected);
+        showToast(`Chris很chill：${label}${maxDecimals === 0 ? "是整数哦！" : `最多只能填到小数点后 ${maxDecimals} 位哦~`}`, true);
+        return;
       }
     }
 
-    // 2. 冷却期内只允许删除（值变小），不允许新增
+    // 2. 冷却期内只允许删除
     if (toastCooldown.current) {
       const currentValue = Number(profile[key]) || 0;
       if (value >= currentValue) return;
     }
 
+    // 3. 范围检查
     if (value > max) {
       update(key, max);
       showToast(`Chris提醒你：${label}满分 ${max}，超过就牛逼过头咯～`);
