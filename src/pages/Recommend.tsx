@@ -218,6 +218,7 @@ export default function Recommend() {
   const [favorites, setFavorites] = useState<number[]>(() => {
     try { return JSON.parse(localStorage.getItem("favorites") || "[]"); } catch { return []; }
   });
+  const resultsRef = useRef<HTMLDivElement>(null);
   const [toast, setToast] = useState<string | null>(null);
   const toastCooldown = useRef(false);
 
@@ -243,6 +244,10 @@ export default function Recommend() {
     e.preventDefault();
     if (!profile.schoolType) { showToast("Chris说：你忘记告诉哥你学的是啥体系的啦！"); return; }
     setResults(matchSchools(profile));
+    // 自动滚动到结果区域
+    setTimeout(() => {
+      resultsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 100);
   };
 
   const update = (key: keyof StudentProfile, value: string | number | string[]) => {
@@ -426,7 +431,7 @@ export default function Recommend() {
           </form>
         </div>
 
-        <div className="lg:col-span-2">
+        <div className="lg:col-span-2" ref={resultsRef}>
           {results === null ? (
             <div className="text-center py-20 text-gray-400">
               <p className="text-5xl mb-4">🎯</p>
