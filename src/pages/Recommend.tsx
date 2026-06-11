@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { schools } from "../data/schools";
 import type { School } from "../data/schools";
@@ -221,6 +221,11 @@ export default function Recommend() {
   const resultsRef = useRef<HTMLDivElement>(null);
   const [toast, setToast] = useState<string | null>(null);
   const toastCooldown = useRef(false);
+
+  // 页面加载时滚动到顶部
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const showToast = (msg: string, isDecimal?: boolean) => {
     if (toastCooldown.current) return;
