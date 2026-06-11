@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 
 const playlist = [
   { name: "JULY", artist: "JULY", file: "/music/JULY.FLAC" },
@@ -15,62 +15,95 @@ export default function MusicPlayer() {
   const [currentTrack, setCurrentTrack] = useState(0);
   const [volume, setVolume] = useState(0.3);
   const [showList, setShowList] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
+  // 同步音频状态
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    const handlePlay = () => setIsPlaying(true);
+    const handlePause = () => setIsPlaying(false);
+    const handleEnded = () => nextTrack();
+    const handleLoadStart = () => setIsLoading(true);
+    const handleCanPlay = () => setIsLoading(false);
+
+    audio.addEventListener("play", handlePlay);
+    audio.addEventListener("pause", handlePause);
+    audio.addEventListener("ended", handleEnded);
+    audio.addEventListener("loadstart", handleLoadStart);
+    audio.addEventListener("canplay", handleCanPlay);
+
+    return () => {
+      audio.removeEventListener("play", handlePlay);
+      audio.removeEventListener("pause", handlePause);
+      audio.removeEventListener("ended", handleEnded);
+      audio.removeEventListener("loadstart", handleLoadStart);
+      audio.removeEventListener("canplay", handleCanPlay);
+    };
+  }, []);
+
+  // 设置音量
   useEffect(() => {
     if (audioRef.current) {
       audioRef.current.volume = volume;
     }
   }, [volume]);
 
-  const togglePlay = () => {
-    if (audioRef.current) {
-      if (isPlaying) {
-        audioRef.current.pause();
-        setIsPlaying(false);
-      } else {
-        audioRef.current.play().then(() => {
-          setIsPlaying(true);
-        }).catch(() => {
-          setIsPlaying(false);
-        });
-      }
-    }
-  };
+  // 播放/暂停切换
+  const togglePlay = useCallback(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
 
-  const playTrack = (index: number) => {
-    setCurrentTrack(index);
-    if (audioRef.current) {
-      audioRef.current.src = playlist[index].file;
-      audioRef.current.play().then(() => {
-        setIsPlaying(true);
-      }).catch(() => {
+    if (isPlaying) {
+      audio.pause();
+    } else {
+      audio.play().catch((err) => {
+        console.log("播放失败:", err);
         setIsPlaying(false);
       });
     }
-  };
+  }, [isPlaying]);
 
-  const nextTrack = () => {
+  // 播放指定歌曲
+  const playTrack = useCallback((index: number) => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    setCurrentTrack(index);
+    audio.src = playlist[index].file;
+    audio.load();
+    audio.play().catch((err) => {
+      console.log("播放失败:", err);
+      setIsPlaying(false);
+    });
+  }, []);
+
+  // 下一首
+  const nextTrack = useCallback(() => {
     const next = (currentTrack + 1) % playlist.length;
     playTrack(next);
-  };
+  }, [currentTrack, playTrack]);
 
-  const prevTrack = () => {
+  // 上一首
+  const prevTrack = useCallback(() => {
     const prev = (currentTrack - 1 + playlist.length) % playlist.length;
     playTrack(prev);
-  };
+  }, [currentTrack, playTrack]);
 
   return (
     <div className="relative">
-      <audio ref={audioRef} src={playlist[currentTrack].file} onEnded={nextTrack} />
+      <audio ref={audioRef} src={playlist[currentTrack].file} preload="auto" />
 
       {/* 播放器控制 */}
       <div className="bg-white/20 backdrop-blur-sm rounded-full shadow-lg border border-white/30 p-2 flex items-center gap-2">
-        {/* 播放/暂停 */}
+        {/* 播放/暂停按钮 */}
         <button
           onClick={togglePlay}
-          className="w-10 h-10 flex items-center justify-center bg-white/30 text-white rounded-full hover:bg-white/50 transition-colors"
+          disabled={isLoading}
+          className="w-10 h-10 flex items-center justify-center bg-white/30 text-white rounded-full hover:bg-white/50 transition-colors disabled:opacity-50"
         >
-          {isPlaying ? "⏸" : "▶"}
+          {isLoading ? "⏳" : isPlaying ? "⏸" : "▶"}
         </button>
 
         {/* 歌曲信息 */}
@@ -125,7 +158,10 @@ export default function MusicPlayer() {
           {playlist.map((track, index) => (
             <button
               key={index}
-              onClick={() => playTrack(index)}
+              onClick={() => {
+                playTrack(index);
+                setShowList(false);
+              }}
               className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ${
                 index === currentTrack
                   ? "bg-blue-50 text-blue-600"
