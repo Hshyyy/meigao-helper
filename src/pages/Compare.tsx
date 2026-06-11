@@ -260,8 +260,57 @@ export default function Compare() {
           </p>
         </div>
       ) : (
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-x-auto">
-          <table className="w-full">
+        <>
+          {/* 手机端卡片式布局 */}
+          <div className="md:hidden space-y-4">
+            {compareSchools.map((school) => {
+              const housingChoice = getHousingChoice(school);
+              const cost = calcCost(school, housingChoice);
+              return (
+                <div key={school.id} className="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
+                  <div className="flex items-center justify-between mb-3">
+                    <button
+                      onClick={() => setSelectedSchool(school)}
+                      className="font-semibold text-gray-900 hover:text-blue-600"
+                    >
+                      {school.nameCn}
+                    </button>
+                    <button
+                      onClick={() => removeSchool(school.id)}
+                      className="text-xs text-red-400 hover:text-red-600"
+                    >
+                      移除
+                    </button>
+                  </div>
+                  <div className="space-y-2 text-sm">
+                    <div className="flex justify-between"><span className="text-gray-500">排名</span><span>#{school.ranking}</span></div>
+                    <div className="flex justify-between"><span className="text-gray-500">梯队</span><span>{school.rankingTier}</span></div>
+                    <div className="flex justify-between"><span className="text-gray-500">住宿</span><span>{school.type === "寄宿" ? "纯寄宿" : school.type === "寄宿/走读" ? "寄宿/走读" : "纯走读"}</span></div>
+                    <div className="flex justify-between"><span className="text-gray-500">学费</span><span>${school.tuition.toLocaleString()}</span></div>
+                    <div className="flex justify-between"><span className="text-gray-500">年度总费用</span><span className="font-semibold text-blue-600">${cost.toLocaleString()}</span></div>
+                    <div className="flex justify-between"><span className="text-gray-500">录取率</span><span>{school.acceptanceRate}%</span></div>
+                    <div className="flex justify-between"><span className="text-gray-500">国际生</span><span>{school.internationalRate}%</span></div>
+                    <div className="flex justify-between"><span className="text-gray-500">TOEFL</span><span>{school.toeflMin}+</span></div>
+                    <div className="flex justify-between"><span className="text-gray-500">SSAT</span><span>{school.ssatPercentile}%+</span></div>
+                    <div className="flex justify-between"><span className="text-gray-500">GPA</span><span>{school.gpaMin}+</span></div>
+                    <div className="flex justify-between"><span className="text-gray-500">学生人数</span><span>{school.studentCount} 人</span></div>
+                    <div className="flex justify-between"><span className="text-gray-500">师生比</span><span>{school.studentTeacherRatio}</span></div>
+                    <div className="flex justify-between"><span className="text-gray-500">年级</span><span>{school.grades}</span></div>
+                    <div className="flex justify-between"><span className="text-gray-500">地区</span><span>{school.state}</span></div>
+                    <div className="flex flex-wrap gap-1 mt-2">
+                      {school.tags.map((tag) => (
+                        <span key={tag} className="bg-blue-50 text-blue-600 text-xs px-2 py-0.5 rounded">{tag}</span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* 桌面端表格布局 */}
+          <div className="hidden md:block bg-white rounded-xl shadow-sm border border-gray-200 overflow-x-auto">
+            <table className="w-full">
             <thead>
               <tr className="border-b border-gray-100">
                 <th className="text-left p-4 text-sm font-medium text-gray-500 w-32">
@@ -396,6 +445,7 @@ export default function Compare() {
             💡 可为混合型学校选择不同住宿方式，费用会自动重新计算。点击学校名称查看详情。
           </div>
         </div>
+        </>
       )}
 
       {selectedSchool && (
