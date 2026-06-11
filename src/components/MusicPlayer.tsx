@@ -1,12 +1,12 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 
 const playlist = [
-  { name: "JULY", artist: "JULY", file: "/music/JULY.FLAC" },
-  { name: "Bad Girl", artist: "Unknown", file: "/music/Bad Girl.FLAC" },
-  { name: "November Rain", artist: "Guns N' Roses", file: "/music/November Rain.FLAC" },
-  { name: "The Way I Still Love You", artist: "Reynard Silva", file: "/music/Reynard Silva - The Way I Still Love You.flac" },
-  { name: "ONLY LOOK AT ME", artist: "TAEYANG", file: "/music/TAEYANG - ONLY LOOK AT ME.flac" },
-  { name: "Work", artist: "Drake ft. Rihanna", file: "/music/Drake、Derra、Rihanna - Work (Derra Flip).mp3" },
+  { name: "JULY", artist: "JULY", file: "/music/JULY.FLAC", cover: "/music/covers/JULY.jpg" },
+  { name: "Bad Girl", artist: "Unknown", file: "/music/Bad Girl.FLAC", cover: "/music/covers/Bad Girl.jpg" },
+  { name: "November Rain", artist: "Guns N' Roses", file: "/music/November Rain.FLAC", cover: "/music/covers/November Rain.jpg" },
+  { name: "The Way I Still Love You", artist: "Reynard Silva", file: "/music/Reynard Silva - The Way I Still Love You.flac", cover: "/music/covers/The Way.jpg" },
+  { name: "ONLY LOOK AT ME", artist: "TAEYANG", file: "/music/TAEYANG - ONLY LOOK AT ME.flac", cover: "/music/covers/ONLY LOOK.jpg" },
+  { name: "Work", artist: "Drake ft. Rihanna", file: "/music/Drake、Derra、Rihanna - Work (Derra Flip).mp3", cover: "/music/covers/Work.jpg" },
 ];
 
 export default function MusicPlayer() {
@@ -97,6 +97,13 @@ export default function MusicPlayer() {
 
       {/* 播放器控制 */}
       <div className="bg-white/20 backdrop-blur-sm rounded-full shadow-lg border border-white/30 p-2 flex items-center gap-2">
+        {/* 封面图 */}
+        <img
+          src={playlist[currentTrack].cover}
+          alt={playlist[currentTrack].name}
+          className="w-10 h-10 rounded-full object-cover"
+        />
+
         {/* 播放/暂停按钮 */}
         <button
           onClick={togglePlay}
@@ -169,7 +176,11 @@ export default function MusicPlayer() {
               }`}
             >
               <div className="flex items-center gap-2">
-                <span>{index === currentTrack && isPlaying ? "▶" : "🎵"}</span>
+                <img
+                  src={track.cover}
+                  alt={track.name}
+                  className="w-8 h-8 rounded object-cover"
+                />
                 <div>
                   <p className="font-medium">{track.name}</p>
                   <p className="text-xs text-gray-400">{track.artist}</p>
