@@ -5,7 +5,6 @@ interface Track {
   artist: string;
   file: string;
   cover: string;
-  climax?: number; // 高潮部分开始时间（秒）
 }
 
 const playlist: Track[] = [
@@ -185,11 +184,6 @@ export default function MusicPlayer() {
   // 计算进度百分比
   const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
 
-  // 计算高潮标记位置
-  const climaxPosition = playlist[currentTrack]?.climax && duration > 0
-    ? (playlist[currentTrack].climax! / duration) * 100
-    : null;
-
   if (playlist.length === 0) {
     return null;
   }
@@ -225,15 +219,6 @@ export default function MusicPlayer() {
               className="absolute top-0 left-0 h-full bg-white rounded-full transition-all"
               style={{ width: `${progress}%` }}
             />
-
-            {/* 高潮标记 */}
-            {climaxPosition !== null && (
-              <div
-                className="absolute top-1/2 -translate-y-1/2 w-2 h-2 bg-yellow-400 rounded-full shadow-sm"
-                style={{ left: `${climaxPosition}%` }}
-                title="高潮部分"
-              />
-            )}
 
             {/* 拖动按钮 */}
             <div
