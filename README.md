@@ -1,73 +1,115 @@
-# React + TypeScript + Vite
+# 🎓 美高选校助手
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+智能匹配美国寄宿高中，帮你找到最适合的学校。
 
-Currently, two official plugins are available:
+## ✨ 功能特色
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+### 🤖 智能选校推荐
+- 输入托福、SSAT、GPA 等成绩
+- 智能匹配冲刺校、匹配校、保底校
+- 支持 IB、A-Level、AP、体制内等多种课程体系
 
-## React Compiler
+### 📚 学校库
+- 30 所美国顶尖寄宿高中详细信息
+- 支持搜索、筛选、排序、标签过滤
+- 学校详情包括学术特色、校园生活、升学走向
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### ⚖️ 学校对比
+- 2-3 所学校并排对比
+- 费用自动计算（含城市生活成本系数）
+- 最优值高亮显示
 
-## Expanding the ESLint configuration
+### 📅 申请时间线
+- 根据课程体系和年级生成个性化规划
+- 6 阶段时间线，可追踪进度
+- 倒计时提醒
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### 💰 费用计算器
+- 详细的年度费用和一次性费用估算
+- 支持多种住宿方案
+- 人民币参考（按汇率换算）
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### 🗺️ 学校地图
+- 地图上查看学校地理位置
+- 按梯队筛选（顶尖/优秀/热门）
+- 点击标记查看详情
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### ❤️ 收藏系统
+- 收藏感兴趣的学校
+- 跨页面共享
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### 📤 分享功能
+- 所有页面支持分享链接
+- 学校详情支持复制匹配建议
+
+## 🛠️ 技术栈
+
+- **前端框架**: React 19 + TypeScript
+- **构建工具**: Vite 8
+- **样式**: Tailwind CSS 4
+- **路由**: React Router 7
+- **地图**: Leaflet + React-Leaflet
+- **部署**: Vercel
+
+## 🚀 本地开发
+
+```bash
+# 安装依赖
+npm install
+
+# 启动开发服务器
+npm run dev
+
+# 构建生产版本
+npm run build
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 📁 项目结构
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
 ```
+src/
+├── components/          # 组件
+│   ├── SchoolCard.tsx   # 学校卡片
+│   ├── SchoolDetail.tsx # 学校详情弹窗
+│   └── ShareButton.tsx  # 分享按钮
+├── data/                # 数据
+│   └── schools.ts       # 学校数据
+├── pages/               # 页面
+│   ├── Home.tsx         # 首页
+│   ├── SchoolList.tsx   # 学校库
+│   ├── Recommend.tsx    # 智能选校
+│   ├── Favorites.tsx    # 收藏
+│   ├── Compare.tsx      # 对比
+│   ├── Timeline.tsx     # 时间线
+│   ├── CostCalculator.tsx # 费用计算器
+│   └── Map.tsx          # 地图
+├── App.tsx              # 布局
+└── main.tsx             # 入口
+```
+
+## 📊 数据说明
+
+- 当前收录 30 所美国寄宿高中
+- 排名来源：Niche（2024-2025）
+- 费用数据为预估值，仅供参考
+
+## 📝 更新日志
+
+### 2026-06-11
+- 添加 Meta 标签和 OG 图片
+- 所有页面添加独立 Meta 标签
+- 添加分享功能
+- 添加复制建议功能
+- 学校卡片显示特色亮点
+
+## 📄 许可证
+
+MIT License
+
+## 👨‍💻 作者
+
+**H-shy** - [GitHub](https://github.com/your-username)
+
+---
+
+> 💡 数据仅供参考，请以学校官网为准
