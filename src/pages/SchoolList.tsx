@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { schools, regions, tuitionRanges, allTags } from "../data/schools";
@@ -14,6 +14,15 @@ export default function SchoolList() {
     "ranking"
   );
   const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+
+  // 搜索防抖
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(search);
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [search]);
   const [selectedTag, setSelectedTag] = useState("");
   const [favorites, setFavorites] = useState<number[]>(() => {
     try {
@@ -60,8 +69,8 @@ export default function SchoolList() {
     let result = [...schools];
 
     // 搜索筛选
-    if (search.trim()) {
-      const q = search.trim().toLowerCase();
+    if (debouncedSearch.trim()) {
+      const q = debouncedSearch.trim().toLowerCase();
       result = result.filter(
         (s) =>
           s.nameCn.includes(q) ||
@@ -102,7 +111,7 @@ export default function SchoolList() {
     });
 
     return result;
-  }, [search, region, tier, tuitionRange, selectedTag, sortBy]);
+  }, [debouncedSearch, region, tier, tuitionRange, selectedTag, sortBy]);
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type { School } from "../data/schools";
 import ShareButton from "./ShareButton";
 
@@ -32,6 +32,19 @@ export default function SchoolDetail({ school, onClose, profile }: Props) {
   const [housing, setHousing] = useState(
     isDay ? "hostFamily" : "boarding"
   );
+
+  // Escape 键关闭弹窗 + 滚动锁定
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    document.addEventListener("keydown", handleEscape);
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", handleEscape);
+      document.body.style.overflow = "";
+    };
+  }, [onClose]);
 
   // 根据城市调整生活成本（精确到城市）
   const cityMultiplier: Record<string, number> = {

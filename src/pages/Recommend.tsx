@@ -445,7 +445,10 @@ export default function Recommend() {
                 </div>
               </div>
             </div>
-            <button type="submit" className="w-full mt-6 bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors">🎯 开始匹配</button>
+            <div className="flex gap-3 mt-6">
+              <button type="submit" className="flex-1 bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors">🎯 开始匹配</button>
+              <button type="button" onClick={() => { setProfile({ toefl: 0, ssat: 0, gpa: "", region: "全部", maxBudget: 0, schoolType: "", interests: [], schoolSize: [] }); setResults(null); }} className="px-4 py-3 bg-gray-100 text-gray-600 rounded-lg font-medium hover:bg-gray-200 transition-colors">🔄 重置</button>
+            </div>
           </form>
         </div>
 
