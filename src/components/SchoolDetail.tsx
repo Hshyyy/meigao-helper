@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type { School } from "../data/schools";
+import ShareButton from "./ShareButton";
 
 interface StudentProfile {
   toefl: number;
@@ -71,12 +72,15 @@ export default function SchoolDetail({ school, onClose, profile }: Props) {
             <h2 className="text-xl font-bold text-gray-900">{school.nameCn}</h2>
             <p className="text-sm text-gray-400">{school.name}</p>
           </div>
-          <button
-            onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 text-2xl leading-none"
-          >
-            ×
-          </button>
+          <div className="flex items-center gap-2">
+            <ShareButton url={`${window.location.origin}/schools/${school.id}`} label="分享学校" />
+            <button
+              onClick={onClose}
+              className="text-gray-400 hover:text-gray-600 text-2xl leading-none"
+            >
+              ×
+            </button>
+          </div>
         </div>
 
         <div className="p-5 space-y-5">

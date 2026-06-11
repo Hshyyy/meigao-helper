@@ -3,6 +3,7 @@ import { Helmet } from "react-helmet-async";
 import { schools } from "../data/schools";
 import type { School } from "../data/schools";
 import SchoolDetail from "../components/SchoolDetail";
+import ShareButton from "../components/ShareButton";
 
 // 住宿方案
 const housingOptions = {
@@ -111,7 +112,15 @@ export default function Compare() {
         <meta name="description" content="对比2-3所美国寄宿高中的排名、费用、录取要求等指标。" />
       </Helmet>
 
-      <h1 className="text-3xl font-bold text-gray-900 mb-2">学校对比</h1>
+      <div className="flex items-center justify-between mb-2">
+        <h1 className="text-3xl font-bold text-gray-900">学校对比</h1>
+        {compareSchools.length >= 2 && (
+          <ShareButton
+            url={`${window.location.origin}/compare?ids=${compareIds.join(",")}`}
+            label="分享对比"
+          />
+        )}
+      </div>
       <p className="text-gray-500 mb-8">
         选择 2-3 所学校，直观对比各项指标
       </p>
