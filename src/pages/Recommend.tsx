@@ -222,9 +222,9 @@ export default function Recommend() {
   const [toast, setToast] = useState<string | null>(null);
   const toastCooldown = useRef(false);
 
-  // 页面加载时滚动到顶部
+  // 页面加载时平滑滚动到顶部
   useEffect(() => {
-    window.scrollTo(0, 0);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
 
   const showToast = (msg: string, isDecimal?: boolean) => {
