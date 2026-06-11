@@ -6,7 +6,7 @@ const playlist = [
   { name: "November Rain", artist: "Kris Wu", file: "/music/November Rain.FLAC", cover: "/music/covers/November Rain.jpg" },
   { name: "The Way I Still Love You", artist: "Reynard Silva", file: "/music/Reynard Silva - The Way I Still Love You.flac", cover: "/music/covers/The Way I Still Love You.jpg" },
   { name: "ONLY LOOK AT ME", artist: "TAEYANG", file: "/music/TAEYANG - ONLY LOOK AT ME.flac", cover: "/music/covers/Only Look At Me.jpg" },
-  { name: "Work", artist: "Drake、Derra、Rihanna", file: "/music/Drake、Derra、Rihanna - Work (Derra Flip).mp3", cover: "/music/covers/Work.jpg" },
+  { name: "Work", artist: "Drake、Derra、Rihanna", file: "/music/Drake、Derra、Rihanna - Work (Derra Flip).mp3", cover: "/music/covers/Work.png" },
 ];
 
 export default function MusicPlayer() {
