@@ -5,6 +5,7 @@ import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import { schools } from "../data/schools";
 import type { School } from "../data/schools";
 import SchoolDetail from "../components/SchoolDetail";
+import ShareButton from "../components/ShareButton";
 import "leaflet/dist/leaflet.css";
 
 import L from "leaflet";
@@ -141,7 +142,10 @@ export default function Map() {
     </Helmet>
 
     <div className="max-w-6xl mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold text-gray-900 mb-2">学校地图</h1>
+      <div className="flex items-center justify-between mb-2">
+        <h1 className="text-3xl font-bold text-gray-900">学校地图</h1>
+        <ShareButton url={window.location.origin + "/map"} label="分享地图" />
+      </div>
       <p className="text-gray-500 mb-6">
         在地图上查看 {schools.length} 所学校的地理位置，点击标记查看详情
       </p>

@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { schools } from "../data/schools";
+import ShareButton from "../components/ShareButton";
 import type { School } from "../data/schools";
 import SchoolCard from "../components/SchoolCard";
 import SchoolDetail from "../components/SchoolDetail";
@@ -316,7 +317,10 @@ export default function Recommend() {
         <meta name="description" content="输入成绩和偏好，智能匹配冲刺校、匹配校、保底校。" />
       </Helmet>
 
-      <h1 className="text-3xl font-bold text-gray-900 mb-2">智能选校推荐</h1>
+      <div className="flex items-center justify-between mb-2">
+        <h1 className="text-3xl font-bold text-gray-900">智能选校推荐</h1>
+        <ShareButton url={window.location.origin + "/recommend"} label="分享推荐" />
+      </div>
       <p className="text-gray-500 mb-8">输入你的成绩和偏好，系统为你匹配最合适的学校</p>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">

@@ -4,6 +4,7 @@ import { schools } from "../data/schools";
 import type { School } from "../data/schools";
 import SchoolCard from "../components/SchoolCard";
 import SchoolDetail from "../components/SchoolDetail";
+import ShareButton from "../components/ShareButton";
 
 export default function Favorites() {
   const [favorites, setFavorites] = useState<number[]>(() => {
@@ -32,7 +33,10 @@ export default function Favorites() {
         <meta name="description" content="查看你收藏的美国寄宿高中。" />
       </Helmet>
 
-      <h1 className="text-3xl font-bold text-gray-900 mb-2">我的收藏</h1>
+      <div className="flex items-center justify-between mb-2">
+        <h1 className="text-3xl font-bold text-gray-900">我的收藏</h1>
+        <ShareButton url={window.location.origin + "/favorites"} label="分享收藏" />
+      </div>
       <p className="text-gray-500 mb-8">
         你收藏了 {favoriteSchools.length} 所学校
       </p>
