@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 
-const playlist = [
+const playlist: Array<{name: string; artist: string; file: string; cover: string}> = [
   // 歌曲将在下载后添加
 ];
 
