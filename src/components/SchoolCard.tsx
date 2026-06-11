@@ -97,6 +97,11 @@ export default function SchoolCard({
           </span>
           <span>录取率 {school.acceptanceRate}%</span>
         </div>
+        {school.highlights && school.highlights.length > 0 && (
+          <p className="text-xs text-green-600 mt-1">
+            🎯 {school.highlights[0]}
+          </p>
+        )}
         <p className="text-xs text-blue-500">
           💡 点击查看：匹配分析 · 申请建议 ·{" "}
           {school.type === "寄宿" ? "寄宿详情" : school.type === "寄宿/走读" ? "住宿选择" : "住宿方案"}
