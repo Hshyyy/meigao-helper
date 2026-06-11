@@ -172,7 +172,10 @@ export default function SchoolDetail({ school, onClose, profile }: Props) {
           {/* 针对你的建议 */}
           {profile && (
             <div>
-              <h3 className="font-semibold text-gray-900 mb-3">💡 针对你的建议</h3>
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="font-semibold text-gray-900">💡 针对你的建议</h3>
+                <CopyAdviceButton profile={profile} school={school} />
+              </div>
               <ul className="space-y-2">
                 {getPersonalizedAdvice(profile, school).map((tip, i) => (
                   <li key={i} className="text-sm text-gray-600 flex items-start gap-2">
@@ -504,4 +507,59 @@ function getPersonalizedAdvice(
   }
 
   return tips;
+}
+
+// 复制建议按钮组件
+function CopyAdviceButton({ profile, school }: { profile: { toefl: number; ssat: number; gpa: number | string; schoolType: string }; school: School }) {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = async () => {
+    const gpaNum = Number(profile.gpa) || 0;
+    const gpaLabel = profile.schoolType === "public" ? "成绩" : "GPA";
+    const gpaValue = profile.schoolType === "public" ? `${profile.gpa}%` : profile.gpa;
+    const requiredGpa = profile.schoolType === "public"
+      ? `${gpaToPercent(school.gpaMin)}%`
+      : school.gpaMin;
+
+    const advice = getPersonalizedAdvice(profile, school);
+    const text = `🎓 ${school.nameCn} 匹配分析
+
+📊 你的成绩：
+- 托福：${profile.toefl} 分（要求 ${school.toeflMin}+）${profile.toefl >= school.toeflMin ? "✅" : "⚠️"}
+- SSAT：${profile.ssat}%（要求 ${school.ssatPercentile}%+）${profile.ssat >= school.ssatPercentile ? "✅" : "⚠️"}
+- ${gpaLabel}：${gpaValue}（要求 ${requiredGpa}+）${gpaNum >= school.gpaMin ? "✅" : "⚠️"}
+
+💡 建议：
+${advice.map(tip => `- ${tip}`).join("\n")}
+
+🔗 查看详情：${window.location.origin}/schools/${school.id}`;
+
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      const textArea = document.createElement("textarea");
+      textArea.value = text;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand("copy");
+      document.body.removeChild(textArea);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
+
+  return (
+    <button
+      onClick={handleCopy}
+      className={`px-3 py-1 rounded-lg text-xs transition-colors ${
+        copied
+          ? "bg-green-100 text-green-700"
+          : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+      }`}
+    >
+      {copied ? "✅ 已复制" : "📤 复制建议"}
+    </button>
+  );
 }
