@@ -1,12 +1,12 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 
 const playlist = [
-  { name: "JULY", artist: "JULY", file: "/music/JULY.FLAC", cover: "/music/covers/JULY.svg" },
-  { name: "Bad Girl", artist: "Unknown", file: "/music/Bad Girl.FLAC", cover: "/music/covers/Bad Girl.svg" },
-  { name: "November Rain", artist: "Guns N' Roses", file: "/music/November Rain.FLAC", cover: "/music/covers/November Rain.svg" },
-  { name: "The Way I Still Love You", artist: "Reynard Silva", file: "/music/Reynard Silva - The Way I Still Love You.flac", cover: "/music/covers/The Way.svg" },
-  { name: "ONLY LOOK AT ME", artist: "TAEYANG", file: "/music/TAEYANG - ONLY LOOK AT ME.flac", cover: "/music/covers/ONLY LOOK.svg" },
-  { name: "Work", artist: "Drake ft. Rihanna", file: "/music/Drake、Derra、Rihanna - Work (Derra Flip).mp3", cover: "/music/covers/Work.svg" },
+  { name: "JULY", artist: "JULY", file: "/music/JULY.FLAC", cover: "/music/covers/JULY.jpg" },
+  { name: "Bad Girl", artist: "Unknown", file: "/music/Bad Girl.FLAC", cover: "/music/covers/Bad Girl.jpg" },
+  { name: "November Rain", artist: "Guns N' Roses", file: "/music/November Rain.FLAC", cover: "/music/covers/November Rain.jpg" },
+  { name: "The Way I Still Love You", artist: "Reynard Silva", file: "/music/Reynard Silva - The Way I Still Love You.flac", cover: "/music/covers/The Way I Still Love You.jpg" },
+  { name: "ONLY LOOK AT ME", artist: "TAEYANG", file: "/music/TAEYANG - ONLY LOOK AT ME.flac", cover: "/music/covers/Only Look At Me.jpg" },
+  { name: "Work", artist: "Drake ft. Rihanna", file: "/music/Drake、Derra、Rihanna - Work (Derra Flip).mp3", cover: "/music/covers/Work.jpg" },
 ];
 
 export default function MusicPlayer() {
