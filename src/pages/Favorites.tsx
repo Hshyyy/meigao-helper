@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Helmet } from "react-helmet-async";
 import { schools } from "../data/schools";
 import type { School } from "../data/schools";
 import SchoolCard from "../components/SchoolCard";
@@ -26,6 +27,11 @@ export default function Favorites() {
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
+      <Helmet>
+        <title>我的收藏 — 美高选校助手</title>
+        <meta name="description" content="查看你收藏的美国寄宿高中。" />
+      </Helmet>
+
       <h1 className="text-3xl font-bold text-gray-900 mb-2">我的收藏</h1>
       <p className="text-gray-500 mb-8">
         你收藏了 {favoriteSchools.length} 所学校

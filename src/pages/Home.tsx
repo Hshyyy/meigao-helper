@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import { schools } from "../data/schools";
 
 export default function Home() {
@@ -12,6 +13,11 @@ export default function Home() {
 
   return (
     <div>
+      <Helmet>
+        <title>美高选校助手 — 智能匹配美国寄宿高中</title>
+        <meta name="description" content="基于成绩、兴趣、预算等多维度智能匹配，帮助中国学生找到最适合的美国寄宿高中。" />
+      </Helmet>
+
       {/* Hero */}
       <section className="bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 text-white">
         <div className="max-w-6xl mx-auto px-4 py-20 text-center">

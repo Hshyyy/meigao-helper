@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import { Helmet } from "react-helmet-async";
 import { schools } from "../data/schools";
 
 interface CostItem {
@@ -125,6 +126,11 @@ export default function CostCalculator() {
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
+      <Helmet>
+        <title>费用计算器 — 美高选校助手</title>
+        <meta name="description" content="估算美国寄宿高中留学总费用，包括学费、住宿、生活费等。" />
+      </Helmet>
+
       <h1 className="text-3xl font-bold text-gray-900 mb-2">费用计算器</h1>
       <p className="text-gray-500 mb-8">
         估算美国寄宿高中留学总费用，帮你做好预算规划

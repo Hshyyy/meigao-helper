@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Helmet } from "react-helmet-async";
 import { schools } from "../data/schools";
 import type { School } from "../data/schools";
 import SchoolDetail from "../components/SchoolDetail";
@@ -105,6 +106,11 @@ export default function Compare() {
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
+      <Helmet>
+        <title>学校对比 — 美高选校助手</title>
+        <meta name="description" content="对比2-3所美国寄宿高中的排名、费用、录取要求等指标。" />
+      </Helmet>
+
       <h1 className="text-3xl font-bold text-gray-900 mb-2">学校对比</h1>
       <p className="text-gray-500 mb-8">
         选择 2-3 所学校，直观对比各项指标

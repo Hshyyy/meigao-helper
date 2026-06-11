@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import { Helmet } from "react-helmet-async";
 import { schools } from "../data/schools";
 
 // 课程体系配置
@@ -656,6 +657,11 @@ export default function Timeline() {
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
+      <Helmet>
+        <title>申请时间线 — 美高选校助手</title>
+        <meta name="description" content="根据课程体系和年级，生成个性化美国高中申请规划。" />
+      </Helmet>
+
       <h1 className="text-3xl font-bold text-gray-900 mb-2">申请时间线</h1>
       <p className="text-gray-500 mb-6">
         根据你的课程体系和年级，生成个性化申请规划

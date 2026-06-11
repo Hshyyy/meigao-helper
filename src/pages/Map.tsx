@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect } from "react";
 import { createPortal } from "react-dom";
+import { Helmet } from "react-helmet-async";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import { schools } from "../data/schools";
 import type { School } from "../data/schools";
@@ -134,6 +135,11 @@ export default function Map() {
 
   return (
     <>
+    <Helmet>
+      <title>学校地图 — 美高选校助手</title>
+      <meta name="description" content="在地图上查看美国寄宿高中的地理位置分布。" />
+    </Helmet>
+
     <div className="max-w-6xl mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold text-gray-900 mb-2">学校地图</h1>
       <p className="text-gray-500 mb-6">

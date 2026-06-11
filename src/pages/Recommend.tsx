@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import { schools } from "../data/schools";
 import type { School } from "../data/schools";
 import SchoolCard from "../components/SchoolCard";
@@ -310,6 +311,11 @@ export default function Recommend() {
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-8 animate-fade-in-up">
+      <Helmet>
+        <title>智能选校推荐 — 美高选校助手</title>
+        <meta name="description" content="输入成绩和偏好，智能匹配冲刺校、匹配校、保底校。" />
+      </Helmet>
+
       <h1 className="text-3xl font-bold text-gray-900 mb-2">智能选校推荐</h1>
       <p className="text-gray-500 mb-8">输入你的成绩和偏好，系统为你匹配最合适的学校</p>
 

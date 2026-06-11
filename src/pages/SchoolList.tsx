@@ -1,5 +1,6 @@
 import { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import { schools, regions, tuitionRanges, allTags } from "../data/schools";
 import type { School } from "../data/schools";
 import SchoolCard from "../components/SchoolCard";
@@ -105,6 +106,11 @@ export default function SchoolList() {
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
+      <Helmet>
+        <title>学校库 — 美高选校助手</title>
+        <meta name="description" content={`浏览${schools.length}所美国寄宿高中，支持筛选、排序、对比。`} />
+      </Helmet>
+
       <h1 className="text-3xl font-bold text-gray-900 mb-2">学校库</h1>
       <p className="text-gray-500 mb-2">
         共收录 {schools.length} 所热门美国寄宿高中
