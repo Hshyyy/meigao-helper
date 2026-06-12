@@ -50,65 +50,89 @@ export function useMusic() {
   return ctx;
 }
 
+// 全局标记，防止 HMR 时重复自动播放
+let hasAutoPlayed = false;
+
 export function MusicProvider({ children }: { children: ReactNode }) {
   const audioRef = useRef<HTMLAudioElement>(null);
+  const playModeRef = useRef<PlayMode>("loop");
   const [currentTrack, setCurrentTrack] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [playMode, setPlayMode] = useState<PlayMode>("loop");
+  const [playMode, setPlayModeState] = useState<PlayMode>("loop");
   const [volume, setVolumeState] = useState(0.3);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
 
+  // 同步 playMode ref
+  useEffect(() => { playModeRef.current = playMode; }, [playMode]);
+
+  // 设置音量
+  useEffect(() => {
+    if (audioRef.current) audioRef.current.volume = volume;
+  }, [volume]);
+
+  // 音频事件监听
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
+
     const onPlay = () => setIsPlaying(true);
     const onPause = () => setIsPlaying(false);
+    const onTimeUpdate = () => setCurrentTime(audio.currentTime);
+    const onLoadedMetadata = () => setDuration(audio.duration);
+
     const onEnded = () => {
-      if (playMode === "single") { audio.currentTime = 0; audio.play(); }
-      else if (playMode === "shuffle") { playTrack(Math.floor(Math.random() * playlist.length)); }
-      else { nextTrack(); }
+      const mode = playModeRef.current;
+      if (mode === "single") {
+        audio.currentTime = 0;
+        audio.play().catch(() => {});
+      } else if (mode === "shuffle") {
+        const idx = Math.floor(Math.random() * playlist.length);
+        setCurrentTrack(idx);
+        audio.src = playlist[idx].file;
+        audio.load();
+        audio.play().catch(() => {});
+      } else {
+        const idx = (currentTrack + 1) % playlist.length;
+        setCurrentTrack(idx);
+        audio.src = playlist[idx].file;
+        audio.load();
+        audio.play().catch(() => {});
+      }
     };
-    const onTime = () => setCurrentTime(audio.currentTime);
-    const onMeta = () => setDuration(audio.duration);
+
     audio.addEventListener("play", onPlay);
     audio.addEventListener("pause", onPause);
     audio.addEventListener("ended", onEnded);
-    audio.addEventListener("timeupdate", onTime);
-    audio.addEventListener("loadedmetadata", onMeta);
+    audio.addEventListener("timeupdate", onTimeUpdate);
+    audio.addEventListener("loadedmetadata", onLoadedMetadata);
+
     return () => {
       audio.removeEventListener("play", onPlay);
       audio.removeEventListener("pause", onPause);
       audio.removeEventListener("ended", onEnded);
-      audio.removeEventListener("timeupdate", onTime);
-      audio.removeEventListener("loadedmetadata", onMeta);
+      audio.removeEventListener("timeupdate", onTimeUpdate);
+      audio.removeEventListener("loadedmetadata", onLoadedMetadata);
     };
-  }, [playMode]);
+  }, [currentTrack]);
 
-  useEffect(() => { if (audioRef.current) audioRef.current.volume = volume; }, [volume]);
-
-  // 进入网站自动播放
+  // 首次进入自动播放（只触发一次）
   useEffect(() => {
+    if (hasAutoPlayed) return;
+    hasAutoPlayed = true;
+
     const audio = audioRef.current;
     if (!audio) return;
 
-    let tried = false;
     const tryPlay = () => {
-      if (tried) return;
-      tried = true;
       audio.play().catch(() => {});
     };
 
-    if (document.readyState === "complete") {
-      setTimeout(tryPlay, 500);
-    } else {
-      window.addEventListener("load", () => setTimeout(tryPlay, 500));
-    }
-
-    return () => { tried = true; };
+    // 延迟播放，确保页面加载完成
+    setTimeout(tryPlay, 1000);
   }, []);
 
-  // 切换标签页暂停，回来时恢复
+  // 离开暂停，回来恢复
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
@@ -117,20 +141,14 @@ export function MusicProvider({ children }: { children: ReactNode }) {
 
     const handleVisibility = () => {
       if (document.hidden) {
-        // 离开时记住播放状态并暂停
         wasPlaying = !audio.paused;
         audio.pause();
-      } else {
-        // 回来时如果之前在播放，就恢复播放
-        if (wasPlaying) {
-          audio.play().catch(() => {});
-        }
+      } else if (wasPlaying) {
+        audio.play().catch(() => {});
       }
     };
 
-    const handleBeforeUnload = () => {
-      audio.pause();
-    };
+    const handleBeforeUnload = () => audio.pause();
 
     document.addEventListener("visibilitychange", handleVisibility);
     window.addEventListener("beforeunload", handleBeforeUnload);
@@ -151,8 +169,7 @@ export function MusicProvider({ children }: { children: ReactNode }) {
     setCurrentTrack(index);
     audio.src = playlist[index].file;
     audio.load();
-    const onReady = () => { audio.play().catch(() => {}); audio.removeEventListener("canplay", onReady); };
-    audio.addEventListener("canplay", onReady);
+    audio.addEventListener("canplay", () => { audio.play().catch(() => {}); }, { once: true });
   }, []);
 
   const nextTrack = useCallback(() => {
@@ -167,6 +184,7 @@ export function MusicProvider({ children }: { children: ReactNode }) {
 
   const seek = useCallback((time: number) => { if (audioRef.current) audioRef.current.currentTime = time; }, []);
   const setVolume = useCallback((v: number) => { setVolumeState(v); }, []);
+  const setPlayMode = useCallback((m: PlayMode) => { setPlayModeState(m); }, []);
 
   return (
     <MusicContext.Provider value={{ playlist, currentTrack, isPlaying, playMode, volume, currentTime, duration, play, pause, togglePlay, nextTrack, prevTrack, playTrack, setVolume, setPlayMode, seek }}>
