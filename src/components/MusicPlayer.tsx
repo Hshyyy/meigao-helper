@@ -34,6 +34,7 @@ export default function MusicPlayer() {
   const [playMode, setPlayMode] = useState<PlayMode>("loop");
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [expanded, setExpanded] = useState(false);
 
   // 同步音频状态
   useEffect(() => {
@@ -104,7 +105,7 @@ export default function MusicPlayer() {
     }
   }, [isPlaying]);
 
-  // 播放指定歌曲
+  // 播放指定歌曲（自动播放）
   const playTrack = useCallback((index: number) => {
     const audio = audioRef.current;
     if (!audio) return;
@@ -112,13 +113,14 @@ export default function MusicPlayer() {
     setCurrentTrack(index);
     audio.src = playlist[index].file;
     audio.load();
+    // 自动播放
     audio.play().catch((err) => {
       console.log("播放失败:", err);
       setIsPlaying(false);
     });
   }, []);
 
-  // 下一首
+  // 下一首（自动播放）
   const nextTrack = useCallback(() => {
     let next: number;
     if (playMode === "shuffle") {
@@ -129,7 +131,7 @@ export default function MusicPlayer() {
     playTrack(next);
   }, [currentTrack, playMode, playTrack]);
 
-  // 上一首
+  // 上一首（自动播放）
   const prevTrack = useCallback(() => {
     let prev: number;
     if (playMode === "shuffle") {
@@ -202,110 +204,134 @@ export default function MusicPlayer() {
     <div className="relative">
       <audio ref={audioRef} src={playlist[currentTrack].file} preload="auto" />
 
-      {/* 播放器控制 */}
-      <div className="bg-white/20 backdrop-blur-sm rounded-2xl shadow-lg border border-white/30 p-3 w-80">
-        {/* 歌曲信息 */}
-        <div className="flex items-center gap-3 mb-3">
+      {/* 收缩状态：小图标 */}
+      {!expanded && (
+        <button
+          onClick={() => setExpanded(true)}
+          className="w-12 h-12 bg-white/30 backdrop-blur-sm rounded-full shadow-lg border border-white/30 flex items-center justify-center hover:bg-white/50 transition-colors"
+        >
           <img
             src={playlist[currentTrack].cover}
             alt={playlist[currentTrack].name}
-            className="w-12 h-12 rounded-lg object-cover"
+            className="w-10 h-10 rounded-full object-cover"
           />
-          <div className="flex-1 min-w-0">
-            <p className="text-white text-sm font-medium truncate">{playlist[currentTrack].name}</p>
-            <p className="text-white/70 text-xs truncate">{playlist[currentTrack].artist}</p>
-          </div>
-        </div>
-
-        {/* 进度条 */}
-        <div className="mb-3">
-          <div
-            ref={progressRef}
-            onClick={handleProgressClick}
-            className="relative h-1.5 bg-white/20 rounded-full cursor-pointer group"
-          >
-            {/* 已播放部分 */}
-            <div
-              className="absolute top-0 left-0 h-full bg-white rounded-full transition-all"
-              style={{ width: `${progress}%` }}
-            />
-
-            {/* 拖动按钮 */}
-            <div
-              className="absolute top-1/2 -translate-y-1/2 w-3 h-3 bg-white rounded-full shadow-sm opacity-0 group-hover:opacity-100 transition-opacity"
-              style={{ left: `${progress}%` }}
-            />
-          </div>
-
-          {/* 时间显示 */}
-          <div className="flex justify-between mt-1">
-            <span className="text-white/70 text-xs">{formatTime(currentTime)}</span>
-            <span className="text-white/70 text-xs">{formatTime(duration)}</span>
-          </div>
-        </div>
-
-        {/* 控制按钮 */}
-        <div className="flex items-center justify-between">
-          {/* 播放模式 */}
-          <button
-            onClick={togglePlayMode}
-            title={getPlayModeTooltip()}
-            className="w-8 h-8 flex items-center justify-center text-white/80 hover:text-white transition-colors"
-          >
-            {getPlayModeIcon()}
-          </button>
-
-          {/* 上一首 */}
-          <button
-            onClick={prevTrack}
-            className="w-8 h-8 flex items-center justify-center text-white/80 hover:text-white transition-colors"
-          >
-            ⏮
-          </button>
-
-          {/* 播放/暂停 */}
-          <button
-            onClick={togglePlay}
-            disabled={isLoading}
-            className="w-12 h-12 flex items-center justify-center bg-white/30 text-white rounded-full hover:bg-white/50 transition-colors disabled:opacity-50"
-          >
-            {isLoading ? "⏳" : isPlaying ? "⏸" : "▶"}
-          </button>
-
-          {/* 下一首 */}
-          <button
-            onClick={nextTrack}
-            className="w-8 h-8 flex items-center justify-center text-white/80 hover:text-white transition-colors"
-          >
-            ⏭
-          </button>
-
-          {/* 音量 */}
-          <div className="flex items-center gap-1">
-            <span className="text-xs text-white/70">🔊</span>
-            <input
-              type="range"
-              min="0"
-              max="1"
-              step="0.1"
-              value={volume}
-              onChange={(e) => setVolume(Number(e.target.value))}
-              className="w-16 h-1"
-            />
-          </div>
-        </div>
-
-        {/* 歌曲列表按钮 */}
-        <button
-          onClick={() => setShowList(!showList)}
-          className="absolute top-3 right-3 w-8 h-8 flex items-center justify-center text-white/80 hover:text-white transition-colors"
-        >
-          📋
         </button>
-      </div>
+      )}
+
+      {/* 展开状态：完整播放器 */}
+      {expanded && (
+        <div className="bg-white/20 backdrop-blur-sm rounded-2xl shadow-lg border border-white/30 p-3 w-72">
+          {/* 收起按钮 */}
+          <button
+            onClick={() => setExpanded(false)}
+            className="absolute top-2 right-2 w-6 h-6 flex items-center justify-center text-white/80 hover:text-white transition-colors"
+          >
+            ✕
+          </button>
+
+          {/* 歌曲信息 */}
+          <div className="flex items-center gap-3 mb-3">
+            <img
+              src={playlist[currentTrack].cover}
+              alt={playlist[currentTrack].name}
+              className="w-12 h-12 rounded-lg object-cover"
+            />
+            <div className="flex-1 min-w-0">
+              <p className="text-white text-sm font-medium truncate">{playlist[currentTrack].name}</p>
+              <p className="text-white/70 text-xs truncate">{playlist[currentTrack].artist}</p>
+            </div>
+          </div>
+
+          {/* 进度条 */}
+          <div className="mb-3">
+            <div
+              ref={progressRef}
+              onClick={handleProgressClick}
+              className="relative h-1.5 bg-white/20 rounded-full cursor-pointer group"
+            >
+              {/* 已播放部分 */}
+              <div
+                className="absolute top-0 left-0 h-full bg-white rounded-full transition-all"
+                style={{ width: `${progress}%` }}
+              />
+
+              {/* 拖动按钮 */}
+              <div
+                className="absolute top-1/2 -translate-y-1/2 w-3 h-3 bg-white rounded-full shadow-sm opacity-0 group-hover:opacity-100 transition-opacity"
+                style={{ left: `${progress}%` }}
+              />
+            </div>
+
+            {/* 时间显示 */}
+            <div className="flex justify-between mt-1">
+              <span className="text-white/70 text-xs">{formatTime(currentTime)}</span>
+              <span className="text-white/70 text-xs">{formatTime(duration)}</span>
+            </div>
+          </div>
+
+          {/* 控制按钮 */}
+          <div className="flex items-center justify-between">
+            {/* 播放模式 */}
+            <button
+              onClick={togglePlayMode}
+              title={getPlayModeTooltip()}
+              className="w-8 h-8 flex items-center justify-center text-white/80 hover:text-white transition-colors"
+            >
+              {getPlayModeIcon()}
+            </button>
+
+            {/* 上一首 */}
+            <button
+              onClick={prevTrack}
+              className="w-8 h-8 flex items-center justify-center text-white/80 hover:text-white transition-colors"
+            >
+              ⏮
+            </button>
+
+            {/* 播放/暂停 */}
+            <button
+              onClick={togglePlay}
+              disabled={isLoading}
+              className="w-12 h-12 flex items-center justify-center bg-white/30 text-white rounded-full hover:bg-white/50 transition-colors disabled:opacity-50"
+            >
+              {isLoading ? "⏳" : isPlaying ? "⏸" : "▶"}
+            </button>
+
+            {/* 下一首 */}
+            <button
+              onClick={nextTrack}
+              className="w-8 h-8 flex items-center justify-center text-white/80 hover:text-white transition-colors"
+            >
+              ⏭
+            </button>
+
+            {/* 音量 */}
+            <div className="flex items-center gap-1">
+              <span className="text-xs text-white/70">🔊</span>
+              <input
+                type="range"
+                min="0"
+                max="1"
+                step="0.1"
+                value={volume}
+                onChange={(e) => setVolume(Number(e.target.value))}
+                className="w-16 h-1"
+              />
+            </div>
+          </div>
+
+          {/* 歌曲列表按钮 */}
+          <button
+            onClick={() => setShowList(!showList)}
+            className="absolute top-2 left-2 w-6 h-6 flex items-center justify-center text-white/80 hover:text-white transition-colors"
+          >
+            📋
+          </button>
+        </div>
+      )}
 
       {/* 歌曲列表 */}
-      {showList && (
+      {showList && expanded && (
         <div className="absolute bottom-full right-0 mb-2 bg-white rounded-xl shadow-lg border border-gray-200 p-3 min-w-56 max-h-64 overflow-y-auto">
           <div className="flex items-center justify-between mb-2">
             <p className="text-xs text-gray-500">🎵 播放列表</p>
