@@ -35,9 +35,15 @@ body {
 @keyframes water-ripple {
   0% {
     box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(255, 255, 255, 0.2);
+    transform: scale(1.02);
   }
   100% {
-    box-shadow: 0 0 0 15px rgba(255, 255, 255, 0);
+    box-shadow: 0 0 0 20px rgba(255, 255, 255, 0);
+    transform: scale(1);
   }
 }
 
@@ -46,5 +52,5 @@ body {
 }
 
 .animate-water-ripple {
-  animation: water-ripple 1.5s ease-out infinite;
+  animation: water-ripple 2s ease-in-out infinite;
 }
