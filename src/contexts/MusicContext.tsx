@@ -104,15 +104,29 @@ export function MusicProvider({ children }: { children: ReactNode }) {
     audio.addEventListener("timeupdate", onTimeUpdate);
     audio.addEventListener("loadedmetadata", onLoadedMetadata);
 
-    // 用户点击页面后自动播放（只触发一次）
+    // 页面可见时自动播放，离开时暂停
     let hasStarted = false;
-    const handleFirstClick = () => {
-      if (hasStarted) return;
-      hasStarted = true;
-      audio.play().catch(() => {});
-      document.removeEventListener("click", handleFirstClick);
+    const handleVisibility = () => {
+      if (document.hidden) {
+        // 离开网站，暂停
+        audio.pause();
+      } else if (!hasStarted) {
+        // 首次进入网站，自动播放
+        hasStarted = true;
+        audio.play().catch(() => {});
+      } else {
+        // 之后再回来，恢复播放
+        audio.play().catch(() => {});
+      }
     };
-    document.addEventListener("click", handleFirstClick);
+
+    // 页面加载时如果已经可见，立即播放
+    if (!document.hidden && !hasStarted) {
+      hasStarted = true;
+      setTimeout(() => audio.play().catch(() => {}), 500);
+    }
+
+    document.addEventListener("visibilitychange", handleVisibility);
 
     return () => {
       audio.removeEventListener("play", onPlay);
@@ -120,7 +134,7 @@ export function MusicProvider({ children }: { children: ReactNode }) {
       audio.removeEventListener("ended", onEnded);
       audio.removeEventListener("timeupdate", onTimeUpdate);
       audio.removeEventListener("loadedmetadata", onLoadedMetadata);
-      document.removeEventListener("click", handleFirstClick);
+      document.removeEventListener("visibilitychange", handleVisibility);
     };
   }, [currentTrack]);
 
