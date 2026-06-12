@@ -149,9 +149,15 @@ export default function Home() {
 
       {/* 功能介绍 */}
       <section className="max-w-6xl mx-auto px-4 py-20">
-        <h2 className="text-2xl font-bold text-center text-gray-900 mb-12">
-          如何使用
-        </h2>
+        <div className="text-center mb-12">
+          <h2 className="text-2xl font-bold text-gray-900 mb-3">
+            How to use?
+          </h2>
+          <div className="flex items-center justify-center gap-2 text-gray-500">
+            <span>look</span>
+            <span className="text-2xl">👇</span>
+          </div>
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="text-center">
             <div className="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
