@@ -75,6 +75,52 @@ export default function MusicPlayer() {
     }
   }, [volume]);
 
+  // 进入网站自动播放
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    // 尝试自动播放（浏览器可能会阻止）
+    const tryAutoPlay = () => {
+      audio.play().catch(() => {
+        // 浏览器阻止了自动播放，需要用户手动点击
+        console.log("自动播放被浏览器阻止，请点击播放按钮");
+      });
+    };
+
+    // 页面加载完成后尝试自动播放
+    if (document.readyState === "complete") {
+      tryAutoPlay();
+    } else {
+      window.addEventListener("load", tryAutoPlay);
+      return () => window.removeEventListener("load", tryAutoPlay);
+    }
+  }, []);
+
+  // 离开网站时暂停
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    const handleBeforeUnload = () => {
+      audio.pause();
+    };
+
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        audio.pause();
+      }
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, []);
+
   // 处理歌曲结束
   const handleTrackEnd = useCallback(() => {
     if (playMode === "single") {
