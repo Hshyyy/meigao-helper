@@ -214,16 +214,16 @@ export default function MusicPlayer() {
     <div className="relative">
       <audio ref={audioRef} src={playlist[currentTrack].file} preload="auto" />
 
-      {/* 收缩状态：小图标 */}
+      {/* 收缩状态：小图标（播放时转动） */}
       {!expanded && (
         <button
           onClick={() => setExpanded(true)}
-          className="w-12 h-12 bg-white/30 backdrop-blur-sm rounded-full shadow-lg border border-white/30 flex items-center justify-center hover:bg-white/50 transition-colors"
+          className="w-14 h-14 bg-white/30 backdrop-blur-sm rounded-full shadow-lg border border-white/30 flex items-center justify-center hover:bg-white/50 transition-colors"
         >
           <img
             src={playlist[currentTrack].cover}
             alt={playlist[currentTrack].name}
-            className="w-10 h-10 rounded-full object-cover"
+            className={`w-12 h-12 rounded-full object-cover ${isPlaying ? 'animate-spin-slow' : ''}`}
           />
         </button>
       )}
@@ -249,12 +249,12 @@ export default function MusicPlayer() {
             </button>
           </div>
 
-          {/* 歌曲信息 */}
+          {/* 歌曲信息（播放时波动） */}
           <div className="flex items-center gap-3 mb-3">
             <img
               src={playlist[currentTrack].cover}
               alt={playlist[currentTrack].name}
-              className="w-12 h-12 rounded-lg object-cover"
+              className={`w-12 h-12 rounded-lg object-cover ${isPlaying ? 'animate-pulse-music' : ''}`}
             />
             <div className="flex-1 min-w-0">
               <p className="text-white text-sm font-medium truncate">{playlist[currentTrack].name}</p>
