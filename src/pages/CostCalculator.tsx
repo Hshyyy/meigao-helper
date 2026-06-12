@@ -140,10 +140,10 @@ export default function CostCalculator() {
         估算美国寄宿高中留学总费用，帮你做好预算规划
       </p>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:h-[calc(100vh-8rem)]">
         {/* 左侧：设置 */}
-        <div className="lg:col-span-1">
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-5 sticky top-20 space-y-5">
+        <div className="lg:col-span-1 lg:overflow-y-auto">
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-5 lg:sticky lg:top-0 space-y-5">
             <h2 className="font-semibold text-gray-900">📌 设置</h2>
 
             {/* 学校选择 */}
@@ -249,7 +249,7 @@ export default function CostCalculator() {
         </div>
 
         {/* 右侧：费用明细 */}
-        <div className="lg:col-span-2 space-y-6">
+        <div className="lg:col-span-2 lg:overflow-y-auto space-y-6">
           {/* 总费用概览 */}
           <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl p-6 text-white">
             <h2 className="text-lg font-semibold mb-2">💰 预估总费用</h2>
