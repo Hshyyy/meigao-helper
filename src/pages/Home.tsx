@@ -31,7 +31,7 @@ export default function Home() {
         </div>
         <div className="max-w-6xl mx-auto px-4 py-20 text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-6">
-            找到最适合你的美国寄宿高中
+            为Hshy们推荐适合你的美国寄宿高中
           </h1>
           <p className="text-xl text-blue-100 mb-10 max-w-2xl mx-auto">
             输入你的成绩和偏好，Chris为你智能匹配推荐学校，助力你成功圆梦！
