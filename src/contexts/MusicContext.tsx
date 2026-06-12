@@ -81,13 +81,9 @@ export function MusicProvider({ children }: { children: ReactNode }) {
     const onEnded = () => {
       const mode = playModeRef.current;
       if (mode === "single") {
-        // 单曲循环：重置时间，等可以播放时再播放
+        // 单曲循环：直接重置并播放
         audio.currentTime = 0;
-        const onCanPlay = () => {
-          audio.play().catch(() => {});
-          audio.removeEventListener("canplay", onCanPlay);
-        };
-        audio.addEventListener("canplay", onCanPlay);
+        audio.play();
       } else if (mode === "shuffle") {
         const idx = Math.floor(Math.random() * playlist.length);
         setCurrentTrack(idx);
