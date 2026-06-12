@@ -108,14 +108,23 @@ export function MusicProvider({ children }: { children: ReactNode }) {
     return () => { tried = true; };
   }, []);
 
-  // 切换标签页或离开网站时暂停
+  // 切换标签页暂停，回来时恢复
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
 
+    let wasPlaying = false;
+
     const handleVisibility = () => {
       if (document.hidden) {
+        // 离开时记住播放状态并暂停
+        wasPlaying = !audio.paused;
         audio.pause();
+      } else {
+        // 回来时如果之前在播放，就恢复播放
+        if (wasPlaying) {
+          audio.play().catch(() => {});
+        }
       }
     };
 
@@ -123,18 +132,12 @@ export function MusicProvider({ children }: { children: ReactNode }) {
       audio.pause();
     };
 
-    const handleBlur = () => {
-      audio.pause();
-    };
-
     document.addEventListener("visibilitychange", handleVisibility);
     window.addEventListener("beforeunload", handleBeforeUnload);
-    window.addEventListener("blur", handleBlur);
 
     return () => {
       document.removeEventListener("visibilitychange", handleVisibility);
       window.removeEventListener("beforeunload", handleBeforeUnload);
-      window.removeEventListener("blur", handleBlur);
     };
   }, []);
 
