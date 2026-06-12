@@ -25,8 +25,13 @@ export default function Home() {
       </Helmet>
 
       {/* Hero */}
-      <section className="bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 text-white relative">
-        <div className="absolute top-4 right-4 z-10">
+      <section className="relative text-white">
+        {/* 背景图片 */}
+        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: "url('/hero-bg.jpg')" }} />
+        {/* 半透明遮罩 */}
+        <div className="absolute inset-0 bg-black/50" />
+        <div className="relative z-10">
+        <div className="absolute top-4 right-4 z-20">
           <ShareButton url={window.location.origin} label="分享网站" />
         </div>
         <div className="max-w-6xl mx-auto px-4 py-32 text-center">
@@ -83,6 +88,7 @@ export default function Home() {
               🗺️ 学校地图
             </Link>
           </div>
+        </div>
         </div>
       </section>
 
