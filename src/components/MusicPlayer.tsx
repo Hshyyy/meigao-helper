@@ -354,9 +354,9 @@ export default function MusicPlayer() {
 
       {/* 歌曲列表（独立弹窗） */}
       {showList && (
-        <div className="absolute bottom-full right-0 mb-2 bg-white rounded-xl shadow-lg border border-gray-200 p-3 min-w-56 max-h-64 overflow-y-auto">
-          {/* 歌单标题和关闭按钮 */}
-          <div className="flex items-center justify-between mb-2">
+        <div className="absolute bottom-full right-0 mb-2 bg-white rounded-xl shadow-lg border border-gray-200 min-w-56 max-h-64 flex flex-col">
+          {/* 歌单标题和关闭按钮（固定） */}
+          <div className="flex items-center justify-between p-3 pb-2 border-b border-gray-100 sticky top-0 bg-white z-10">
             <div className="flex items-center gap-2">
               <p className="text-xs text-gray-500">🎵 播放列表</p>
               <span className="text-xs text-gray-400">{getPlayModeTooltip()}</span>
@@ -369,32 +369,35 @@ export default function MusicPlayer() {
               ✕
             </button>
           </div>
-          {playlist.map((track, index) => (
-            <button
-              key={index}
-              onClick={() => {
-                playTrack(index);
-                setShowList(false);
-              }}
-              className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ${
-                index === currentTrack
-                  ? "bg-blue-50 text-blue-600"
-                  : "hover:bg-gray-50 text-gray-700"
-              }`}
-            >
-              <div className="flex items-center gap-2">
-                <img
-                  src={track.cover}
-                  alt={track.name}
-                  className="w-8 h-8 rounded object-cover"
-                />
-                <div>
-                  <p className="font-medium">{track.name}</p>
-                  <p className="text-xs text-gray-400">{track.artist}</p>
+          {/* 歌曲列表（可滚动） */}
+          <div className="overflow-y-auto flex-1 p-2">
+            {playlist.map((track, index) => (
+              <button
+                key={index}
+                onClick={() => {
+                  playTrack(index);
+                  setShowList(false);
+                }}
+                className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ${
+                  index === currentTrack
+                    ? "bg-blue-50 text-blue-600"
+                    : "hover:bg-gray-50 text-gray-700"
+                }`}
+              >
+                <div className="flex items-center gap-2">
+                  <img
+                    src={track.cover}
+                    alt={track.name}
+                    className="w-8 h-8 rounded object-cover"
+                  />
+                  <div>
+                    <p className="font-medium">{track.name}</p>
+                    <p className="text-xs text-gray-400">{track.artist}</p>
+                  </div>
                 </div>
-              </div>
-            </button>
-          ))}
+              </button>
+            ))}
+          </div>
         </div>
       )}
     </div>
