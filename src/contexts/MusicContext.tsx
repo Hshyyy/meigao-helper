@@ -81,20 +81,22 @@ export function MusicProvider({ children }: { children: ReactNode }) {
     const onEnded = () => {
       const mode = playModeRef.current;
       if (mode === "single") {
-        audio.currentTime = 0;
-        audio.play().catch(() => {});
+        // 单曲循环：重新加载并播放当前歌曲
+        audio.src = playlist[currentTrack].file;
+        audio.load();
+        audio.addEventListener("canplay", () => { audio.play().catch(() => {}); }, { once: true });
       } else if (mode === "shuffle") {
         const idx = Math.floor(Math.random() * playlist.length);
         setCurrentTrack(idx);
         audio.src = playlist[idx].file;
         audio.load();
-        audio.play().catch(() => {});
+        audio.addEventListener("canplay", () => { audio.play().catch(() => {}); }, { once: true });
       } else {
         const idx = (currentTrack + 1) % playlist.length;
         setCurrentTrack(idx);
         audio.src = playlist[idx].file;
         audio.load();
-        audio.play().catch(() => {});
+        audio.addEventListener("canplay", () => { audio.play().catch(() => {}); }, { once: true });
       }
     };
 
