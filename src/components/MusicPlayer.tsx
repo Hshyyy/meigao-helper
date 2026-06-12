@@ -113,7 +113,6 @@ export default function MusicPlayer() {
     setCurrentTrack(index);
     audio.src = playlist[index].file;
     audio.load();
-    // 自动播放
     audio.play().catch((err) => {
       console.log("播放失败:", err);
       setIsPlaying(false);
@@ -196,6 +195,17 @@ export default function MusicPlayer() {
   // 计算进度百分比
   const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
 
+  // 关闭播放器（同时关闭歌单）
+  const closePlayer = () => {
+    setExpanded(false);
+    setShowList(false);
+  };
+
+  // 只关闭歌单
+  const closeList = () => {
+    setShowList(false);
+  };
+
   if (playlist.length === 0) {
     return null;
   }
@@ -221,13 +231,23 @@ export default function MusicPlayer() {
       {/* 展开状态：完整播放器 */}
       {expanded && (
         <div className="bg-white/20 backdrop-blur-sm rounded-2xl shadow-lg border border-white/30 p-3 w-72">
-          {/* 收起按钮 */}
-          <button
-            onClick={() => setExpanded(false)}
-            className="absolute top-2 right-2 w-6 h-6 flex items-center justify-center text-white/80 hover:text-white transition-colors"
-          >
-            ✕
-          </button>
+          {/* 顶部按钮：歌单和关闭 */}
+          <div className="flex items-center justify-between mb-2">
+            <button
+              onClick={() => setShowList(!showList)}
+              className="w-6 h-6 flex items-center justify-center text-white/80 hover:text-white transition-colors"
+              title="播放列表"
+            >
+              📋
+            </button>
+            <button
+              onClick={closePlayer}
+              className="w-6 h-6 flex items-center justify-center text-white/80 hover:text-white transition-colors"
+              title="收起播放器"
+            >
+              ✕
+            </button>
+          </div>
 
           {/* 歌曲信息 */}
           <div className="flex items-center gap-3 mb-3">
@@ -319,23 +339,25 @@ export default function MusicPlayer() {
               />
             </div>
           </div>
-
-          {/* 歌曲列表按钮 */}
-          <button
-            onClick={() => setShowList(!showList)}
-            className="absolute top-2 left-2 w-6 h-6 flex items-center justify-center text-white/80 hover:text-white transition-colors"
-          >
-            📋
-          </button>
         </div>
       )}
 
-      {/* 歌曲列表 */}
-      {showList && expanded && (
+      {/* 歌曲列表（独立弹窗） */}
+      {showList && (
         <div className="absolute bottom-full right-0 mb-2 bg-white rounded-xl shadow-lg border border-gray-200 p-3 min-w-56 max-h-64 overflow-y-auto">
+          {/* 歌单标题和关闭按钮 */}
           <div className="flex items-center justify-between mb-2">
-            <p className="text-xs text-gray-500">🎵 播放列表</p>
-            <span className="text-xs text-gray-400">{getPlayModeTooltip()}</span>
+            <div className="flex items-center gap-2">
+              <p className="text-xs text-gray-500">🎵 播放列表</p>
+              <span className="text-xs text-gray-400">{getPlayModeTooltip()}</span>
+            </div>
+            <button
+              onClick={closeList}
+              className="w-5 h-5 flex items-center justify-center text-gray-400 hover:text-gray-600 transition-colors"
+              title="关闭歌单"
+            >
+              ✕
+            </button>
           </div>
           {playlist.map((track, index) => (
             <button
