@@ -108,17 +108,33 @@ export function MusicProvider({ children }: { children: ReactNode }) {
     return () => { tried = true; };
   }, []);
 
-  // 离开网站暂停
+  // 切换标签页或离开网站时暂停
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
-    const onUnload = () => audio.pause();
-    const onVis = () => { if (document.hidden) audio.pause(); };
-    window.addEventListener("beforeunload", onUnload);
-    document.addEventListener("visibilitychange", onVis);
+
+    const handleVisibility = () => {
+      if (document.hidden) {
+        audio.pause();
+      }
+    };
+
+    const handleBeforeUnload = () => {
+      audio.pause();
+    };
+
+    const handleBlur = () => {
+      audio.pause();
+    };
+
+    document.addEventListener("visibilitychange", handleVisibility);
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    window.addEventListener("blur", handleBlur);
+
     return () => {
-      window.removeEventListener("beforeunload", onUnload);
-      document.removeEventListener("visibilitychange", onVis);
+      document.removeEventListener("visibilitychange", handleVisibility);
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+      window.removeEventListener("blur", handleBlur);
     };
   }, []);
 
