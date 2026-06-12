@@ -192,7 +192,7 @@ export default function Home() {
           <div className="absolute inset-0 bg-black/50" />
           {/* 内容 */}
           <div className="relative z-10">
-            <h2 className="text-2xl font-bold mb-4">准备好了吗？</h2>
+            <h2 className="text-2xl font-bold mb-4">Are you ready?</h2>
             <p className="text-blue-100 mb-6">
               现在就开始，找到属于你的理想美高
             </p>
