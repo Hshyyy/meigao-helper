@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Outlet, Link, useLocation } from "react-router-dom";
 import MusicPlayer from "./components/MusicPlayer";
-import { useEffect, useRef } from "react";
 
 const navItems = [
   { path: "/", label: "首页" },
