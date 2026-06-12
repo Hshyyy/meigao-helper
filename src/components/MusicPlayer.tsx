@@ -113,10 +113,16 @@ export default function MusicPlayer() {
     setCurrentTrack(index);
     audio.src = playlist[index].file;
     audio.load();
-    audio.play().catch((err) => {
-      console.log("播放失败:", err);
-      setIsPlaying(false);
-    });
+
+    // 等待音频加载完成后自动播放
+    const handleCanPlay = () => {
+      audio.play().catch((err) => {
+        console.log("播放失败:", err);
+        setIsPlaying(false);
+      });
+      audio.removeEventListener("canplay", handleCanPlay);
+    };
+    audio.addEventListener("canplay", handleCanPlay);
   }, []);
 
   // 下一首（自动播放）
