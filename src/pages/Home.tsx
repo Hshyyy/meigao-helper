@@ -37,7 +37,7 @@ export default function Home() {
           <p className="text-xl text-blue-100 mb-12 max-w-2xl mx-auto">
             输入你的成绩和偏好，Chris为你智能匹配推荐学校，助力你成功圆梦！
           </p>
-          <div className="flex gap-4 justify-center flex-wrap mb-6">
+          <div className="flex gap-4 justify-center flex-wrap mb-10">
             <Link
               to="/recommend"
               className="bg-white text-blue-700 px-8 py-4 rounded-xl font-semibold text-lg hover:bg-blue-50 transition-colors no-underline shadow-lg"
