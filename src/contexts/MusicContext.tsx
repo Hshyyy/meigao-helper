@@ -50,9 +50,6 @@ export function useMusic() {
   return ctx;
 }
 
-// 全局标记，防止 HMR 时重复自动播放
-let hasAutoPlayed = false;
-
 export function MusicProvider({ children }: { children: ReactNode }) {
   const audioRef = useRef<HTMLAudioElement>(null);
   const playModeRef = useRef<PlayMode>("loop");
@@ -115,22 +112,6 @@ export function MusicProvider({ children }: { children: ReactNode }) {
       audio.removeEventListener("loadedmetadata", onLoadedMetadata);
     };
   }, [currentTrack]);
-
-  // 首次进入自动播放（只触发一次）
-  useEffect(() => {
-    if (hasAutoPlayed) return;
-    hasAutoPlayed = true;
-
-    const audio = audioRef.current;
-    if (!audio) return;
-
-    const tryPlay = () => {
-      audio.play().catch(() => {});
-    };
-
-    // 延迟播放，确保页面加载完成
-    setTimeout(tryPlay, 1000);
-  }, []);
 
   // 离开暂停，回来恢复
   useEffect(() => {
