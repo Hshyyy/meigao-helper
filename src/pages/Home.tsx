@@ -34,7 +34,7 @@ export default function Home() {
             找到最适合你的美国寄宿高中
           </h1>
           <p className="text-xl text-blue-100 mb-10 max-w-2xl mx-auto">
-            输入你的成绩和偏好，智能匹配推荐学校，让选校不再迷茫
+            输入你的成绩和偏好，Chris为你智能匹配推荐学校，助力你成功圆梦！
           </p>
           <div className="flex gap-3 justify-center flex-wrap">
             <Link
