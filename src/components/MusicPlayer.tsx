@@ -75,6 +75,60 @@ export default function MusicPlayer() {
     }
   }, [volume]);
 
+  // 进入网站自动播放（只在首次加载时触发）
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    // 标记是否已经尝试过自动播放
+    let hasTriedAutoPlay = false;
+
+    const tryAutoPlay = () => {
+      if (hasTriedAutoPlay) return;
+      hasTriedAutoPlay = true;
+      audio.play().catch(() => {
+        // 浏览器阻止了自动播放，需要用户手动点击
+        console.log("自动播放被浏览器阻止，请点击播放按钮");
+      });
+    };
+
+    // 页面加载完成后尝试自动播放
+    if (document.readyState === "complete") {
+      // 延迟一下，确保音频加载完成
+      setTimeout(tryAutoPlay, 500);
+    } else {
+      window.addEventListener("load", () => setTimeout(tryAutoPlay, 500));
+    }
+
+    return () => {
+      hasTriedAutoPlay = true; // 防止 HMR 时重复触发
+    };
+  }, []);
+
+  // 离开网站时暂停
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    const handleBeforeUnload = () => {
+      audio.pause();
+    };
+
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        audio.pause();
+      }
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, []);
+
   // 处理歌曲结束
   const handleTrackEnd = useCallback(() => {
     if (playMode === "single") {
