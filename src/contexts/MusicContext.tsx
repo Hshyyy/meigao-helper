@@ -87,6 +87,27 @@ export function MusicProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => { if (audioRef.current) audioRef.current.volume = volume; }, [volume]);
 
+  // 进入网站自动播放
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    let tried = false;
+    const tryPlay = () => {
+      if (tried) return;
+      tried = true;
+      audio.play().catch(() => {});
+    };
+
+    if (document.readyState === "complete") {
+      setTimeout(tryPlay, 500);
+    } else {
+      window.addEventListener("load", () => setTimeout(tryPlay, 500));
+    }
+
+    return () => { tried = true; };
+  }, []);
+
   // 离开网站暂停
   useEffect(() => {
     const audio = audioRef.current;
