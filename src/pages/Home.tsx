@@ -25,7 +25,7 @@ export default function Home() {
         <div className="absolute top-4 right-4 z-10">
           <ShareButton url={window.location.origin} label="分享网站" />
         </div>
-        <div className="absolute bottom-4 right-4 z-10">
+        <div className="absolute bottom-4 left-4 z-10">
           <MusicPlayer />
         </div>
         <div className="max-w-6xl mx-auto px-4 py-20 text-center">
