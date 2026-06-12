@@ -105,6 +105,37 @@ export default function Home() {
         </div>
       </section>
 
+      {/* 精选顶尖名校 */}
+      <section className="max-w-6xl mx-auto px-4 pb-12">
+        <h2 className="text-2xl font-bold text-center text-gray-900 mb-8">🌟 精选顶尖名校</h2>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {schools.filter(s => s.rankingTier === "顶尖").slice(0, 4).map((school) => (
+            <Link key={school.id} to="/schools" className="group">
+              <div className="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all">
+                {school.photoUrl ? (
+                  <img src={school.photoUrl} alt={school.nameCn} className="w-full h-32 object-cover" />
+                ) : (
+                  <div className="w-full h-32 bg-gradient-to-br from-blue-100 to-purple-100 flex items-center justify-center text-4xl">🏫</div>
+                )}
+                <div className="p-3">
+                  <h3 className="font-semibold text-gray-900 text-sm truncate">{school.nameCn}</h3>
+                  <p className="text-xs text-gray-500 truncate">{school.name}</p>
+                  <div className="flex items-center justify-between mt-2">
+                    <span className="text-xs text-gray-400">#{school.ranking}</span>
+                    <span className="text-xs text-blue-600 font-medium">${school.tuition.toLocaleString()}</span>
+                  </div>
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+        <div className="text-center mt-6">
+          <Link to="/schools" className="text-blue-600 hover:text-blue-700 font-medium text-sm no-underline">
+            查看全部学校 →
+          </Link>
+        </div>
+      </section>
+
       {/* 功能介绍 */}
       <section className="max-w-6xl mx-auto px-4 py-16">
         <h2 className="text-2xl font-bold text-center text-gray-900 mb-12">
