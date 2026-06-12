@@ -23,7 +23,11 @@ const playlist: Track[] = [
 
 type PlayMode = "loop" | "single" | "shuffle";
 
-export default function MusicPlayer() {
+interface MusicPlayerProps {
+  showUI?: boolean; // 是否显示播放器UI
+}
+
+export default function MusicPlayer({ showUI = true }: MusicPlayerProps) {
   const audioRef = useRef<HTMLAudioElement>(null);
   const progressRef = useRef<HTMLDivElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -272,10 +276,11 @@ export default function MusicPlayer() {
 
   return (
     <div className="relative">
+      {/* 音乐播放器（始终渲染，保证音乐持续播放） */}
       <audio ref={audioRef} src={playlist[currentTrack].file} preload="auto" />
 
-      {/* 收缩状态：小图标（播放时转动+水波纹） */}
-      {!expanded && (
+      {/* UI 控制（只在首页显示） */}
+      {showUI && !expanded && (
         <button
           onClick={() => setExpanded(true)}
           className="w-16 h-16 bg-white/30 backdrop-blur-sm rounded-full shadow-lg border border-white/30 flex items-center justify-center hover:bg-white/50 transition-colors"
@@ -291,7 +296,7 @@ export default function MusicPlayer() {
       )}
 
       {/* 展开状态：完整播放器 */}
-      {expanded && (
+      {showUI && expanded && (
         <div className="bg-white/20 backdrop-blur-sm rounded-2xl shadow-lg border border-white/30 p-3 w-72">
           {/* 顶部按钮：歌单和关闭 */}
           <div className="flex items-center justify-between mb-2">
@@ -407,7 +412,7 @@ export default function MusicPlayer() {
       )}
 
       {/* 歌曲列表（独立弹窗） */}
-      {showList && (
+      {showUI && showList && (
         <div className="absolute bottom-full right-0 mb-2 bg-white rounded-xl shadow-lg border border-gray-200 min-w-56 max-h-64 flex flex-col">
           {/* 歌单标题和关闭按钮（固定） */}
           <div className="flex items-center justify-between p-3 pb-2 border-b border-gray-100 sticky top-0 bg-white z-10">

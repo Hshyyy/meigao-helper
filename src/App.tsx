@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Outlet, Link, useLocation } from "react-router-dom";
 import MusicPlayer from "./components/MusicPlayer";
+import { useEffect, useRef } from "react";
 
 const navItems = [
   { path: "/", label: "首页" },
@@ -115,10 +116,8 @@ export default function App() {
         </div>
       </footer>
 
-      {/* 音乐播放器（固定在左下角） */}
-      <div className="fixed bottom-4 left-4 z-50">
-        <MusicPlayer />
-      </div>
+      {/* 音乐播放器（只播放音乐，不显示UI） */}
+      <MusicPlayer showUI={false} />
     </div>
   );
 }
