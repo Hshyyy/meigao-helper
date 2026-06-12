@@ -51,34 +51,34 @@ export default function Home() {
               📋 浏览全部学校
             </Link>
           </div>
-          <div className="flex gap-3 justify-center flex-wrap">
+          <div className="flex gap-4 justify-center flex-wrap">
             <Link
               to="/compare"
-              className="border-2 border-white/60 text-white/80 px-5 py-3 rounded-xl font-medium text-base hover:bg-white/10 transition-colors no-underline"
+              className="border-2 border-white/60 text-white/80 px-6 py-3 rounded-xl font-medium text-lg hover:bg-white/10 transition-colors no-underline"
             >
               ⚖️ 学校对比
             </Link>
             <Link
               to="/favorites"
-              className="border-2 border-white/60 text-white/80 px-5 py-3 rounded-xl font-medium text-base hover:bg-white/10 transition-colors no-underline"
+              className="border-2 border-white/60 text-white/80 px-6 py-3 rounded-xl font-medium text-lg hover:bg-white/10 transition-colors no-underline"
             >
               ❤️ 我的收藏
             </Link>
             <Link
               to="/timeline"
-              className="border-2 border-white/60 text-white/80 px-5 py-3 rounded-xl font-medium text-base hover:bg-white/10 transition-colors no-underline"
+              className="border-2 border-white/60 text-white/80 px-6 py-3 rounded-xl font-medium text-lg hover:bg-white/10 transition-colors no-underline"
             >
               📅 申请时间线
             </Link>
             <Link
               to="/cost"
-              className="border-2 border-white/60 text-white/80 px-5 py-3 rounded-xl font-medium text-base hover:bg-white/10 transition-colors no-underline"
+              className="border-2 border-white/60 text-white/80 px-6 py-3 rounded-xl font-medium text-lg hover:bg-white/10 transition-colors no-underline"
             >
               💰 费用计算
             </Link>
             <Link
               to="/map"
-              className="border-2 border-white/60 text-white/80 px-5 py-3 rounded-xl font-medium text-base hover:bg-white/10 transition-colors no-underline"
+              className="border-2 border-white/60 text-white/80 px-6 py-3 rounded-xl font-medium text-lg hover:bg-white/10 transition-colors no-underline"
             >
               🗺️ 学校地图
             </Link>
