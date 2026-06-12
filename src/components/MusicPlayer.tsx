@@ -12,7 +12,7 @@ export default function MusicPlayer() {
   const [showList, setShowList] = useState(false);
 
   const getPlayModeIcon = () => playMode === "loop" ? "🔁" : playMode === "single" ? "🔂" : "🔀";
-  const getPlayModeTooltip = () => playMode === "loop" ? "列表循环" : playMode === "single" ? "单曲循环" : "随机播放";
+  const getPlayModeTooltip = () => playMode === "loop" ? "Loop" : playMode === "single" ? "Single" : "Shuffle";
   const togglePlayMode = () => {
     const modes = ["loop", "single", "shuffle"] as const;
     setPlayMode(modes[(modes.indexOf(playMode) + 1) % 3]);
@@ -41,8 +41,8 @@ export default function MusicPlayer() {
       {expanded && (
         <div className="bg-white rounded-2xl shadow-xl border border-gray-200 p-3 w-72">
           <div className="flex items-center justify-between mb-2">
-            <button onClick={() => setShowList(!showList)} className="w-6 h-6 flex items-center justify-center text-gray-500 hover:text-gray-700 transition-colors" title="播放列表">📋</button>
-            <button onClick={() => { setExpanded(false); setShowList(false); }} className="w-6 h-6 flex items-center justify-center text-gray-500 hover:text-gray-700 transition-colors" title="收起">✕</button>
+            <button onClick={() => setShowList(!showList)} className="flex items-center gap-1 px-2 py-1 rounded text-xs text-gray-500 hover:text-gray-700 hover:bg-gray-100 transition-colors" title="Playlist">📋 Playlist</button>
+            <button onClick={() => { setExpanded(false); setShowList(false); }} className="w-6 h-6 flex items-center justify-center text-gray-500 hover:text-gray-700 transition-colors" title="Close">✕</button>
           </div>
 
           <div className="flex items-center gap-3 mb-3">
@@ -67,7 +67,9 @@ export default function MusicPlayer() {
           </div>
 
           <div className="flex items-center justify-between">
-            <button onClick={togglePlayMode} title={getPlayModeTooltip()} className="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-gray-700 transition-colors">{getPlayModeIcon()}</button>
+            <button onClick={togglePlayMode} title={getPlayModeTooltip()} className="flex items-center gap-1 px-2 py-1 rounded text-xs text-gray-500 hover:text-gray-700 hover:bg-gray-100 transition-colors">
+              {getPlayModeIcon()} {getPlayModeTooltip()}
+            </button>
             <button onClick={prevTrack} className="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-gray-700 transition-colors">⏮</button>
             <button onClick={togglePlay} className="w-12 h-12 flex items-center justify-center bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-colors">{isPlaying ? "⏸" : "▶"}</button>
             <button onClick={nextTrack} className="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-gray-700 transition-colors">⏭</button>
@@ -84,7 +86,7 @@ export default function MusicPlayer() {
         <div className="absolute bottom-full right-0 mb-2 bg-white rounded-xl shadow-lg border border-gray-200 min-w-56 max-h-64 flex flex-col">
           <div className="flex items-center justify-between p-3 pb-2 border-b border-gray-100 sticky top-0 bg-white z-10">
             <div className="flex items-center gap-2">
-              <p className="text-xs text-gray-500">🎵 播放列表</p>
+              <p className="text-xs text-gray-500">🎵 Playlist</p>
               <span className="text-xs text-gray-400">{getPlayModeTooltip()}</span>
             </div>
             <button onClick={() => setShowList(false)} className="w-5 h-5 flex items-center justify-center text-gray-400 hover:text-gray-600 transition-colors">✕</button>
