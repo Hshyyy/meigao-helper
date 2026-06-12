@@ -1,329 +1,53 @@
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState } from "react";
+import { useMusic } from "../contexts/MusicContext";
 
-interface Track {
-  name: string;
-  artist: string;
-  file: string;
-  cover: string;
-}
+export default function MusicPlayer() {
+  const {
+    playlist, currentTrack, isPlaying, playMode, volume,
+    currentTime, duration, togglePlay, nextTrack, prevTrack,
+    playTrack, setVolume, setPlayMode, seek,
+  } = useMusic();
 
-const playlist: Track[] = [
-  { name: "JULY", artist: "Kris Wu", file: "/music/JULY.FLAC", cover: "/music/covers/JULY.jpg" },
-  { name: "Bad Girl", artist: "Kris Wu", file: "/music/Bad Girl.FLAC", cover: "/music/covers/Bad Girl.jpg" },
-  { name: "November Rain", artist: "Kris Wu", file: "/music/November Rain.FLAC", cover: "/music/covers/November Rain.jpg" },
-  { name: "Despacito (Remix)", artist: "Luis Fonsi, Daddy Yankee, Justin Bieber", file: "/music/Despacito (Remix) - Luis Fonsi、Daddy Yankee、Justin Bieber.mp3", cover: "/music/covers/Despacito.jpg" },
-  { name: "My Jealousy", artist: "Clazziquai", file: "/music/My Jealousy - Clazziquai.mp3", cover: "/music/covers/My Jealousy.svg" },
-  { name: "ONLY LOOK AT ME", artist: "TAEYANG", file: "/music/ONLY LOOK AT ME - TAEYANG.mp3", cover: "/music/covers/ONLY LOOK AT ME.jpg" },
-  { name: "The Way I Still Love You", artist: "Reynard Silva", file: "/music/The Way I Still Love You - Reynard Silva.mp3", cover: "/music/covers/The Way I Still Love You.jpg" },
-  { name: "Work (Derra Flip)", artist: "Drake, Derra, Rihanna", file: "/music/Work (Derra Flip) - Drake、Derra、Rihanna.mp3", cover: "/music/covers/Work.jpg" },
-  { name: "一半一半", artist: "Top Barry", file: "/music/一半一半 - Top Barry、INDEcompany.mp3", cover: "/music/covers/一半一半.svg" },
-  { name: "暮雨2.0", artist: "HYPEEZY", file: "/music/暮雨2.0 (那往事就到此) - HYPEEZY、CHECKYHON、邓乐怡.mp3", cover: "/music/covers/暮雨2.0.svg" },
-  { name: "玻璃", artist: "Gareth.T", file: "/music/玻璃 - Gareth.T.mp3", cover: "/music/covers/玻璃.svg" },
-];
-
-type PlayMode = "loop" | "single" | "shuffle";
-
-interface MusicPlayerProps {
-  showUI?: boolean; // 是否显示播放器UI
-}
-
-export default function MusicPlayer({ showUI = true }: MusicPlayerProps) {
-  const audioRef = useRef<HTMLAudioElement>(null);
-  const progressRef = useRef<HTMLDivElement>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [currentTrack, setCurrentTrack] = useState(0);
-  const [volume, setVolume] = useState(0.3);
-  const [showList, setShowList] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [playMode, setPlayMode] = useState<PlayMode>("loop");
-  const [currentTime, setCurrentTime] = useState(0);
-  const [duration, setDuration] = useState(0);
   const [expanded, setExpanded] = useState(false);
+  const [showList, setShowList] = useState(false);
 
-  // 同步音频状态
-  useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
-
-    const handlePlay = () => setIsPlaying(true);
-    const handlePause = () => setIsPlaying(false);
-    const handleEnded = () => handleTrackEnd();
-    const handleLoadStart = () => setIsLoading(true);
-    const handleCanPlay = () => setIsLoading(false);
-    const handleTimeUpdate = () => setCurrentTime(audio.currentTime);
-    const handleLoadedMetadata = () => setDuration(audio.duration);
-
-    audio.addEventListener("play", handlePlay);
-    audio.addEventListener("pause", handlePause);
-    audio.addEventListener("ended", handleEnded);
-    audio.addEventListener("loadstart", handleLoadStart);
-    audio.addEventListener("canplay", handleCanPlay);
-    audio.addEventListener("timeupdate", handleTimeUpdate);
-    audio.addEventListener("loadedmetadata", handleLoadedMetadata);
-
-    return () => {
-      audio.removeEventListener("play", handlePlay);
-      audio.removeEventListener("pause", handlePause);
-      audio.removeEventListener("ended", handleEnded);
-      audio.removeEventListener("loadstart", handleLoadStart);
-      audio.removeEventListener("canplay", handleCanPlay);
-      audio.removeEventListener("timeupdate", handleTimeUpdate);
-      audio.removeEventListener("loadedmetadata", handleLoadedMetadata);
-    };
-  }, []);
-
-  // 设置音量
-  useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.volume = volume;
-    }
-  }, [volume]);
-
-  // 进入网站自动播放（只在首次加载时触发）
-  useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
-
-    // 标记是否已经尝试过自动播放
-    let hasTriedAutoPlay = false;
-
-    const tryAutoPlay = () => {
-      if (hasTriedAutoPlay) return;
-      hasTriedAutoPlay = true;
-      audio.play().catch(() => {
-        // 浏览器阻止了自动播放，需要用户手动点击
-        console.log("自动播放被浏览器阻止，请点击播放按钮");
-      });
-    };
-
-    // 页面加载完成后尝试自动播放
-    if (document.readyState === "complete") {
-      // 延迟一下，确保音频加载完成
-      setTimeout(tryAutoPlay, 500);
-    } else {
-      window.addEventListener("load", () => setTimeout(tryAutoPlay, 500));
-    }
-
-    return () => {
-      hasTriedAutoPlay = true; // 防止 HMR 时重复触发
-    };
-  }, []);
-
-  // 离开网站时暂停
-  useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
-
-    const handleBeforeUnload = () => {
-      audio.pause();
-    };
-
-    const handleVisibilityChange = () => {
-      if (document.hidden) {
-        audio.pause();
-      }
-    };
-
-    window.addEventListener("beforeunload", handleBeforeUnload);
-    document.addEventListener("visibilitychange", handleVisibilityChange);
-
-    return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-      document.removeEventListener("visibilitychange", handleVisibilityChange);
-    };
-  }, []);
-
-  // 处理歌曲结束
-  const handleTrackEnd = useCallback(() => {
-    if (playMode === "single") {
-      if (audioRef.current) {
-        audioRef.current.currentTime = 0;
-        audioRef.current.play();
-      }
-    } else if (playMode === "shuffle") {
-      const randomIndex = Math.floor(Math.random() * playlist.length);
-      playTrack(randomIndex);
-    } else {
-      nextTrack();
-    }
-  }, [playMode]);
-
-  // 播放/暂停切换
-  const togglePlay = useCallback(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
-
-    if (isPlaying) {
-      audio.pause();
-    } else {
-      audio.play().catch((err) => {
-        console.log("播放失败:", err);
-        setIsPlaying(false);
-      });
-    }
-  }, [isPlaying]);
-
-  // 播放指定歌曲（自动播放）
-  const playTrack = useCallback((index: number) => {
-    const audio = audioRef.current;
-    if (!audio) return;
-
-    setCurrentTrack(index);
-    audio.src = playlist[index].file;
-    audio.load();
-
-    // 等待音频加载完成后自动播放
-    const handleCanPlay = () => {
-      audio.play().catch((err) => {
-        console.log("播放失败:", err);
-        setIsPlaying(false);
-      });
-      audio.removeEventListener("canplay", handleCanPlay);
-    };
-    audio.addEventListener("canplay", handleCanPlay);
-  }, []);
-
-  // 下一首（自动播放）
-  const nextTrack = useCallback(() => {
-    let next: number;
-    if (playMode === "shuffle") {
-      next = Math.floor(Math.random() * playlist.length);
-    } else {
-      next = (currentTrack + 1) % playlist.length;
-    }
-    playTrack(next);
-  }, [currentTrack, playMode, playTrack]);
-
-  // 上一首（自动播放）
-  const prevTrack = useCallback(() => {
-    let prev: number;
-    if (playMode === "shuffle") {
-      prev = Math.floor(Math.random() * playlist.length);
-    } else {
-      prev = (currentTrack - 1 + playlist.length) % playlist.length;
-    }
-    playTrack(prev);
-  }, [currentTrack, playMode, playTrack]);
-
-  // 切换播放模式
-  const togglePlayMode = useCallback(() => {
-    const modes: PlayMode[] = ["loop", "single", "shuffle"];
-    const currentIndex = modes.indexOf(playMode);
-    const nextIndex = (currentIndex + 1) % modes.length;
-    setPlayMode(modes[nextIndex]);
-  }, [playMode]);
-
-  // 获取播放模式图标
-  const getPlayModeIcon = () => {
-    switch (playMode) {
-      case "loop":
-        return "🔁";
-      case "single":
-        return "🔂";
-      case "shuffle":
-        return "🔀";
-    }
+  const getPlayModeIcon = () => playMode === "loop" ? "🔁" : playMode === "single" ? "🔂" : "🔀";
+  const getPlayModeTooltip = () => playMode === "loop" ? "列表循环" : playMode === "single" ? "单曲循环" : "随机播放";
+  const togglePlayMode = () => {
+    const modes = ["loop", "single", "shuffle"] as const;
+    setPlayMode(modes[(modes.indexOf(playMode) + 1) % 3]);
   };
-
-  // 获取播放模式提示
-  const getPlayModeTooltip = () => {
-    switch (playMode) {
-      case "loop":
-        return "列表循环";
-      case "single":
-        return "单曲循环";
-      case "shuffle":
-        return "随机播放";
-    }
-  };
-
-  // 点击进度条跳转
-  const handleProgressClick = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-    const audio = audioRef.current;
-    const progressBar = progressRef.current;
-    if (!audio || !progressBar) return;
-
-    const rect = progressBar.getBoundingClientRect();
-    const clickX = e.clientX - rect.left;
-    const progress = clickX / rect.width;
-    audio.currentTime = progress * audio.duration;
-  }, []);
-
-  // 格式化时间
-  const formatTime = (time: number) => {
-    const minutes = Math.floor(time / 60);
-    const seconds = Math.floor(time % 60);
-    return `${minutes}:${seconds.toString().padStart(2, "0")}`;
-  };
-
-  // 计算进度百分比
+  const formatTime = (t: number) => `${Math.floor(t / 60)}:${Math.floor(t % 60).toString().padStart(2, "0")}`;
   const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
-
-  // 关闭播放器（同时关闭歌单）
-  const closePlayer = () => {
-    setExpanded(false);
-    setShowList(false);
+  const handleProgressClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    seek((e.clientX - rect.left) / rect.width * duration);
   };
 
-  // 只关闭歌单
-  const closeList = () => {
-    setShowList(false);
-  };
-
-  if (playlist.length === 0) {
-    return null;
-  }
+  if (playlist.length === 0) return null;
 
   return (
     <div className="relative">
-      {/* 音乐播放器（始终渲染，保证音乐持续播放） */}
-      <audio ref={audioRef} src={playlist[currentTrack].file} preload="auto" />
-
-      {/* UI 控制（只在首页显示） */}
-      {showUI && !expanded && (
-        <button
-          onClick={() => setExpanded(true)}
-          className="w-16 h-16 bg-white/30 backdrop-blur-sm rounded-full shadow-lg border border-white/30 flex items-center justify-center hover:bg-white/50 transition-colors"
-        >
+      {/* 收缩状态 */}
+      {!expanded && (
+        <button onClick={() => setExpanded(true)} className="w-16 h-16 bg-white/30 backdrop-blur-sm rounded-full shadow-lg border border-white/30 flex items-center justify-center hover:bg-white/50 transition-colors">
           <div className={`relative w-14 h-14 rounded-full ${isPlaying ? 'animate-water-ripple' : ''}`}>
-            <img
-              src={playlist[currentTrack].cover}
-              alt={playlist[currentTrack].name}
-              className={`w-14 h-14 rounded-full object-cover ${isPlaying ? 'animate-spin-slow' : ''}`}
-            />
+            <img src={playlist[currentTrack].cover} alt={playlist[currentTrack].name} className={`w-14 h-14 rounded-full object-cover ${isPlaying ? 'animate-spin-slow' : ''}`} />
           </div>
         </button>
       )}
 
-      {/* 展开状态：完整播放器 */}
-      {showUI && expanded && (
+      {/* 展开状态 */}
+      {expanded && (
         <div className="bg-white/20 backdrop-blur-sm rounded-2xl shadow-lg border border-white/30 p-3 w-72">
-          {/* 顶部按钮：歌单和关闭 */}
           <div className="flex items-center justify-between mb-2">
-            <button
-              onClick={() => setShowList(!showList)}
-              className="w-6 h-6 flex items-center justify-center text-white/80 hover:text-white transition-colors"
-              title="播放列表"
-            >
-              📋
-            </button>
-            <button
-              onClick={closePlayer}
-              className="w-6 h-6 flex items-center justify-center text-white/80 hover:text-white transition-colors"
-              title="收起播放器"
-            >
-              ✕
-            </button>
+            <button onClick={() => setShowList(!showList)} className="w-6 h-6 flex items-center justify-center text-white/80 hover:text-white transition-colors" title="播放列表">📋</button>
+            <button onClick={() => { setExpanded(false); setShowList(false); }} className="w-6 h-6 flex items-center justify-center text-white/80 hover:text-white transition-colors" title="收起">✕</button>
           </div>
 
-          {/* 歌曲信息（播放时水波纹） */}
           <div className="flex items-center gap-3 mb-3">
             <div className={`relative w-12 h-12 rounded-lg ${isPlaying ? 'animate-water-ripple' : ''}`}>
-              <img
-                src={playlist[currentTrack].cover}
-                alt={playlist[currentTrack].name}
-                className="w-12 h-12 rounded-lg object-cover"
-              />
+              <img src={playlist[currentTrack].cover} alt={playlist[currentTrack].name} className="w-12 h-12 rounded-lg object-cover" />
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-white text-sm font-medium truncate">{playlist[currentTrack].name}</p>
@@ -331,128 +55,47 @@ export default function MusicPlayer({ showUI = true }: MusicPlayerProps) {
             </div>
           </div>
 
-          {/* 进度条 */}
           <div className="mb-3">
-            <div
-              ref={progressRef}
-              onClick={handleProgressClick}
-              className="relative h-1.5 bg-white/20 rounded-full cursor-pointer group"
-            >
-              {/* 已播放部分 */}
-              <div
-                className="absolute top-0 left-0 h-full bg-white rounded-full transition-all"
-                style={{ width: `${progress}%` }}
-              />
-
-              {/* 拖动按钮 */}
-              <div
-                className="absolute top-1/2 -translate-y-1/2 w-3 h-3 bg-white rounded-full shadow-sm opacity-0 group-hover:opacity-100 transition-opacity"
-                style={{ left: `${progress}%` }}
-              />
+            <div onClick={handleProgressClick} className="relative h-1.5 bg-white/20 rounded-full cursor-pointer group">
+              <div className="absolute top-0 left-0 h-full bg-white rounded-full transition-all" style={{ width: `${progress}%` }} />
+              <div className="absolute top-1/2 -translate-y-1/2 w-3 h-3 bg-white rounded-full shadow-sm opacity-0 group-hover:opacity-100 transition-opacity" style={{ left: `${progress}%` }} />
             </div>
-
-            {/* 时间显示 */}
             <div className="flex justify-between mt-1">
               <span className="text-white/70 text-xs">{formatTime(currentTime)}</span>
               <span className="text-white/70 text-xs">{formatTime(duration)}</span>
             </div>
           </div>
 
-          {/* 控制按钮 */}
           <div className="flex items-center justify-between">
-            {/* 播放模式 */}
-            <button
-              onClick={togglePlayMode}
-              title={getPlayModeTooltip()}
-              className="w-8 h-8 flex items-center justify-center text-white/80 hover:text-white transition-colors"
-            >
-              {getPlayModeIcon()}
-            </button>
-
-            {/* 上一首 */}
-            <button
-              onClick={prevTrack}
-              className="w-8 h-8 flex items-center justify-center text-white/80 hover:text-white transition-colors"
-            >
-              ⏮
-            </button>
-
-            {/* 播放/暂停 */}
-            <button
-              onClick={togglePlay}
-              disabled={isLoading}
-              className="w-12 h-12 flex items-center justify-center bg-white/30 text-white rounded-full hover:bg-white/50 transition-colors disabled:opacity-50"
-            >
-              {isLoading ? "⏳" : isPlaying ? "⏸" : "▶"}
-            </button>
-
-            {/* 下一首 */}
-            <button
-              onClick={nextTrack}
-              className="w-8 h-8 flex items-center justify-center text-white/80 hover:text-white transition-colors"
-            >
-              ⏭
-            </button>
-
-            {/* 音量 */}
+            <button onClick={togglePlayMode} title={getPlayModeTooltip()} className="w-8 h-8 flex items-center justify-center text-white/80 hover:text-white transition-colors">{getPlayModeIcon()}</button>
+            <button onClick={prevTrack} className="w-8 h-8 flex items-center justify-center text-white/80 hover:text-white transition-colors">⏮</button>
+            <button onClick={togglePlay} className="w-12 h-12 flex items-center justify-center bg-white/30 text-white rounded-full hover:bg-white/50 transition-colors">{isPlaying ? "⏸" : "▶"}</button>
+            <button onClick={nextTrack} className="w-8 h-8 flex items-center justify-center text-white/80 hover:text-white transition-colors">⏭</button>
             <div className="flex items-center gap-1">
               <span className="text-xs text-white/70">🔊</span>
-              <input
-                type="range"
-                min="0"
-                max="1"
-                step="0.1"
-                value={volume}
-                onChange={(e) => setVolume(Number(e.target.value))}
-                className="w-16 h-1"
-              />
+              <input type="range" min="0" max="1" step="0.1" value={volume} onChange={(e) => setVolume(Number(e.target.value))} className="w-16 h-1" />
             </div>
           </div>
         </div>
       )}
 
-      {/* 歌曲列表（独立弹窗） */}
-      {showUI && showList && (
+      {/* 歌曲列表 */}
+      {showList && (
         <div className="absolute bottom-full right-0 mb-2 bg-white rounded-xl shadow-lg border border-gray-200 min-w-56 max-h-64 flex flex-col">
-          {/* 歌单标题和关闭按钮（固定） */}
           <div className="flex items-center justify-between p-3 pb-2 border-b border-gray-100 sticky top-0 bg-white z-10">
             <div className="flex items-center gap-2">
               <p className="text-xs text-gray-500">🎵 播放列表</p>
               <span className="text-xs text-gray-400">{getPlayModeTooltip()}</span>
             </div>
-            <button
-              onClick={closeList}
-              className="w-5 h-5 flex items-center justify-center text-gray-400 hover:text-gray-600 transition-colors"
-              title="关闭歌单"
-            >
-              ✕
-            </button>
+            <button onClick={() => setShowList(false)} className="w-5 h-5 flex items-center justify-center text-gray-400 hover:text-gray-600 transition-colors">✕</button>
           </div>
-          {/* 歌曲列表（可滚动） */}
           <div className="overflow-y-auto flex-1 p-2">
             {playlist.map((track, index) => (
-              <button
-                key={index}
-                onClick={() => {
-                  playTrack(index);
-                  setShowList(false);
-                }}
-                className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ${
-                  index === currentTrack
-                    ? "bg-blue-50 text-blue-600"
-                    : "hover:bg-gray-50 text-gray-700"
-                }`}
-              >
+              <button key={index} onClick={() => { playTrack(index); setShowList(false); }}
+                className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ${index === currentTrack ? "bg-blue-50 text-blue-600" : "hover:bg-gray-50 text-gray-700"}`}>
                 <div className="flex items-center gap-2">
-                  <img
-                    src={track.cover}
-                    alt={track.name}
-                    className="w-8 h-8 rounded object-cover"
-                  />
-                  <div>
-                    <p className="font-medium">{track.name}</p>
-                    <p className="text-xs text-gray-400">{track.artist}</p>
-                  </div>
+                  <img src={track.cover} alt={track.name} className="w-8 h-8 rounded object-cover" />
+                  <div><p className="font-medium">{track.name}</p><p className="text-xs text-gray-400">{track.artist}</p></div>
                 </div>
               </button>
             ))}

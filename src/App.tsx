@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Outlet, Link, useLocation } from "react-router-dom";
+import { MusicProvider } from "./contexts/MusicContext";
 
 const navItems = [
   { path: "/", label: "首页" },
@@ -17,6 +18,7 @@ export default function App() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
+    <MusicProvider>
     <div className="min-h-screen bg-gray-50">
       {/* 导航栏 */}
       <nav className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
@@ -114,5 +116,6 @@ export default function App() {
         </div>
       </footer>
     </div>
+    </MusicProvider>
   );
 }
