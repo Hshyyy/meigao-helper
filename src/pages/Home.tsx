@@ -25,9 +25,6 @@ export default function Home() {
         <div className="absolute top-4 right-4 z-10">
           <ShareButton url={window.location.origin} label="分享网站" />
         </div>
-        <div className="absolute bottom-4 left-4 z-10">
-          <MusicPlayer />
-        </div>
         <div className="max-w-6xl mx-auto px-4 py-20 text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-6">
             找到最适合你的美国寄宿高中
@@ -159,6 +156,11 @@ export default function Home() {
           </Link>
         </div>
       </section>
+
+      {/* 音乐播放器（固定在左下角） */}
+      <div className="fixed bottom-4 left-4 z-50">
+        <MusicPlayer />
+      </div>
     </div>
   );
 }
