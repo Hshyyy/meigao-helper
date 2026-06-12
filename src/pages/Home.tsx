@@ -30,55 +30,55 @@ export default function Home() {
           <ShareButton url={window.location.origin} label="分享网站" />
         </div>
         <div className="max-w-6xl mx-auto px-4 py-32 text-center">
-          <p className="text-5xl md:text-6xl text-yellow-400 mb-8 font-bold tracking-widest">H-shy出品</p>
-          <h1 className="text-3xl md:text-4xl font-bold mb-6">
+          <p className="text-5xl md:text-6xl text-yellow-400 mb-12 font-bold tracking-widest">H-shy出品</p>
+          <h1 className="text-3xl md:text-4xl font-bold mb-8">
             为Hshy们推荐适合你的美国寄宿高中
           </h1>
-          <p className="text-xl text-blue-100 mb-10 max-w-2xl mx-auto">
+          <p className="text-xl text-blue-100 mb-12 max-w-2xl mx-auto">
             输入你的成绩和偏好，Chris为你智能匹配推荐学校，助力你成功圆梦！
           </p>
-          <div className="flex gap-3 justify-center flex-wrap">
+          <div className="flex gap-4 justify-center flex-wrap mb-6">
             <Link
               to="/recommend"
-              className="bg-white text-blue-700 px-6 md:px-8 py-3 rounded-xl font-semibold text-base md:text-lg hover:bg-blue-50 transition-colors no-underline shadow-lg"
+              className="bg-white text-blue-700 px-8 py-4 rounded-xl font-semibold text-lg hover:bg-blue-50 transition-colors no-underline shadow-lg"
             >
               🎯 智能选校推荐
             </Link>
             <Link
               to="/schools"
-              className="border-2 border-white text-white px-6 md:px-8 py-3 rounded-xl font-semibold text-base md:text-lg hover:bg-white/10 transition-colors no-underline"
+              className="border-2 border-white text-white px-8 py-4 rounded-xl font-semibold text-lg hover:bg-white/10 transition-colors no-underline"
             >
               📋 浏览全部学校
             </Link>
           </div>
-          <div className="flex gap-2 md:gap-4 justify-center flex-wrap mt-3 md:mt-4">
+          <div className="flex gap-3 justify-center flex-wrap">
             <Link
               to="/compare"
-              className="border-2 border-white/60 text-white/80 px-4 md:px-6 py-2 md:py-2.5 rounded-xl font-medium text-sm md:text-base hover:bg-white/10 transition-colors no-underline"
+              className="border-2 border-white/60 text-white/80 px-5 py-3 rounded-xl font-medium text-base hover:bg-white/10 transition-colors no-underline"
             >
               ⚖️ 学校对比
             </Link>
             <Link
               to="/favorites"
-              className="border-2 border-white/60 text-white/80 px-4 md:px-6 py-2 md:py-2.5 rounded-xl font-medium text-sm md:text-base hover:bg-white/10 transition-colors no-underline"
+              className="border-2 border-white/60 text-white/80 px-5 py-3 rounded-xl font-medium text-base hover:bg-white/10 transition-colors no-underline"
             >
               ❤️ 我的收藏
             </Link>
             <Link
               to="/timeline"
-              className="border-2 border-white/60 text-white/80 px-4 md:px-6 py-2 md:py-2.5 rounded-xl font-medium text-sm md:text-base hover:bg-white/10 transition-colors no-underline"
+              className="border-2 border-white/60 text-white/80 px-5 py-3 rounded-xl font-medium text-base hover:bg-white/10 transition-colors no-underline"
             >
               📅 申请时间线
             </Link>
             <Link
               to="/cost"
-              className="border-2 border-white/60 text-white/80 px-4 md:px-6 py-2 md:py-2.5 rounded-xl font-medium text-sm md:text-base hover:bg-white/10 transition-colors no-underline"
+              className="border-2 border-white/60 text-white/80 px-5 py-3 rounded-xl font-medium text-base hover:bg-white/10 transition-colors no-underline"
             >
               💰 费用计算
             </Link>
             <Link
               to="/map"
-              className="border-2 border-white/60 text-white/80 px-4 md:px-6 py-2 md:py-2.5 rounded-xl font-medium text-sm md:text-base hover:bg-white/10 transition-colors no-underline"
+              className="border-2 border-white/60 text-white/80 px-5 py-3 rounded-xl font-medium text-base hover:bg-white/10 transition-colors no-underline"
             >
               🗺️ 学校地图
             </Link>
