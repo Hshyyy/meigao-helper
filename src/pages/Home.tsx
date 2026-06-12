@@ -1,10 +1,14 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { schools } from "../data/schools";
+import type { School } from "../data/schools";
 import ShareButton from "../components/ShareButton";
 import MusicPlayer from "../components/MusicPlayer";
+import SchoolDetail from "../components/SchoolDetail";
 
 export default function Home() {
+  const [selectedSchool, setSelectedSchool] = useState<School | null>(null);
   const stats = {
     total: schools.length,
     topTier: schools.filter((s) => s.rankingTier === "顶尖").length,
@@ -110,7 +114,7 @@ export default function Home() {
         <h2 className="text-2xl font-bold text-center text-gray-900 mb-8">🌟 精选顶尖名校</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {schools.filter(s => s.rankingTier === "顶尖").slice(0, 4).map((school) => (
-            <Link key={school.id} to="/schools" className="group">
+            <div key={school.id} onClick={() => setSelectedSchool(school)} className="cursor-pointer group">
               <div className="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all">
                 {school.photoUrl ? (
                   <img src={school.photoUrl} alt={school.nameCn} className="w-full h-32 object-cover" />
@@ -126,7 +130,7 @@ export default function Home() {
                   </div>
                 </div>
               </div>
-            </Link>
+            </div>
           ))}
         </div>
         <div className="text-center mt-6">
@@ -192,6 +196,11 @@ export default function Home() {
       <div className="fixed bottom-4 left-4 z-50">
         <MusicPlayer />
       </div>
+
+      {/* 学校详情弹窗 */}
+      {selectedSchool && (
+        <SchoolDetail school={selectedSchool} onClose={() => setSelectedSchool(null)} />
+      )}
     </div>
   );
 }
