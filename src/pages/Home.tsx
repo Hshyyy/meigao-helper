@@ -185,17 +185,24 @@ export default function Home() {
 
       {/* CTA */}
       <section className="max-w-6xl mx-auto px-4 py-20">
-        <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl p-10 text-center text-white">
-          <h2 className="text-2xl font-bold mb-4">准备好了吗？</h2>
-          <p className="text-blue-100 mb-6">
-            现在就开始，找到属于你的理想美高
-          </p>
-          <Link
-            to="/recommend"
-            className="inline-block bg-white text-blue-700 px-8 py-3 rounded-xl font-semibold hover:bg-blue-50 transition-colors no-underline"
-          >
-            开始智能选校 →
-          </Link>
+        <div className="relative rounded-2xl overflow-hidden p-10 text-center text-white">
+          {/* 背景图片 */}
+          <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: "url('/hero-bg.jpg')" }} />
+          {/* 半透明遮罩 */}
+          <div className="absolute inset-0 bg-black/50" />
+          {/* 内容 */}
+          <div className="relative z-10">
+            <h2 className="text-2xl font-bold mb-4">准备好了吗？</h2>
+            <p className="text-blue-100 mb-6">
+              现在就开始，找到属于你的理想美高
+            </p>
+            <Link
+              to="/recommend"
+              className="inline-block bg-white text-blue-700 px-8 py-3 rounded-xl font-semibold hover:bg-blue-50 transition-colors no-underline"
+            >
+              开始智能选校 →
+            </Link>
+          </div>
         </div>
       </section>
 
