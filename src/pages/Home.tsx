@@ -163,7 +163,7 @@ export default function Home() {
             <div className="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
               <span className="text-3xl">📝</span>
             </div>
-            <h3 className="font-semibold text-gray-900 mb-2">第一步：输入信息</h3>
+            <h3 className="font-semibold text-gray-900 mb-2">Step 1: Enter information</h3>
             <p className="text-gray-600 text-sm">
               填写你的托福、SSAT、GPA 等成绩，以及地区偏好和预算
             </p>
@@ -172,7 +172,7 @@ export default function Home() {
             <div className="w-16 h-16 bg-green-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
               <span className="text-3xl">🤖</span>
             </div>
-            <h3 className="font-semibold text-gray-900 mb-2">第二步：智能匹配</h3>
+            <h3 className="font-semibold text-gray-900 mb-2">Step 2: Chris intelligently matches for u</h3>
             <p className="text-gray-600 text-sm">
               系统根据你的条件自动分析，筛选出最适合的学校
             </p>
@@ -181,7 +181,7 @@ export default function Home() {
             <div className="w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
               <span className="text-3xl">🎯</span>
             </div>
-            <h3 className="font-semibold text-gray-900 mb-2">第三步：查看推荐</h3>
+            <h3 className="font-semibold text-gray-900 mb-2">Step 3: Review recommendations and suggestions</h3>
             <p className="text-gray-600 text-sm">
               获取冲刺校、匹配校、保底校的分层推荐方案
             </p>
