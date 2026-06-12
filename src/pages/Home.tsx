@@ -27,7 +27,7 @@ export default function Home() {
       {/* Hero */}
       <section className="relative text-white">
         {/* 背景图片 */}
-        <div className="absolute inset-0 bg-cover" style={{ backgroundImage: "url('/hero-bg-3.jpg')", backgroundPosition: "center 20%" }} />
+        <div className="absolute inset-0 bg-cover" style={{ backgroundImage: "url('/hero-bg-3.jpg')", backgroundPosition: "center 80%" }} />
         {/* 半透明遮罩 */}
         <div className="absolute inset-0 bg-black/50" />
         <div className="relative z-10">
