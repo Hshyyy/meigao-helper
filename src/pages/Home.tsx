@@ -30,6 +30,7 @@ export default function Home() {
           <ShareButton url={window.location.origin} label="分享网站" />
         </div>
         <div className="max-w-6xl mx-auto px-4 py-32 text-center">
+          <p className="text-lg text-yellow-300 mb-4 font-medium">H-shy出品</p>
           <h1 className="text-4xl md:text-5xl font-bold mb-6">
             为Hshy们推荐适合你的美国寄宿高中
           </h1>
