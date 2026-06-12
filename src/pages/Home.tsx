@@ -29,7 +29,7 @@ export default function Home() {
         <div className="absolute top-4 right-4 z-10">
           <ShareButton url={window.location.origin} label="分享网站" />
         </div>
-        <div className="max-w-6xl mx-auto px-4 py-20 text-center">
+        <div className="max-w-6xl mx-auto px-4 py-32 text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-6">
             为Hshy们推荐适合你的美国寄宿高中
           </h1>
@@ -110,7 +110,7 @@ export default function Home() {
       </section>
 
       {/* 精选顶尖名校 */}
-      <section className="max-w-6xl mx-auto px-4 pb-12">
+      <section className="max-w-6xl mx-auto px-4 py-16">
         <h2 className="text-2xl font-bold text-center text-gray-900 mb-8">🌟 精选顶尖名校</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {schools.filter(s => s.rankingTier === "顶尖").slice(0, 4).map((school) => (
@@ -141,7 +141,7 @@ export default function Home() {
       </section>
 
       {/* 功能介绍 */}
-      <section className="max-w-6xl mx-auto px-4 py-16">
+      <section className="max-w-6xl mx-auto px-4 py-20">
         <h2 className="text-2xl font-bold text-center text-gray-900 mb-12">
           如何使用
         </h2>
@@ -177,7 +177,7 @@ export default function Home() {
       </section>
 
       {/* CTA */}
-      <section className="max-w-6xl mx-auto px-4 pb-16">
+      <section className="max-w-6xl mx-auto px-4 py-20">
         <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl p-10 text-center text-white">
           <h2 className="text-2xl font-bold mb-4">准备好了吗？</h2>
           <p className="text-blue-100 mb-6">
