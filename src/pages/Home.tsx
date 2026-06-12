@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-import { schools } from "../data/schools";
+import { schools, getEstimatedAnnualCost } from "../data/schools";
 import type { School } from "../data/schools";
 import ShareButton from "../components/ShareButton";
 import MusicPlayer from "../components/MusicPlayer";
@@ -13,7 +13,7 @@ export default function Home() {
     total: schools.length,
     topTier: schools.filter((s) => s.rankingTier === "顶尖").length,
     avgTuition: Math.round(
-      schools.reduce((sum, s) => sum + s.tuition, 0) / schools.length
+      schools.reduce((sum, s) => sum + getEstimatedAnnualCost(s), 0) / schools.length
     ),
   };
 
