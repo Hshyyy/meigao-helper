@@ -104,12 +104,23 @@ export function MusicProvider({ children }: { children: ReactNode }) {
     audio.addEventListener("timeupdate", onTimeUpdate);
     audio.addEventListener("loadedmetadata", onLoadedMetadata);
 
+    // 用户点击页面后自动播放（只触发一次）
+    let hasStarted = false;
+    const handleFirstClick = () => {
+      if (hasStarted) return;
+      hasStarted = true;
+      audio.play().catch(() => {});
+      document.removeEventListener("click", handleFirstClick);
+    };
+    document.addEventListener("click", handleFirstClick);
+
     return () => {
       audio.removeEventListener("play", onPlay);
       audio.removeEventListener("pause", onPause);
       audio.removeEventListener("ended", onEnded);
       audio.removeEventListener("timeupdate", onTimeUpdate);
       audio.removeEventListener("loadedmetadata", onLoadedMetadata);
+      document.removeEventListener("click", handleFirstClick);
     };
   }, [currentTrack]);
 
