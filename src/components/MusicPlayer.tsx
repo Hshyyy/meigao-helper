@@ -214,16 +214,16 @@ export default function MusicPlayer() {
     <div className="relative">
       <audio ref={audioRef} src={playlist[currentTrack].file} preload="auto" />
 
-      {/* 收缩状态：小图标（播放时转动） */}
+      {/* 收缩状态：小图标（播放时转动+水波纹） */}
       {!expanded && (
         <button
           onClick={() => setExpanded(true)}
-          className="w-14 h-14 bg-white/30 backdrop-blur-sm rounded-full shadow-lg border border-white/30 flex items-center justify-center hover:bg-white/50 transition-colors"
+          className="w-16 h-16 bg-white/30 backdrop-blur-sm rounded-full shadow-lg border border-white/30 flex items-center justify-center hover:bg-white/50 transition-colors"
         >
           <img
             src={playlist[currentTrack].cover}
             alt={playlist[currentTrack].name}
-            className={`w-12 h-12 rounded-full object-cover ${isPlaying ? 'animate-spin-slow' : ''}`}
+            className={`w-14 h-14 rounded-full object-cover ${isPlaying ? 'animate-spin-slow animate-water-ripple' : ''}`}
           />
         </button>
       )}
@@ -249,12 +249,12 @@ export default function MusicPlayer() {
             </button>
           </div>
 
-          {/* 歌曲信息（播放时波动） */}
+          {/* 歌曲信息（播放时水波纹） */}
           <div className="flex items-center gap-3 mb-3">
             <img
               src={playlist[currentTrack].cover}
               alt={playlist[currentTrack].name}
-              className={`w-12 h-12 rounded-lg object-cover ${isPlaying ? 'animate-pulse-music' : ''}`}
+              className={`w-12 h-12 rounded-lg object-cover ${isPlaying ? 'animate-water-ripple' : ''}`}
             />
             <div className="flex-1 min-w-0">
               <p className="text-white text-sm font-medium truncate">{playlist[currentTrack].name}</p>
