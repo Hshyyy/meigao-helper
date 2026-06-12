@@ -34,8 +34,8 @@ export default function Home() {
         <div className="absolute top-4 right-4 z-20">
           <ShareButton url={window.location.origin} label="分享网站" />
         </div>
-        <div className="max-w-6xl mx-auto px-4 pt-16 pb-24 text-center">
-          <p className="text-5xl md:text-6xl text-yellow-400 mb-12 font-bold tracking-widest">H-shy出品</p>
+        <div className="max-w-6xl mx-auto px-4 py-32 text-center">
+          <p className="text-5xl md:text-6xl text-yellow-400 mb-16 font-bold tracking-widest">H-shy出品</p>
           <h1 className="text-3xl md:text-4xl font-bold mb-8">
             为Hshy们推荐适合你的美国寄宿高中
           </h1>
