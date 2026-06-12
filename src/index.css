@@ -54,3 +54,22 @@ body {
 .animate-water-ripple {
   animation: water-ripple 2s ease-in-out infinite;
 }
+
+@keyframes water-ripple-light {
+  0% {
+    box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.3);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(37, 99, 235, 0.1);
+    transform: scale(1.02);
+  }
+  100% {
+    box-shadow: 0 0 0 20px rgba(37, 99, 235, 0);
+    transform: scale(1);
+  }
+}
+
+.animate-water-ripple-light {
+  animation: water-ripple-light 2s ease-in-out infinite;
+}

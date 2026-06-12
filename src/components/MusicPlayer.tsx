@@ -30,7 +30,7 @@ export default function MusicPlayer() {
     <div className="relative">
       {/* 收缩状态 */}
       {!expanded && (
-        <button onClick={() => setExpanded(true)} className="w-16 h-16 bg-white/30 backdrop-blur-sm rounded-full shadow-lg border border-white/30 flex items-center justify-center hover:bg-white/50 transition-colors">
+        <button onClick={() => setExpanded(true)} className="w-16 h-16 bg-white rounded-full shadow-lg border border-gray-200 flex items-center justify-center hover:shadow-xl transition-all">
           <div className={`relative w-14 h-14 rounded-full ${isPlaying ? 'animate-water-ripple' : ''}`}>
             <img src={playlist[currentTrack].cover} alt={playlist[currentTrack].name} className={`w-14 h-14 rounded-full object-cover ${isPlaying ? 'animate-spin-slow' : ''}`} />
           </div>
@@ -39,40 +39,40 @@ export default function MusicPlayer() {
 
       {/* 展开状态 */}
       {expanded && (
-        <div className="bg-white/20 backdrop-blur-sm rounded-2xl shadow-lg border border-white/30 p-3 w-72">
+        <div className="bg-white rounded-2xl shadow-xl border border-gray-200 p-3 w-72">
           <div className="flex items-center justify-between mb-2">
-            <button onClick={() => setShowList(!showList)} className="w-6 h-6 flex items-center justify-center text-white/80 hover:text-white transition-colors" title="播放列表">📋</button>
-            <button onClick={() => { setExpanded(false); setShowList(false); }} className="w-6 h-6 flex items-center justify-center text-white/80 hover:text-white transition-colors" title="收起">✕</button>
+            <button onClick={() => setShowList(!showList)} className="w-6 h-6 flex items-center justify-center text-gray-500 hover:text-gray-700 transition-colors" title="播放列表">📋</button>
+            <button onClick={() => { setExpanded(false); setShowList(false); }} className="w-6 h-6 flex items-center justify-center text-gray-500 hover:text-gray-700 transition-colors" title="收起">✕</button>
           </div>
 
           <div className="flex items-center gap-3 mb-3">
-            <div className={`relative w-12 h-12 rounded-lg ${isPlaying ? 'animate-water-ripple' : ''}`}>
+            <div className={`relative w-12 h-12 rounded-lg ${isPlaying ? 'animate-water-ripple-light' : ''}`}>
               <img src={playlist[currentTrack].cover} alt={playlist[currentTrack].name} className="w-12 h-12 rounded-lg object-cover" />
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-white text-sm font-medium truncate">{playlist[currentTrack].name}</p>
-              <p className="text-white/70 text-xs truncate">{playlist[currentTrack].artist}</p>
+              <p className="text-gray-900 text-sm font-medium truncate">{playlist[currentTrack].name}</p>
+              <p className="text-gray-500 text-xs truncate">{playlist[currentTrack].artist}</p>
             </div>
           </div>
 
           <div className="mb-3">
-            <div onClick={handleProgressClick} className="relative h-1.5 bg-white/20 rounded-full cursor-pointer group">
-              <div className="absolute top-0 left-0 h-full bg-white rounded-full transition-all" style={{ width: `${progress}%` }} />
-              <div className="absolute top-1/2 -translate-y-1/2 w-3 h-3 bg-white rounded-full shadow-sm opacity-0 group-hover:opacity-100 transition-opacity" style={{ left: `${progress}%` }} />
+            <div onClick={handleProgressClick} className="relative h-1.5 bg-gray-200 rounded-full cursor-pointer group">
+              <div className="absolute top-0 left-0 h-full bg-blue-600 rounded-full transition-all" style={{ width: `${progress}%` }} />
+              <div className="absolute top-1/2 -translate-y-1/2 w-3 h-3 bg-blue-600 rounded-full shadow-sm opacity-0 group-hover:opacity-100 transition-opacity" style={{ left: `${progress}%` }} />
             </div>
             <div className="flex justify-between mt-1">
-              <span className="text-white/70 text-xs">{formatTime(currentTime)}</span>
-              <span className="text-white/70 text-xs">{formatTime(duration)}</span>
+              <span className="text-gray-500 text-xs">{formatTime(currentTime)}</span>
+              <span className="text-gray-500 text-xs">{formatTime(duration)}</span>
             </div>
           </div>
 
           <div className="flex items-center justify-between">
-            <button onClick={togglePlayMode} title={getPlayModeTooltip()} className="w-8 h-8 flex items-center justify-center text-white/80 hover:text-white transition-colors">{getPlayModeIcon()}</button>
-            <button onClick={prevTrack} className="w-8 h-8 flex items-center justify-center text-white/80 hover:text-white transition-colors">⏮</button>
-            <button onClick={togglePlay} className="w-12 h-12 flex items-center justify-center bg-white/30 text-white rounded-full hover:bg-white/50 transition-colors">{isPlaying ? "⏸" : "▶"}</button>
-            <button onClick={nextTrack} className="w-8 h-8 flex items-center justify-center text-white/80 hover:text-white transition-colors">⏭</button>
+            <button onClick={togglePlayMode} title={getPlayModeTooltip()} className="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-gray-700 transition-colors">{getPlayModeIcon()}</button>
+            <button onClick={prevTrack} className="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-gray-700 transition-colors">⏮</button>
+            <button onClick={togglePlay} className="w-12 h-12 flex items-center justify-center bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-colors">{isPlaying ? "⏸" : "▶"}</button>
+            <button onClick={nextTrack} className="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-gray-700 transition-colors">⏭</button>
             <div className="flex items-center gap-1">
-              <span className="text-xs text-white/70">🔊</span>
+              <span className="text-xs text-gray-500">🔊</span>
               <input type="range" min="0" max="1" step="0.1" value={volume} onChange={(e) => setVolume(Number(e.target.value))} className="w-16 h-1" />
             </div>
           </div>
