@@ -82,21 +82,21 @@ export default function Home() {
       </section>
 
       {/* 数据概览 */}
-      <section className="max-w-6xl mx-auto px-4 -mt-8">
+      <section className="max-w-6xl mx-auto px-4 -mt-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="bg-white rounded-xl shadow-md p-6 text-center">
+          <div className="bg-white rounded-xl shadow-xl border border-gray-100 p-6 text-center">
             <div className="text-3xl font-bold text-blue-600">
               {stats.total}
             </div>
             <div className="text-gray-500 mt-1">所热门寄宿美高</div>
           </div>
-          <div className="bg-white rounded-xl shadow-md p-6 text-center">
+          <div className="bg-white rounded-xl shadow-xl border border-gray-100 p-6 text-center">
             <div className="text-3xl font-bold text-green-600">
               {stats.topTier}
             </div>
             <div className="text-gray-500 mt-1">所顶尖名校</div>
           </div>
-          <div className="bg-white rounded-xl shadow-md p-6 text-center">
+          <div className="bg-white rounded-xl shadow-xl border border-gray-100 p-6 text-center">
             <div className="text-3xl font-bold text-purple-600">
               ${stats.avgTuition.toLocaleString()}
             </div>
