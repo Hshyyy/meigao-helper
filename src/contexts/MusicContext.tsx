@@ -170,7 +170,11 @@ export function MusicProvider({ children }: { children: ReactNode }) {
     setCurrentTrack(index);
     audio.src = playlist[index].file;
     audio.load();
-    audio.addEventListener("canplay", () => { audio.play().catch(() => {}); }, { once: true });
+    // 立即尝试播放，如果不行则等待 canplay
+    audio.play().catch(() => {
+      const onCanPlay = () => { audio.play().catch(() => {}); audio.removeEventListener("canplay", onCanPlay); };
+      audio.addEventListener("canplay", onCanPlay);
+    });
   }, []);
 
   const nextTrack = useCallback(() => {
