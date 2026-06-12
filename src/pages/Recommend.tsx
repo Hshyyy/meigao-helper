@@ -323,9 +323,9 @@ export default function Recommend() {
       </div>
       <p className="text-gray-500 mb-8">输入你的成绩和偏好，系统为你匹配最合适的学校</p>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-1">
-          <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 sticky top-20">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:h-[calc(100vh-8rem)]">
+        <div className="lg:col-span-1 lg:overflow-y-auto">
+          <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 lg:sticky lg:top-0">
             <h2 className="font-semibold text-gray-900 mb-4">📋 你的信息</h2>
             <div className="space-y-4">
               <div>
@@ -452,7 +452,7 @@ export default function Recommend() {
           </form>
         </div>
 
-        <div className="lg:col-span-2" ref={resultsRef}>
+        <div className="lg:col-span-2 lg:overflow-y-auto" ref={resultsRef}>
           {results === null ? (
             <div className="text-center py-20 text-gray-400">
               <p className="text-5xl mb-4">🎯</p>
