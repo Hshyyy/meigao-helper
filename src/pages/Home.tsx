@@ -153,7 +153,7 @@ export default function Home() {
           <h2 className="text-2xl font-bold text-gray-900 mb-3">
             How to use?
           </h2>
-          <div className="flex items-center justify-center gap-2 text-gray-900">
+          <div className="flex items-center justify-center gap-2 text-gray-900 font-bold">
             <span>look</span>
             <span className="text-2xl">👇</span>
           </div>
