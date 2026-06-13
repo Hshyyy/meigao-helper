@@ -252,16 +252,16 @@ export default function CostCalculator() {
         <div className="lg:col-span-2 lg:overflow-y-auto space-y-6">
           {/* 总费用概览 */}
           <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl p-6 text-white">
-            <h2 className="text-lg font-semibold mb-2">💰 预估总费用</h2>
+            <h2 className="text-lg font-semibold mb-2">💰 Estimated Total</h2>
             <div className="text-4xl font-bold mb-2">${grandTotal.toLocaleString()}</div>
             <div className="text-blue-100 text-sm">{studyYears} 年总费用（含一次性费用）</div>
             <div className="grid grid-cols-2 gap-4 mt-4">
               <div className="bg-white/10 rounded-lg p-3">
-                <div className="text-sm text-blue-100">年度费用</div>
+                <div className="text-sm text-blue-100">Annual</div>
                 <div className="text-xl font-semibold">${annualTotal.toLocaleString()}/年</div>
               </div>
               <div className="bg-white/10 rounded-lg p-3">
-                <div className="text-sm text-blue-100">一次性费用</div>
+                <div className="text-sm text-blue-100">One-time</div>
                 <div className="text-xl font-semibold">${oneTimeTotal.toLocaleString()}</div>
               </div>
             </div>
