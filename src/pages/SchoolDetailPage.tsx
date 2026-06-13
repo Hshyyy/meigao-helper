@@ -34,15 +34,6 @@ export default function SchoolDetailPage() {
         <meta name="description" content={school.description.slice(0, 160)} />
       </Helmet>
 
-      {/* 返回按钮 */}
-      <button
-        onClick={() => navigate(-1)}
-        className="mb-6 px-4 py-2 text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg flex items-center gap-2 transition-colors"
-      >
-        <span>←</span>
-        <span>返回学校库</span>
-      </button>
-
       {/* 学校详情 */}
       <SchoolDetail school={school} onClose={() => navigate(-1)} />
     </div>
