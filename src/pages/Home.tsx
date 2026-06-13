@@ -99,19 +99,19 @@ export default function Home() {
             <div className="text-4xl font-bold text-blue-600 mb-2">
               {stats.total}
             </div>
-            <div className="text-gray-600 font-medium">所热门寄宿美高</div>
+            <div className="text-gray-600 font-medium">Boarding Schools</div>
           </div>
           <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-2xl shadow-lg border border-green-200 p-8 text-center">
             <div className="text-4xl font-bold text-green-600 mb-2">
               {stats.topTier}
             </div>
-            <div className="text-gray-600 font-medium">所顶尖名校</div>
+            <div className="text-gray-600 font-medium">Top Schools</div>
           </div>
           <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl shadow-lg border border-purple-200 p-8 text-center">
             <div className="text-4xl font-bold text-purple-600 mb-2">
               ${stats.avgTuition.toLocaleString()}
             </div>
-            <div className="text-gray-600 font-medium">平均年学费</div>
+            <div className="text-gray-600 font-medium">Avg. Tuition</div>
           </div>
         </div>
       </section>

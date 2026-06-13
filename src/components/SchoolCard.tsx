@@ -79,15 +79,15 @@ export default function SchoolCard({
       <div className="space-y-2 text-sm text-gray-600">
         <div className="flex justify-between">
           <span>📍 {school.state}</span>
-          <span>#{school.ranking}</span>
+          <span>Rank #{school.ranking}</span>
         </div>
         <div className="flex justify-between">
-          <span>💰 学费 ${school.tuition.toLocaleString()}/年</span>
+          <span>💰 Tuition ${school.tuition.toLocaleString()}/yr</span>
           <span className="text-xs text-gray-400">{getHousingNote(school)}</span>
         </div>
         <div className="flex justify-between">
           <span className="flex items-center gap-1">
-            📊 预估总费用 ${displayCost.toLocaleString()}/年
+            📊 Total ${displayCost.toLocaleString()}/yr
             <span className="relative group cursor-help">
               <span className="text-xs text-gray-400">ℹ️</span>
               <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 bg-gray-800 text-white text-xs px-2 py-1 rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
@@ -95,7 +95,7 @@ export default function SchoolCard({
               </span>
             </span>
           </span>
-          <span>录取率 {school.acceptanceRate}%</span>
+          <span>Acceptance {school.acceptanceRate}%</span>
         </div>
         {school.highlights && school.highlights.length > 0 && (
           <p className="text-xs text-green-600 mt-1">

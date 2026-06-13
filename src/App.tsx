@@ -3,14 +3,14 @@ import { Outlet, Link, useLocation } from "react-router-dom";
 import { MusicProvider } from "./contexts/MusicContext";
 
 const navItems = [
-  { path: "/", label: "首页" },
-  { path: "/schools", label: "学校库" },
-  { path: "/recommend", label: "智能选校" },
-  { path: "/favorites", label: "❤️ 收藏" },
-  { path: "/compare", label: "⚖️ 对比" },
-  { path: "/timeline", label: "📅 时间线" },
-  { path: "/cost", label: "💰 费用" },
-  { path: "/map", label: "🗺️ 地图" },
+  { path: "/", label: "Home" },
+  { path: "/schools", label: "Schools" },
+  { path: "/recommend", label: "Recommendation" },
+  { path: "/favorites", label: "❤️ Favorites" },
+  { path: "/compare", label: "⚖️ Compare" },
+  { path: "/timeline", label: "📅 Timeline" },
+  { path: "/cost", label: "💰 Cost" },
+  { path: "/map", label: "🗺️ Map" },
 ];
 
 export default function App() {
