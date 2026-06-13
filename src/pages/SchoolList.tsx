@@ -2,7 +2,6 @@ import { useState, useMemo, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { schools, regions, tuitionRanges, allTags } from "../data/schools";
-import type { School } from "../data/schools";
 import SchoolCard from "../components/SchoolCard";
 
 export default function SchoolList() {
