@@ -8,7 +8,7 @@ interface Track {
 }
 
 const playlist: Track[] = [
-  // 前五首（固定顺序）
+  // 第一组：固定顺序（前5首）
   { name: "Super Shy", artist: "NewJeans", file: "/music/Super Shy - NewJeans.mp3", cover: "/music/covers/Super Shy.jpg" },
   { name: "GO BABY", artist: "Justin Bieber", file: "/music/GO BABY - Justin Bieber.mp3", cover: "/music/covers/GO BABY.jpg" },
   { name: "thank u, next (Explicit)", artist: "Ariana Grande", file: "/music/thank u, next (Explicit) - Ariana Grande.mp3", cover: "/music/covers/thank u, next.jpg" },
@@ -21,6 +21,44 @@ const playlist: Track[] = [
   { name: "November Rain", artist: "Kris Wu", file: "/music/November Rain.FLAC", cover: "/music/covers/November Rain.jpg" },
   { name: "大碗宽面", artist: "Kris Wu", file: "/music/大碗宽面 - Kris Wu.FLAC", cover: "/music/covers/大碗宽面.jpg" },
 
+  // Justin Bieber（Baby第一，Beauty第二，Eenie第三）
+  { name: "Baby", artist: "Justin Bieber、Ludacris", file: "/music/Baby - Justin Bieber、Ludacris.mp3", cover: "/music/covers/Baby.jpg" },
+  { name: "Beauty And A Beat", artist: "Justin Bieber、Nicki Minaj", file: "/music/Beauty And A Beat - Justin Bieber、Nicki Minaj.mp3", cover: "/music/covers/Beauty And A Beat.jpg" },
+  { name: "Eenie Meenie", artist: "Justin Bieber、Sean Kingston", file: "/music/Eenie Meenie - Justin Bieber、Sean Kingston.mp3", cover: "/music/covers/Eenie Meenie.jpg" },
+  { name: "All That Matters", artist: "Justin Bieber", file: "/music/All That Matters - Justin Bieber.mp3", cover: "/music/covers/All That Matters.jpg" },
+  { name: "As Long As You Love Me", artist: "Justin Bieber、Big Sean", file: "/music/As Long As You Love Me - Justin Bieber、Big Sean.mp3", cover: "/music/covers/As Long As You Love Me.jpg" },
+  { name: "Boyfriend", artist: "Justin Bieber", file: "/music/Boyfriend - Justin Bieber.mp3", cover: "/music/covers/Boyfriend.jpg" },
+  { name: "Come Around Me", artist: "Justin Bieber", file: "/music/Come Around Me - Justin Bieber.mp3", cover: "/music/covers/Come Around Me.jpg" },
+  { name: "Confident", artist: "Justin Bieber、Chance the Rapper", file: "/music/Confident - Justin Bieber、Chance the Rapper.mp3", cover: "/music/covers/Confident.jpg" },
+  { name: "DAISIES", artist: "Justin Bieber", file: "/music/DAISIES - Justin Bieber.mp3", cover: "/music/covers/DAISIES.jpg" },
+  { name: "Favorite Girl", artist: "Justin Bieber", file: "/music/Favorite Girl - Justin Bieber.mp3", cover: "/music/covers/Favorite Girl.jpg" },
+  { name: "Heartbreaker", artist: "Justin Bieber", file: "/music/Heartbreaker - Justin Bieber.mp3", cover: "/music/covers/Heartbreaker.jpg" },
+  { name: "Hold On", artist: "Justin Bieber", file: "/music/Hold On - Justin Bieber.mp3", cover: "/music/covers/Hold On.jpg" },
+  { name: "Intentions", artist: "Justin Bieber、Quavo", file: "/music/Intentions - Justin Bieber、Quavo.mp3", cover: "/music/covers/Intentions.jpg" },
+  { name: "Let Me Love You", artist: "DJ Snake、Justin Bieber", file: "/music/Let Me Love You - DJ Snake、Justin Bieber.mp3", cover: "/music/covers/Let Me Love You.jpg" },
+  { name: "Love Me", artist: "Justin Bieber", file: "/music/Love Me - Justin Bieber.mp3", cover: "/music/covers/Love Me.jpg" },
+  { name: "Love Yourself", artist: "Justin Bieber", file: "/music/Love Yourself - Justin Bieber.mp3", cover: "/music/covers/Love Yourself.jpg" },
+  { name: "One Less Lonely Girl", artist: "Justin Bieber", file: "/music/One Less Lonely Girl - Justin Bieber.mp3", cover: "/music/covers/One Less Lonely Girl.jpg" },
+  { name: "One Time", artist: "Justin Bieber", file: "/music/One Time - Justin Bieber.mp3", cover: "/music/covers/One Time.jpg" },
+  { name: "Peaches (Explicit)", artist: "Justin Bieber、Daniel Caesar、GIVĒON", file: "/music/Peaches (Explicit) - Justin Bieber、Daniel Caesar、GIVĒON.mp3", cover: "/music/covers/Peaches.jpg" },
+  { name: "Running Over", artist: "Justin Bieber、Lil Dicky", file: "/music/Running Over - Justin Bieber、Lil Dicky.mp3", cover: "/music/covers/Running Over.jpg" },
+  { name: "Sorry", artist: "Justin Bieber", file: "/music/Sorry - Justin Bieber.mp3", cover: "/music/covers/Sorry.jpg" },
+  { name: "STAY (Explicit)", artist: "The Kid LAROI、Justin Bieber", file: "/music/STAY (Explicit) - The Kid LAROI、Justin Bieber.mp3", cover: "/music/covers/STAY.jpg" },
+  { name: "That Should Be Me", artist: "Justin Bieber", file: "/music/That Should Be Me - Justin Bieber.mp3", cover: "/music/covers/That Should Be Me.jpg" },
+  { name: "What Do You Mean", artist: "Justin Bieber", file: "/music/What Do You Mean - Justin Bieber.mp3", cover: "/music/covers/What Do You Mean.jpg" },
+  { name: "Yummy", artist: "Justin Bieber", file: "/music/Yummy - Justin Bieber.mp3", cover: "/music/covers/Yummy.jpg" },
+
+  // Tyla
+  { name: "ART", artist: "Tyla", file: "/music/ART - Tyla.mp3", cover: "/music/covers/ART.jpg" },
+  { name: "Truth or Dare", artist: "Tyla", file: "/music/Truth or Dare - Tyla.mp3", cover: "/music/covers/Truth or Dare.jpg" },
+  { name: "Water", artist: "Tyla", file: "/music/Water - Tyla.mp3", cover: "/music/covers/Water.jpg" },
+
+  // SZA
+  { name: "Conceited (Explicit)", artist: "SZA", file: "/music/Conceited (Explicit) - SZA.mp3", cover: "/music/covers/Conceited.jpg" },
+  { name: "Snooze (Explicit)", artist: "SZA", file: "/music/Snooze (Explicit) - SZA.mp3", cover: "/music/covers/Snooze.jpg" },
+  { name: "Open Arms", artist: "SZA、Travis Scott", file: "/music/Open Arms - SZA、Travis Scott.mp3", cover: "/music/covers/Open Arms.jpg" },
+  { name: "Kiss Me More (Explicit)", artist: "Doja Cat、SZA", file: "/music/Kiss Me More (Explicit) - Doja Cat、SZA.mp3", cover: "/music/covers/Kiss Me More.jpg" },
+
   // 其他歌曲（按歌手分组）
   // BoA
   { name: "Only One", artist: "BoA", file: "/music/Only One - BoA.mp3", cover: "/music/covers/Only One.jpg" },
@@ -30,10 +68,6 @@ const playlist: Track[] = [
   { name: "We Don't Talk Anymore (Mr. Collipark Remix)", artist: "Charlie Puth、Selena Gomez", file: "/music/We Don't Talk Anymore (Mr. Collipark Remix) - Charlie Puth、Selena Gomez.mp3", cover: "/music/covers/We Don't Talk Anymore.jpg" },
   // Clazziquai
   { name: "My Jealousy", artist: "Clazziquai", file: "/music/My Jealousy - Clazziquai.mp3", cover: "/music/covers/My Jealousy.jpg" },
-  // DJ Snake
-  { name: "Let Me Love You", artist: "DJ Snake、Justin Bieber", file: "/music/Let Me Love You - DJ Snake、Justin Bieber.mp3", cover: "/music/covers/Let Me Love You.jpg" },
-  // Doja Cat
-  { name: "Kiss Me More (Explicit)", artist: "Doja Cat、SZA", file: "/music/Kiss Me More (Explicit) - Doja Cat、SZA.mp3", cover: "/music/covers/Kiss Me More.jpg" },
   // Drake
   { name: "In My Feelings (Explicit)", artist: "Drake", file: "/music/In My Feelings (Explicit) - Drake.mp3", cover: "/music/covers/In My Feelings.jpg" },
   // Future
@@ -44,30 +78,6 @@ const playlist: Track[] = [
   { name: "暮雨2.0 (那往事就到此)", artist: "HYPEEZY、CHECKYHON、邓乐怡", file: "/music/暮雨2.0 (那往事就到此) - HYPEEZY、CHECKYHON、邓乐怡.mp3", cover: "/music/covers/暮雨2.0 (那往事就到此).jpg" },
   // Jai Wolf
   { name: "Gravity", artist: "Jai Wolf、JMR", file: "/music/Gravity - Jai Wolf、JMR.mp3", cover: "/music/covers/Gravity.jpg" },
-  // Justin Bieber
-  { name: "All That Matters", artist: "Justin Bieber", file: "/music/All That Matters - Justin Bieber.mp3", cover: "/music/covers/All That Matters.jpg" },
-  { name: "Boyfriend", artist: "Justin Bieber", file: "/music/Boyfriend - Justin Bieber.mp3", cover: "/music/covers/Boyfriend.jpg" },
-  { name: "Come Around Me", artist: "Justin Bieber", file: "/music/Come Around Me - Justin Bieber.mp3", cover: "/music/covers/Come Around Me.jpg" },
-  { name: "DAISIES", artist: "Justin Bieber", file: "/music/DAISIES - Justin Bieber.mp3", cover: "/music/covers/DAISIES.jpg" },
-  { name: "Favorite Girl", artist: "Justin Bieber", file: "/music/Favorite Girl - Justin Bieber.mp3", cover: "/music/covers/Favorite Girl.jpg" },
-  { name: "Heartbreaker", artist: "Justin Bieber", file: "/music/Heartbreaker - Justin Bieber.mp3", cover: "/music/covers/Heartbreaker.jpg" },
-  { name: "Hold On", artist: "Justin Bieber", file: "/music/Hold On - Justin Bieber.mp3", cover: "/music/covers/Hold On.jpg" },
-  { name: "Love Me", artist: "Justin Bieber", file: "/music/Love Me - Justin Bieber.mp3", cover: "/music/covers/Love Me.jpg" },
-  { name: "Love Yourself", artist: "Justin Bieber", file: "/music/Love Yourself - Justin Bieber.mp3", cover: "/music/covers/Love Yourself.jpg" },
-  { name: "One Less Lonely Girl", artist: "Justin Bieber", file: "/music/One Less Lonely Girl - Justin Bieber.mp3", cover: "/music/covers/One Less Lonely Girl.jpg" },
-  { name: "One Time", artist: "Justin Bieber", file: "/music/One Time - Justin Bieber.mp3", cover: "/music/covers/One Time.jpg" },
-  { name: "Sorry", artist: "Justin Bieber", file: "/music/Sorry - Justin Bieber.mp3", cover: "/music/covers/Sorry.jpg" },
-  { name: "That Should Be Me", artist: "Justin Bieber", file: "/music/That Should Be Me - Justin Bieber.mp3", cover: "/music/covers/That Should Be Me.jpg" },
-  { name: "What Do You Mean", artist: "Justin Bieber", file: "/music/What Do You Mean - Justin Bieber.mp3", cover: "/music/covers/What Do You Mean.jpg" },
-  { name: "Yummy", artist: "Justin Bieber", file: "/music/Yummy - Justin Bieber.mp3", cover: "/music/covers/Yummy.jpg" },
-  { name: "As Long As You Love Me", artist: "Justin Bieber、Big Sean", file: "/music/As Long As You Love Me - Justin Bieber、Big Sean.mp3", cover: "/music/covers/As Long As You Love Me.jpg" },
-  { name: "Confident", artist: "Justin Bieber、Chance the Rapper", file: "/music/Confident - Justin Bieber、Chance the Rapper.mp3", cover: "/music/covers/Confident.jpg" },
-  { name: "Peaches (Explicit)", artist: "Justin Bieber、Daniel Caesar、GIVĒON", file: "/music/Peaches (Explicit) - Justin Bieber、Daniel Caesar、GIVĒON.mp3", cover: "/music/covers/Peaches.jpg" },
-  { name: "Running Over", artist: "Justin Bieber、Lil Dicky", file: "/music/Running Over - Justin Bieber、Lil Dicky.mp3", cover: "/music/covers/Running Over.jpg" },
-  { name: "Baby", artist: "Justin Bieber、Ludacris", file: "/music/Baby - Justin Bieber、Ludacris.mp3", cover: "/music/covers/Baby.jpg" },
-  { name: "Beauty And A Beat", artist: "Justin Bieber、Nicki Minaj", file: "/music/Beauty And A Beat - Justin Bieber、Nicki Minaj.mp3", cover: "/music/covers/Beauty And A Beat.jpg" },
-  { name: "Intentions", artist: "Justin Bieber、Quavo", file: "/music/Intentions - Justin Bieber、Quavo.mp3", cover: "/music/covers/Intentions.jpg" },
-  { name: "Eenie Meenie", artist: "Justin Bieber、Sean Kingston", file: "/music/Eenie Meenie - Justin Bieber、Sean Kingston.mp3", cover: "/music/covers/Eenie Meenie.jpg" },
   // Lil Tjay
   { name: "Scared 2 Be Lonely", artist: "Lil Tjay", file: "/music/Scared 2 Be Lonely - Lil Tjay.mp3", cover: "/music/covers/Scared 2 Be Lonely.jpg" },
   // Luis Fonsi
@@ -78,24 +88,14 @@ const playlist: Track[] = [
   { name: "Attention", artist: "NewJeans", file: "/music/Attention - NewJeans.mp3", cover: "/music/covers/Attention.jpg" },
   // Reynard Silva
   { name: "The Way I Still Love You", artist: "Reynard Silva", file: "/music/The Way I Still Love You - Reynard Silva.mp3", cover: "/music/covers/The Way I Still Love You.jpg" },
-  // SZA
-  { name: "Conceited (Explicit)", artist: "SZA", file: "/music/Conceited (Explicit) - SZA.mp3", cover: "/music/covers/Conceited.jpg" },
-  { name: "Snooze (Explicit)", artist: "SZA", file: "/music/Snooze (Explicit) - SZA.mp3", cover: "/music/covers/Snooze.jpg" },
-  { name: "Open Arms", artist: "SZA、Travis Scott", file: "/music/Open Arms - SZA、Travis Scott.mp3", cover: "/music/covers/Open Arms.jpg" },
   // TAEYANG
   { name: "ONLY LOOK AT ME", artist: "TAEYANG", file: "/music/ONLY LOOK AT ME - TAEYANG.mp3", cover: "/music/covers/ONLY LOOK AT ME.jpg" },
   // Taylor Swift
   { name: "Cruel Summer", artist: "Taylor Swift", file: "/music/Cruel Summer - Taylor Swift.mp3", cover: "/music/covers/Cruel Summer.jpg" },
-  // The Kid LAROI
-  { name: "STAY (Explicit)", artist: "The Kid LAROI、Justin Bieber", file: "/music/STAY (Explicit) - The Kid LAROI、Justin Bieber.mp3", cover: "/music/covers/STAY.jpg" },
   // The Weeknd
   { name: "Die For You", artist: "The Weeknd", file: "/music/Die For You - The Weeknd.mp3", cover: "/music/covers/Die For You.jpg" },
   // Top Barry
   { name: "一半一半", artist: "Top Barry、INDEcompany", file: "/music/一半一半 - Top Barry、INDEcompany.mp3", cover: "/music/covers/一半一半.jpg" },
-  // Tyla
-  { name: "ART", artist: "Tyla", file: "/music/ART - Tyla.mp3", cover: "/music/covers/ART.jpg" },
-  { name: "Truth or Dare", artist: "Tyla", file: "/music/Truth or Dare - Tyla.mp3", cover: "/music/covers/Truth or Dare.jpg" },
-  { name: "Water", artist: "Tyla", file: "/music/Water - Tyla.mp3", cover: "/music/covers/Water.jpg" },
   // Tyler, The Creator
   { name: "See You Again (Explicit)", artist: "Tyler, The Creator", file: "/music/See You Again (Explicit) - Tyler, The Creator.mp3", cover: "/music/covers/See You Again.jpg" },
   // Usher
