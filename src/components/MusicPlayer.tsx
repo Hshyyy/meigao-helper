@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useMusic } from "../contexts/MusicContext";
 
 export default function MusicPlayer() {
@@ -10,6 +10,8 @@ export default function MusicPlayer() {
 
   const [expanded, setExpanded] = useState(false);
   const [showList, setShowList] = useState(false);
+  const listRef = useRef<HTMLDivElement>(null);
+  const trackRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
   const getPlayModeIcon = () => playMode === "loop" ? "🔁" : playMode === "single" ? "🔂" : "🔀";
   const getPlayModeTooltip = () => playMode === "loop" ? "Loop" : playMode === "single" ? "Single" : "Shuffle";
@@ -23,6 +25,15 @@ export default function MusicPlayer() {
     const rect = e.currentTarget.getBoundingClientRect();
     seek((e.clientX - rect.left) / rect.width * duration);
   };
+
+  // 打开歌单时滚动到当前播放歌曲
+  useEffect(() => {
+    if (showList && trackRefs.current[currentTrack]) {
+      setTimeout(() => {
+        trackRefs.current[currentTrack]?.scrollIntoView({ behavior: "smooth", block: "center" });
+      }, 100);
+    }
+  }, [showList, currentTrack]);
 
   if (playlist.length === 0) return null;
 
@@ -95,10 +106,14 @@ export default function MusicPlayer() {
             </div>
             <button onClick={() => setShowList(false)} className="w-5 h-5 flex items-center justify-center text-gray-400 hover:text-gray-600 transition-colors">✕</button>
           </div>
-          <div className="overflow-y-auto flex-1 p-2">
+          <div ref={listRef} className="overflow-y-auto flex-1 p-2">
             {playlist.map((track, index) => (
-              <button key={index} onClick={() => { playTrack(index); setShowList(false); }}
-                className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ${index === currentTrack ? "bg-blue-50 text-blue-600" : "hover:bg-gray-50 text-gray-700"}`}>
+              <button
+                key={index}
+                ref={(el) => { trackRefs.current[index] = el; }}
+                onClick={() => { playTrack(index); setShowList(false); }}
+                className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ${index === currentTrack ? "bg-blue-50 text-blue-600" : "hover:bg-gray-50 text-gray-700"}`}
+              >
                 <div className="flex items-center gap-2">
                   <img src={track.cover} alt={track.name} className="w-8 h-8 rounded object-cover" />
                   <div><p className="font-medium">{track.name}</p><p className="text-xs text-gray-400">{track.artist}</p></div>
