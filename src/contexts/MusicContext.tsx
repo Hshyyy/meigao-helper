@@ -64,6 +64,7 @@ const playlist: Track[] = [
   { name: "JULY", artist: "Kris Wu", file: "/music/JULY.FLAC", cover: "/music/covers/JULY.jpg" },
   { name: "Bad Girl", artist: "Kris Wu", file: "/music/Bad Girl.FLAC", cover: "/music/covers/Bad Girl.jpg" },
   { name: "November Rain", artist: "Kris Wu", file: "/music/November Rain.FLAC", cover: "/music/covers/November Rain.jpg" },
+  { name: "大碗宽面", artist: "Kris Wu", file: "/music/大碗宽面 - Kris Wu.FLAC", cover: "/music/covers/大碗宽面.jpg" },
   // Lil Tjay
   { name: "Scared 2 Be Lonely", artist: "Lil Tjay", file: "/music/Scared 2 Be Lonely - Lil Tjay.mp3", cover: "/music/covers/Scared 2 Be Lonely.jpg" },
   // Luis Fonsi
