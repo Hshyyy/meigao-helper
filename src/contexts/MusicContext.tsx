@@ -146,7 +146,7 @@ export function MusicProvider({ children }: { children: ReactNode }) {
     if (audioRef.current) audioRef.current.volume = volume;
   }, [volume]);
 
-  // 音频事件监听
+  // 音频事件监听（只绑定一次）
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
@@ -155,6 +155,24 @@ export function MusicProvider({ children }: { children: ReactNode }) {
     const onPause = () => setIsPlaying(false);
     const onTimeUpdate = () => setCurrentTime(audio.currentTime);
     const onLoadedMetadata = () => setDuration(audio.duration);
+
+    audio.addEventListener("play", onPlay);
+    audio.addEventListener("pause", onPause);
+    audio.addEventListener("timeupdate", onTimeUpdate);
+    audio.addEventListener("loadedmetadata", onLoadedMetadata);
+
+    return () => {
+      audio.removeEventListener("play", onPlay);
+      audio.removeEventListener("pause", onPause);
+      audio.removeEventListener("timeupdate", onTimeUpdate);
+      audio.removeEventListener("loadedmetadata", onLoadedMetadata);
+    };
+  }, []);
+
+  // 歌曲结束事件（依赖 currentTrack）
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
 
     const onEnded = () => {
       const mode = playModeRef.current;
@@ -176,19 +194,8 @@ export function MusicProvider({ children }: { children: ReactNode }) {
       }
     };
 
-    audio.addEventListener("play", onPlay);
-    audio.addEventListener("pause", onPause);
     audio.addEventListener("ended", onEnded);
-    audio.addEventListener("timeupdate", onTimeUpdate);
-    audio.addEventListener("loadedmetadata", onLoadedMetadata);
-
-    return () => {
-      audio.removeEventListener("play", onPlay);
-      audio.removeEventListener("pause", onPause);
-      audio.removeEventListener("ended", onEnded);
-      audio.removeEventListener("timeupdate", onTimeUpdate);
-      audio.removeEventListener("loadedmetadata", onLoadedMetadata);
-    };
+    return () => audio.removeEventListener("ended", onEnded);
   }, [currentTrack]);
 
   // 首次进入自动播放
