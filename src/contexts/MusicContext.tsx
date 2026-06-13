@@ -8,8 +8,20 @@ interface Track {
 }
 
 const playlist: Track[] = [
-  // Ariana Grande
+  // 前五首（固定顺序）
+  { name: "Super Shy", artist: "NewJeans", file: "/music/Super Shy - NewJeans.mp3", cover: "/music/covers/Super Shy.jpg" },
+  { name: "GO BABY", artist: "Justin Bieber", file: "/music/GO BABY - Justin Bieber.mp3", cover: "/music/covers/GO BABY.jpg" },
   { name: "thank u, next (Explicit)", artist: "Ariana Grande", file: "/music/thank u, next (Explicit) - Ariana Grande.mp3", cover: "/music/covers/thank u, next.jpg" },
+  { name: "Heat Waves", artist: "Glass Animals", file: "/music/Heat Waves - Glass Animals.mp3", cover: "/music/covers/Heat Waves.jpg" },
+  { name: "Work (Derra Flip)", artist: "Drake、Derra、Rihanna", file: "/music/Work (Derra Flip) - Drake、Derra、Rihanna.mp3", cover: "/music/covers/Work (Derra Flip).jpg" },
+
+  // Kris Wu
+  { name: "JULY", artist: "Kris Wu", file: "/music/JULY.FLAC", cover: "/music/covers/JULY.jpg" },
+  { name: "Bad Girl", artist: "Kris Wu", file: "/music/Bad Girl.FLAC", cover: "/music/covers/Bad Girl.jpg" },
+  { name: "November Rain", artist: "Kris Wu", file: "/music/November Rain.FLAC", cover: "/music/covers/November Rain.jpg" },
+  { name: "大碗宽面", artist: "Kris Wu", file: "/music/大碗宽面 - Kris Wu.FLAC", cover: "/music/covers/大碗宽面.jpg" },
+
+  // 其他歌曲（按歌手分组）
   // BoA
   { name: "Only One", artist: "BoA", file: "/music/Only One - BoA.mp3", cover: "/music/covers/Only One.jpg" },
   // Charlie Puth
@@ -24,13 +36,10 @@ const playlist: Track[] = [
   { name: "Kiss Me More (Explicit)", artist: "Doja Cat、SZA", file: "/music/Kiss Me More (Explicit) - Doja Cat、SZA.mp3", cover: "/music/covers/Kiss Me More.jpg" },
   // Drake
   { name: "In My Feelings (Explicit)", artist: "Drake", file: "/music/In My Feelings (Explicit) - Drake.mp3", cover: "/music/covers/In My Feelings.jpg" },
-  { name: "Work (Derra Flip)", artist: "Drake、Derra、Rihanna", file: "/music/Work (Derra Flip) - Drake、Derra、Rihanna.mp3", cover: "/music/covers/Work (Derra Flip).jpg" },
   // Future
   { name: "Game Time", artist: "Future、Tyla、FIFA Sound", file: "/music/Game Time - Future、Tyla、FIFA Sound.mp3", cover: "/music/covers/Game Time.jpg" },
   // Gareth.T
   { name: "玻璃", artist: "Gareth.T", file: "/music/玻璃 - Gareth.T.mp3", cover: "/music/covers/玻璃.jpg" },
-  // Glass Animals
-  { name: "Heat Waves", artist: "Glass Animals", file: "/music/Heat Waves - Glass Animals.mp3", cover: "/music/covers/Heat Waves.jpg" },
   // HYPEEZY
   { name: "暮雨2.0 (那往事就到此)", artist: "HYPEEZY、CHECKYHON、邓乐怡", file: "/music/暮雨2.0 (那往事就到此) - HYPEEZY、CHECKYHON、邓乐怡.mp3", cover: "/music/covers/暮雨2.0 (那往事就到此).jpg" },
   // Jai Wolf
@@ -41,7 +50,6 @@ const playlist: Track[] = [
   { name: "Come Around Me", artist: "Justin Bieber", file: "/music/Come Around Me - Justin Bieber.mp3", cover: "/music/covers/Come Around Me.jpg" },
   { name: "DAISIES", artist: "Justin Bieber", file: "/music/DAISIES - Justin Bieber.mp3", cover: "/music/covers/DAISIES.jpg" },
   { name: "Favorite Girl", artist: "Justin Bieber", file: "/music/Favorite Girl - Justin Bieber.mp3", cover: "/music/covers/Favorite Girl.jpg" },
-  { name: "GO BABY", artist: "Justin Bieber", file: "/music/GO BABY - Justin Bieber.mp3", cover: "/music/covers/GO BABY.jpg" },
   { name: "Heartbreaker", artist: "Justin Bieber", file: "/music/Heartbreaker - Justin Bieber.mp3", cover: "/music/covers/Heartbreaker.jpg" },
   { name: "Hold On", artist: "Justin Bieber", file: "/music/Hold On - Justin Bieber.mp3", cover: "/music/covers/Hold On.jpg" },
   { name: "Love Me", artist: "Justin Bieber", file: "/music/Love Me - Justin Bieber.mp3", cover: "/music/covers/Love Me.jpg" },
@@ -60,11 +68,6 @@ const playlist: Track[] = [
   { name: "Beauty And A Beat", artist: "Justin Bieber、Nicki Minaj", file: "/music/Beauty And A Beat - Justin Bieber、Nicki Minaj.mp3", cover: "/music/covers/Beauty And A Beat.jpg" },
   { name: "Intentions", artist: "Justin Bieber、Quavo", file: "/music/Intentions - Justin Bieber、Quavo.mp3", cover: "/music/covers/Intentions.jpg" },
   { name: "Eenie Meenie", artist: "Justin Bieber、Sean Kingston", file: "/music/Eenie Meenie - Justin Bieber、Sean Kingston.mp3", cover: "/music/covers/Eenie Meenie.jpg" },
-  // Kris Wu
-  { name: "JULY", artist: "Kris Wu", file: "/music/JULY.FLAC", cover: "/music/covers/JULY.jpg" },
-  { name: "Bad Girl", artist: "Kris Wu", file: "/music/Bad Girl.FLAC", cover: "/music/covers/Bad Girl.jpg" },
-  { name: "November Rain", artist: "Kris Wu", file: "/music/November Rain.FLAC", cover: "/music/covers/November Rain.jpg" },
-  { name: "大碗宽面", artist: "Kris Wu", file: "/music/大碗宽面 - Kris Wu.FLAC", cover: "/music/covers/大碗宽面.jpg" },
   // Lil Tjay
   { name: "Scared 2 Be Lonely", artist: "Lil Tjay", file: "/music/Scared 2 Be Lonely - Lil Tjay.mp3", cover: "/music/covers/Scared 2 Be Lonely.jpg" },
   // Luis Fonsi
@@ -73,7 +76,6 @@ const playlist: Track[] = [
   { name: "Running Up That Hill", artist: "Meg Myers", file: "/music/Running Up That Hill - Meg Myers.mp3", cover: "/music/covers/Running Up That Hill.jpg" },
   // NewJeans
   { name: "Attention", artist: "NewJeans", file: "/music/Attention - NewJeans.mp3", cover: "/music/covers/Attention.jpg" },
-  { name: "Super Shy", artist: "NewJeans", file: "/music/Super Shy - NewJeans.mp3", cover: "/music/covers/Super Shy.jpg" },
   // Reynard Silva
   { name: "The Way I Still Love You", artist: "Reynard Silva", file: "/music/The Way I Still Love You - Reynard Silva.mp3", cover: "/music/covers/The Way I Still Love You.jpg" },
   // SZA
