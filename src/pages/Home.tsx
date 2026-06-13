@@ -118,7 +118,7 @@ export default function Home() {
 
       {/* 精选顶尖名校 */}
       <section className="max-w-6xl mx-auto px-4 py-16">
-        <h2 className="text-2xl font-bold text-center text-gray-900 mb-8">🌟 精选顶尖名校</h2>
+        <h2 className="text-2xl font-bold text-center text-gray-900 mb-8">🌟 Select top famous schools</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {schools.filter(s => s.rankingTier === "顶尖").slice(0, 4).map((school) => (
             <div key={school.id} onClick={() => setSelectedSchool(school)} className="cursor-pointer group">
