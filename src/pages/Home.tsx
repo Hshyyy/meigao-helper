@@ -94,7 +94,7 @@ export default function Home() {
 
       {/* 往下看提醒 */}
       <div className="text-center py-4 bg-gray-50">
-        <p className="text-sm text-gray-500">往下看更多精彩内容 👇</p>
+        <p className="text-sm text-gray-500">Chris chill to say：更多精彩内容往下划哦！👄</p>
       </div>
 
       {/* 数据概览 */}
