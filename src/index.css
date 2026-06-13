@@ -51,6 +51,10 @@ body {
   animation: spin-slow 12s linear infinite;
 }
 
+.animate-spin-slow.paused {
+  animation-play-state: paused;
+}
+
 .animate-water-ripple {
   animation: water-ripple 2s ease-in-out infinite;
 }
