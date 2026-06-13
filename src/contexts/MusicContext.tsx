@@ -17,7 +17,7 @@ const playlist: Track[] = [
   { name: "Cheating on You", artist: "Charlie Puth", file: "/music/Cheating on You - Charlie Puth.mp3", cover: "/music/covers/Cheating on You.jpg" },
   { name: "We Don't Talk Anymore (Mr. Collipark Remix)", artist: "Charlie Puth、Selena Gomez", file: "/music/We Don't Talk Anymore (Mr. Collipark Remix) - Charlie Puth、Selena Gomez.mp3", cover: "/music/covers/We Don't Talk Anymore.jpg" },
   // Clazziquai
-  { name: "My Jealousy", artist: "Clazziquai", file: "/music/My Jealousy - Clazziquai.mp3", cover: "/music/covers/My Jealousy.svg" },
+  { name: "My Jealousy", artist: "Clazziquai", file: "/music/My Jealousy - Clazziquai.mp3", cover: "/music/covers/My Jealousy.jpg" },
   // DJ Snake
   { name: "Let Me Love You", artist: "DJ Snake、Justin Bieber", file: "/music/Let Me Love You - DJ Snake、Justin Bieber.mp3", cover: "/music/covers/Let Me Love You.jpg" },
   // Doja Cat
@@ -28,11 +28,11 @@ const playlist: Track[] = [
   // Future
   { name: "Game Time", artist: "Future、Tyla、FIFA Sound", file: "/music/Game Time - Future、Tyla、FIFA Sound.mp3", cover: "/music/covers/Game Time.jpg" },
   // Gareth.T
-  { name: "玻璃", artist: "Gareth.T", file: "/music/玻璃 - Gareth.T.mp3", cover: "/music/covers/玻璃.svg" },
+  { name: "玻璃", artist: "Gareth.T", file: "/music/玻璃 - Gareth.T.mp3", cover: "/music/covers/玻璃.jpg" },
   // Glass Animals
   { name: "Heat Waves", artist: "Glass Animals", file: "/music/Heat Waves - Glass Animals.mp3", cover: "/music/covers/Heat Waves.jpg" },
   // HYPEEZY
-  { name: "暮雨2.0 (那往事就到此)", artist: "HYPEEZY、CHECKYHON、邓乐怡", file: "/music/暮雨2.0 (那往事就到此) - HYPEEZY、CHECKYHON、邓乐怡.mp3", cover: "/music/covers/暮雨2.0.svg" },
+  { name: "暮雨2.0 (那往事就到此)", artist: "HYPEEZY、CHECKYHON、邓乐怡", file: "/music/暮雨2.0 (那往事就到此) - HYPEEZY、CHECKYHON、邓乐怡.mp3", cover: "/music/covers/暮雨2.0 (那往事就到此).jpg" },
   // Jai Wolf
   { name: "Gravity", artist: "Jai Wolf、JMR", file: "/music/Gravity - Jai Wolf、JMR.mp3", cover: "/music/covers/Gravity.jpg" },
   // Justin Bieber
@@ -88,7 +88,7 @@ const playlist: Track[] = [
   // The Weeknd
   { name: "Die For You", artist: "The Weeknd", file: "/music/Die For You - The Weeknd.mp3", cover: "/music/covers/Die For You.jpg" },
   // Top Barry
-  { name: "一半一半", artist: "Top Barry、INDEcompany", file: "/music/一半一半 - Top Barry、INDEcompany.mp3", cover: "/music/covers/一半一半.svg" },
+  { name: "一半一半", artist: "Top Barry、INDEcompany", file: "/music/一半一半 - Top Barry、INDEcompany.mp3", cover: "/music/covers/一半一半.jpg" },
   // Tyla
   { name: "ART", artist: "Tyla", file: "/music/ART - Tyla.mp3", cover: "/music/covers/ART.jpg" },
   { name: "Truth or Dare", artist: "Tyla", file: "/music/Truth or Dare - Tyla.mp3", cover: "/music/covers/Truth or Dare.jpg" },
