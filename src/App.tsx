@@ -37,17 +37,26 @@ export default function App() {
           {/* 桌面端导航 */}
           <div className="hidden md:flex gap-1">
             {navItems.map((item) => (
-              <Link
-                key={item.path}
-                to={item.path}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors no-underline ${
-                  location.pathname === item.path
-                    ? "bg-blue-600 text-white"
-                    : "text-gray-600 hover:bg-gray-100"
-                }`}
-              >
-                {item.label}
-              </Link>
+              location.pathname === "/" ? (
+                <span
+                  key={item.path}
+                  className="px-4 py-2 rounded-lg text-sm font-medium text-gray-400 cursor-default"
+                >
+                  {item.label}
+                </span>
+              ) : (
+                <Link
+                  key={item.path}
+                  to={item.path}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors no-underline ${
+                    location.pathname === item.path
+                      ? "bg-blue-600 text-white"
+                      : "text-gray-600 hover:bg-gray-100"
+                  }`}
+                >
+                  {item.label}
+                </Link>
+              )
             ))}
           </div>
 
@@ -86,18 +95,27 @@ export default function App() {
         {menuOpen && (
           <div className="md:hidden border-t border-gray-100 bg-white">
             {navItems.map((item) => (
-              <Link
-                key={item.path}
-                to={item.path}
-                onClick={() => setMenuOpen(false)}
-                className={`block px-4 py-3 text-sm font-medium no-underline ${
-                  location.pathname === item.path
-                    ? "bg-blue-50 text-blue-600"
-                    : "text-gray-600 hover:bg-gray-50"
-                }`}
-              >
-                {item.label}
-              </Link>
+              location.pathname === "/" ? (
+                <span
+                  key={item.path}
+                  className="block px-4 py-3 text-sm font-medium text-gray-400 cursor-default"
+                >
+                  {item.label}
+                </span>
+              ) : (
+                <Link
+                  key={item.path}
+                  to={item.path}
+                  onClick={() => setMenuOpen(false)}
+                  className={`block px-4 py-3 text-sm font-medium no-underline ${
+                    location.pathname === item.path
+                      ? "bg-blue-50 text-blue-600"
+                      : "text-gray-600 hover:bg-gray-50"
+                  }`}
+                >
+                  {item.label}
+                </Link>
+              )
             ))}
           </div>
         )}
