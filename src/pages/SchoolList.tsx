@@ -38,7 +38,6 @@ export default function SchoolList() {
       return [];
     }
   });
-  const navigate = useNavigate();
   const [selectedSchool, setSelectedSchool] = useState<School | null>(null);
 
   const toggleFavorite = (id: number) => {
