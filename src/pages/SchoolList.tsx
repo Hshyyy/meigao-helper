@@ -1,10 +1,9 @@
 import { useState, useMemo, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { schools, regions, tuitionRanges, allTags } from "../data/schools";
 import type { School } from "../data/schools";
 import SchoolCard from "../components/SchoolCard";
-import SchoolDetail from "../components/SchoolDetail";
 
 export default function SchoolList() {
   const [region, setRegion] = useState("全部");
@@ -38,7 +37,7 @@ export default function SchoolList() {
       return [];
     }
   });
-  const [selectedSchool, setSelectedSchool] = useState<School | null>(null);
+  const navigate = useNavigate();
 
   const toggleFavorite = (id: number) => {
     setFavorites((prev) => {
@@ -255,7 +254,7 @@ export default function SchoolList() {
             <SchoolCard
               key={school.id}
               school={school}
-              onClick={() => setSelectedSchool(school)}
+              onClick={() => navigate(`/schools/${school.id}`)}
               isFavorited={favorites.includes(school.id)}
               onToggleFavorite={() => toggleFavorite(school.id)}
               isCompared={compareIds.includes(school.id)}
@@ -263,14 +262,6 @@ export default function SchoolList() {
             />
           ))}
         </div>
-      )}
-
-      {/* 详情弹窗 */}
-      {selectedSchool && (
-        <SchoolDetail
-          school={selectedSchool}
-          onClose={() => setSelectedSchool(null)}
-        />
       )}
 
       {/* 浮动对比栏 */}
