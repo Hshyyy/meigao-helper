@@ -28,14 +28,14 @@ export default function SchoolDetailPage() {
   }
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8">
+    <>
       <Helmet>
         <title>{school.nameCn} — 美高选校助手</title>
         <meta name="description" content={school.description.slice(0, 160)} />
       </Helmet>
 
-      {/* 学校详情 */}
+      {/* 学校详情弹窗（覆盖在原页面上） */}
       <SchoolDetail school={school} onClose={() => navigate(-1)} />
-    </div>
+    </>
   );
 }
