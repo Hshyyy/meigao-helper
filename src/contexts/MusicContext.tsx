@@ -176,22 +176,26 @@ export function MusicProvider({ children }: { children: ReactNode }) {
 
     const onEnded = () => {
       const mode = playModeRef.current;
+      let nextIdx: number;
+
       if (mode === "single") {
-        audio.currentTime = 0;
-        audio.play().catch(() => {});
+        nextIdx = currentTrack;
       } else if (mode === "shuffle") {
-        const idx = Math.floor(Math.random() * playlist.length);
-        setCurrentTrack(idx);
-        audio.src = playlist[idx].file;
-        audio.load();
-        audio.play().catch(() => {});
+        nextIdx = Math.floor(Math.random() * playlist.length);
       } else {
-        const idx = (currentTrack + 1) % playlist.length;
-        setCurrentTrack(idx);
-        audio.src = playlist[idx].file;
-        audio.load();
-        audio.play().catch(() => {});
+        nextIdx = (currentTrack + 1) % playlist.length;
       }
+
+      setCurrentTrack(nextIdx);
+      audio.src = playlist[nextIdx].file;
+      audio.load();
+
+      // 等待音频加载完成后播放
+      const onCanPlay = () => {
+        audio.play().catch(() => {});
+        audio.removeEventListener("canplay", onCanPlay);
+      };
+      audio.addEventListener("canplay", onCanPlay);
     };
 
     audio.addEventListener("ended", onEnded);
