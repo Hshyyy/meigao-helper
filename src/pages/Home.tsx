@@ -95,7 +95,7 @@ export default function Home() {
       {/* 往下看提醒 */}
       <div className="text-center py-4 bg-gray-50">
         <p className="text-base text-gray-900 font-bold" style={{ fontSize: '16px' }}>Chris chill to say：更多精彩内容往下划哦！👄</p>
-        <p className="text-sm text-gray-600 mt-1">某些中介最严厉的父亲！</p>
+        <p className="text-sm text-gray-900 font-bold mt-1">某些中介最严厉的父亲！👍</p>
       </div>
 
       {/* 数据概览 */}
