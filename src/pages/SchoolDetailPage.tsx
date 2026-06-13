@@ -37,7 +37,7 @@ export default function SchoolDetailPage() {
       {/* 返回按钮 */}
       <button
         onClick={() => navigate(-1)}
-        className="mb-6 px-4 py-2 bg-white border border-gray-200 rounded-lg text-gray-700 hover:bg-gray-50 hover:border-gray-300 flex items-center gap-2 transition-colors shadow-sm"
+        className="mb-6 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2 transition-colors shadow-md"
       >
         <span>←</span>
         <span>返回学校库</span>
