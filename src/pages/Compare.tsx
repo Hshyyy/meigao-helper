@@ -283,19 +283,19 @@ export default function Compare() {
                     </button>
                   </div>
                   <div className="space-y-2 text-sm">
-                    <div className="flex justify-between"><span className="text-gray-500">排名</span><span>#{school.ranking}</span></div>
-                    <div className="flex justify-between"><span className="text-gray-500">梯队</span><span>{school.rankingTier}</span></div>
-                    <div className="flex justify-between"><span className="text-gray-500">住宿</span><span>{school.type === "寄宿" ? "纯寄宿" : school.type === "寄宿/走读" ? "寄宿/走读" : "纯走读"}</span></div>
-                    <div className="flex justify-between"><span className="text-gray-500">学费</span><span>${school.tuition.toLocaleString()}</span></div>
-                    <div className="flex justify-between"><span className="text-gray-500">年度总费用</span><span className="font-semibold text-blue-600">${cost.toLocaleString()}</span></div>
-                    <div className="flex justify-between"><span className="text-gray-500">录取率</span><span>{school.acceptanceRate}%</span></div>
-                    <div className="flex justify-between"><span className="text-gray-500">国际生</span><span>{school.internationalRate}%</span></div>
+                    <div className="flex justify-between"><span className="text-gray-500">Rank</span><span>#{school.ranking}</span></div>
+                    <div className="flex justify-between"><span className="text-gray-500">Tier</span><span>{school.rankingTier}</span></div>
+                    <div className="flex justify-between"><span className="text-gray-500">Boarding</span><span>{school.type === "寄宿" ? "Full Boarding" : school.type === "寄宿/走读" ? "Boarding/Day" : "Day School"}</span></div>
+                    <div className="flex justify-between"><span className="text-gray-500">Tuition</span><span>${school.tuition.toLocaleString()}</span></div>
+                    <div className="flex justify-between"><span className="text-gray-500">Annual Total</span><span className="font-semibold text-blue-600">${cost.toLocaleString()}</span></div>
+                    <div className="flex justify-between"><span className="text-gray-500">Acceptance</span><span>{school.acceptanceRate}%</span></div>
+                    <div className="flex justify-between"><span className="text-gray-500">International</span><span>{school.internationalRate}%</span></div>
                     <div className="flex justify-between"><span className="text-gray-500">TOEFL</span><span>{school.toeflMin}+</span></div>
                     <div className="flex justify-between"><span className="text-gray-500">SSAT</span><span>{school.ssatPercentile}%+</span></div>
                     <div className="flex justify-between"><span className="text-gray-500">GPA</span><span>{school.gpaMin}+</span></div>
-                    <div className="flex justify-between"><span className="text-gray-500">学生人数</span><span>{school.studentCount} 人</span></div>
-                    <div className="flex justify-between"><span className="text-gray-500">师生比</span><span>{school.studentTeacherRatio}</span></div>
-                    <div className="flex justify-between"><span className="text-gray-500">年级</span><span>{school.grades}</span></div>
+                    <div className="flex justify-between"><span className="text-gray-500">Enrollment</span><span>{school.studentCount}</span></div>
+                    <div className="flex justify-between"><span className="text-gray-500">Student-Faculty</span><span>{school.studentTeacherRatio}</span></div>
+                    <div className="flex justify-between"><span className="text-gray-500">Grades</span><span>{school.grades}</span></div>
                     <div className="flex justify-between"><span className="text-gray-500">地区</span><span>{school.state}</span></div>
                     <div className="flex flex-wrap gap-1 mt-2">
                       {school.tags.map((tag) => (

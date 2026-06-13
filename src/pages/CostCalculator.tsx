@@ -269,7 +269,7 @@ export default function CostCalculator() {
 
           {/* 年度费用明细 */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
-            <h3 className="font-semibold text-gray-900 mb-4">📅 年度费用（每年）</h3>
+            <h3 className="font-semibold text-gray-900 mb-4">📅 Annual Costs</h3>
             <div className="space-y-3">
               {annualCosts.map((cost, i) => (
                 <div key={i} className="flex items-center justify-between py-2 border-b border-gray-50 last:border-0">
@@ -281,14 +281,14 @@ export default function CostCalculator() {
                 </div>
               ))}
               <div className="flex items-center justify-between pt-3 border-t border-gray-200">
-                <div className="font-semibold text-gray-900">年度合计</div>
+                <div className="font-semibold text-gray-900">Annual Total</div>
                 <div className="text-lg font-bold text-blue-600">${annualTotal.toLocaleString()}</div>
               </div>
             </div>
 
             {/* 住宿费说明 */}
             <div className="mt-4 bg-blue-50 border border-blue-200 rounded-lg p-4">
-              <h4 className="text-sm font-semibold text-blue-900 mb-2">🏠 住宿费说明</h4>
+              <h4 className="text-sm font-semibold text-blue-900 mb-2">🏠 Housing Info</h4>
               {isBoarding ? (
                 <div className="text-sm text-blue-800">
                   <p>住宿+餐饮费（估算）：≈ ${(estimatedRoomBoard + Math.round(selectedSchool.tuition * 0.1)).toLocaleString()}/年</p>
@@ -313,7 +313,7 @@ export default function CostCalculator() {
 
           {/* 一次性费用明细 */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
-            <h3 className="font-semibold text-gray-900 mb-4">📋 一次性费用（申请阶段）</h3>
+            <h3 className="font-semibold text-gray-900 mb-4">📋 One-time Costs</h3>
             <div className="space-y-3">
               {oneTimeCosts.map((cost, i) => (
                 <div key={i} className="flex items-center justify-between py-2 border-b border-gray-50 last:border-0">

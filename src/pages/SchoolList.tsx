@@ -144,7 +144,7 @@ export default function SchoolList() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              地区
+              Region
             </label>
             <select
               value={region}
@@ -159,7 +159,7 @@ export default function SchoolList() {
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              梯队
+              Tier
             </label>
             <select
               value={tier}
