@@ -92,6 +92,11 @@ export default function Home() {
         </div>
       </section>
 
+      {/* 往下看提醒 */}
+      <div className="text-center py-4 bg-gray-50">
+        <p className="text-sm text-gray-500">往下看更多精彩内容 👇</p>
+      </div>
+
       {/* 数据概览 */}
       <section className="max-w-6xl mx-auto px-4 py-12">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
