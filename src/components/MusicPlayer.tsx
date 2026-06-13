@@ -31,8 +31,8 @@ export default function MusicPlayer() {
       {/* 收缩状态 */}
       {!expanded && (
         <button onClick={() => setExpanded(true)} className="w-16 h-16 bg-white rounded-full shadow-lg border border-gray-200 flex items-center justify-center hover:shadow-xl transition-all">
-          <div className={`relative w-14 h-14 rounded-full ${isPlaying ? 'animate-water-ripple' : ''}`}>
-            <img src={playlist[currentTrack].cover} alt={playlist[currentTrack].name} className={`w-14 h-14 rounded-full object-cover animate-spin-slow ${!isPlaying ? 'paused' : ''}`} />
+          <div className={`relative w-14 h-14 rounded-full animate-spin-slow ${!isPlaying ? 'paused' : ''} ${isPlaying ? 'animate-water-ripple' : ''}`}>
+            <img src={playlist[currentTrack].cover} alt={playlist[currentTrack].name} className="w-14 h-14 rounded-full object-cover" />
           </div>
         </button>
       )}
