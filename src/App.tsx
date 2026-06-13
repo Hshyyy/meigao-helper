@@ -40,7 +40,9 @@ export default function App() {
               location.pathname === "/" ? (
                 <span
                   key={item.path}
-                  className="px-4 py-2 rounded-lg text-sm font-medium text-gray-400 cursor-default"
+                  className={`px-4 py-2 rounded-lg text-sm font-medium cursor-default ${
+                    item.path === "/" ? "bg-blue-600 text-white" : "text-gray-400"
+                  }`}
                 >
                   {item.label}
                 </span>
@@ -98,7 +100,9 @@ export default function App() {
               location.pathname === "/" ? (
                 <span
                   key={item.path}
-                  className="block px-4 py-3 text-sm font-medium text-gray-400 cursor-default"
+                  className={`block px-4 py-3 text-sm font-medium cursor-default ${
+                    item.path === "/" ? "bg-blue-50 text-blue-600" : "text-gray-400"
+                  }`}
                 >
                   {item.label}
                 </span>
