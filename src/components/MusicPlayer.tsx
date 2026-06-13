@@ -35,8 +35,7 @@ export default function MusicPlayer() {
             <img
               src={playlist[currentTrack].cover}
               alt={playlist[currentTrack].name}
-              className="w-14 h-14 rounded-full object-cover animate-spin-slow"
-              style={{ animationPlayState: isPlaying ? 'running' : 'paused' }}
+              className={`w-14 h-14 rounded-full object-cover ${isPlaying ? 'animate-spin-slow' : ''}`}
             />
           </div>
         </button>
