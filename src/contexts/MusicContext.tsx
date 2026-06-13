@@ -24,7 +24,7 @@ const playlist: Track[] = [
   { name: "Kiss Me More (Explicit)", artist: "Doja Cat、SZA", file: "/music/Kiss Me More (Explicit) - Doja Cat、SZA.mp3", cover: "/music/covers/Kiss Me More.jpg" },
   // Drake
   { name: "In My Feelings (Explicit)", artist: "Drake", file: "/music/In My Feelings (Explicit) - Drake.mp3", cover: "/music/covers/In My Feelings.jpg" },
-  { name: "Work (Derra Flip)", artist: "Drake、Derra、Rihanna", file: "/music/Work (Derra Flip) - Drake、Derra、Rihanna.mp3", cover: "/music/covers/Work.jpg" },
+  { name: "Work (Derra Flip)", artist: "Drake、Derra、Rihanna", file: "/music/Work (Derra Flip) - Drake、Derra、Rihanna.mp3", cover: "/music/covers/Work (Derra Flip).jpg" },
   // Future
   { name: "Game Time", artist: "Future、Tyla、FIFA Sound", file: "/music/Game Time - Future、Tyla、FIFA Sound.mp3", cover: "/music/covers/Game Time.jpg" },
   // Gareth.T
