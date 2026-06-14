@@ -11,9 +11,9 @@ interface CostItem {
 
 // 住宿方案选项
 const housingOptions = [
-  { value: "hostFamily", label: "寄宿家庭", cost: 15000, note: "住在美国家庭，含餐饮" },
-  { value: "rent", label: "租房", cost: 12000, note: "自己租公寓，不含餐饮" },
-  { value: "guardian", label: "监护人寄宿", cost: 18000, note: "住监护人家，含餐饮和监管" },
+  { value: "hostFamily", label: "Host Family", cost: 15000, note: "住在美国家庭，含餐饮" },
+  { value: "rent", label: "Rent", cost: 12000, note: "自己租公寓，不含餐饮" },
+  { value: "guardian", label: "Guardian", cost: 18000, note: "住监护人家，含餐饮和监管" },
   { value: "ownHouse", label: "My House", cost: 0, note: "家人在美国有房子" },
 ];
 
@@ -204,7 +204,7 @@ export default function CostCalculator() {
                 >
                   {housingOptions.map((h) => (
                     <option key={h.value} value={h.value}>
-                      {h.label} {h.cost > 0 ? `($${h.cost.toLocaleString()}/年)` : "(免费)"}
+                      {h.label} {h.cost > 0 ? `($${h.cost.toLocaleString()}/yr)` : "(Free)"}
                     </option>
                   ))}
                 </select>

@@ -7,9 +7,9 @@ import ShareButton from "../components/ShareButton";
 
 // 住宿方案
 const housingOptions = {
-  boarding: { label: "寄宿（住校）", cost: 0, note: "含住宿餐饮" },
-  hostFamily: { label: "寄宿家庭", cost: 15000, note: "含餐饮" },
-  rent: { label: "租房", cost: 16800, note: "含餐饮费" },
+  boarding: { label: "Boarding", cost: 0, note: "含住宿餐饮" },
+  hostFamily: { label: "Host Family", cost: 15000, note: "含餐饮" },
+  rent: { label: "Rent", cost: 16800, note: "含餐饮费" },
   ownHouse: { label: "My House", cost: 0, note: "免费" },
 };
 
@@ -392,7 +392,7 @@ export default function Compare() {
               {/* GPA */}
               <CompareRow label="GPA" values={compareSchools.map(s => `${s.gpaMin}+`)} />
               {/* Enrollment */}
-              <CompareRow label="Enrollment" values={compareSchools.map(s => `${s.studentCount} 人`)} />
+              <CompareRow label="Enrollment" values={compareSchools.map(s => `${s.studentCount}`)} />
               {/* Student-Faculty Ratio */}
               <CompareRow label="Student-Faculty Ratio" values={compareSchools.map(s => s.studentTeacherRatio)} />
               {/* Grades */}
