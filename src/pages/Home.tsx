@@ -232,7 +232,7 @@ export default function Home() {
           </p>
           <p className="text-pink-500 font-bold text-sm text-right mt-2">—你们的Hshy_Chris.W</p>
           <div className="mt-4 flex justify-center">
-            <img src="/chris-photo.jpg" alt="Chris.W" className="rounded-xl shadow-md w-full max-w-lg object-contain" style={{ maxHeight: '500px' }} />
+            <img src="/chris-photo.jpg" alt="Chris.W" className="rounded-xl shadow-md w-full max-w-lg object-contain" style={{ maxHeight: '700px' }} />
           </div>
         </div>
       </section>
