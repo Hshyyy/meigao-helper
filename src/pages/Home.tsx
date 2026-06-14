@@ -4,6 +4,7 @@ import { Helmet } from "react-helmet-async";
 import { schools, getEstimatedAnnualCost } from "../data/schools";
 import type { School } from "../data/schools";
 import ShareButton from "../components/ShareButton";
+import MusicPlayer from "../components/MusicPlayer";
 import SchoolDetail from "../components/SchoolDetail";
 
 export default function Home() {
@@ -32,6 +33,9 @@ export default function Home() {
         <div className="relative z-10">
         <div className="absolute top-4 right-4 z-20">
           <ShareButton url={window.location.origin} label="Share Website" />
+        </div>
+        <div className="absolute bottom-4 left-4 z-20">
+          <MusicPlayer />
         </div>
         <div className="max-w-6xl mx-auto px-4 pt-48 pb-16 text-center">
           <p className="text-5xl md:text-6xl text-yellow-400 mb-16 font-bold tracking-widest">H-shy出品</p>
