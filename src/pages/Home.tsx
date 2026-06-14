@@ -217,11 +217,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 音乐播放器（固定在左下角） */}
-      <div className="fixed bottom-4 left-4 z-50">
-        <MusicPlayer />
-      </div>
-
       {/* 学校详情弹窗 */}
       {selectedSchool && (
         <SchoolDetail school={selectedSchool} onClose={() => setSelectedSchool(null)} />
