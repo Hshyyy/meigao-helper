@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Outlet, Link, useLocation } from "react-router-dom";
 import { MusicProvider } from "./contexts/MusicContext";
+import MusicPlayer from "./components/MusicPlayer";
 
 const navItems = [
   { path: "/", label: "Home" },
@@ -137,6 +138,11 @@ export default function App() {
           <p className="mt-2">数据仅供参考，请以学校官网为准</p>
         </div>
       </footer>
+
+      {/* 音乐播放器（所有页面） */}
+      <div className="fixed bottom-4 left-4 z-50">
+        <MusicPlayer />
+      </div>
     </div>
     </MusicProvider>
   );

@@ -4,7 +4,6 @@ import { Helmet } from "react-helmet-async";
 import { schools, getEstimatedAnnualCost } from "../data/schools";
 import type { School } from "../data/schools";
 import ShareButton from "../components/ShareButton";
-import MusicPlayer from "../components/MusicPlayer";
 import SchoolDetail from "../components/SchoolDetail";
 
 export default function Home() {
