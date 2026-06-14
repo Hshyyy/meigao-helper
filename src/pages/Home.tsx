@@ -221,6 +221,28 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Chris 致谢 */}
+      <section className="max-w-6xl mx-auto px-4 py-16">
+        <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-8 border border-gray-200">
+          <p className="text-gray-700 text-base leading-relaxed mb-4">
+            for所有hshy，my friends：感谢你们光顾本网站，进来听听歌也行的harhar~里面有歌单哦！
+          </p>
+          <p className="text-gray-700 text-base leading-relaxed mb-4">
+            Chris.W在此向所有人致谢：这是我做的一个关于帮助申请美高的网站，能够帮助大家去筛选，去匹配适合自己的top30美国寄宿高中，并且能够给你们提供一些的建议及推荐给你们准备的方向。
+          </p>
+          <p className="text-gray-700 text-base leading-relaxed mb-4">
+            感谢你们一直以来对我的支持，这段时间也谢谢你们对我提的宝贵建议，我也迫切想看到你们对这个网站的点评，无论好坏与否我都会细品。
+          </p>
+          <p className="text-gray-700 text-base leading-relaxed mb-4">
+            制作这个网站是我一次对自己能力与勇气的大胆实践，在此后，我会继续在设计与计算机系统等领域创造更多的可能，也欢迎everyone来投稿（告诉我设计或创造的方向），我会尽自己最大的努力去将它变成现实！
+          </p>
+          <p className="text-gray-700 text-base leading-relaxed mb-4">
+            祝各位身体健康，学业蒸蒸日上~心想事成！Keep happy every day！！！
+          </p>
+          <p className="text-gray-500 text-sm text-right mt-6">— Chris.W (Hshy)</p>
+        </div>
+      </section>
+
       {/* 学校详情弹窗 */}
       {selectedSchool && (
         <SchoolDetail school={selectedSchool} onClose={() => setSelectedSchool(null)} />
