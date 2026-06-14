@@ -134,7 +134,7 @@ export default function CostCalculator() {
 
       <div className="flex items-center justify-between mb-2">
         <h1 className="text-3xl font-bold text-gray-900">费用计算器</h1>
-        <ShareButton url={window.location.origin + "/cost"} label="分享费用" />
+        <ShareButton url={window.location.origin + "/cost"} label="Share Cost" />
       </div>
       <p className="text-gray-500 mb-8">
         估算美国寄宿高中留学总费用，帮你做好预算规划

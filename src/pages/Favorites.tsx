@@ -35,7 +35,7 @@ export default function Favorites() {
 
       <div className="flex items-center justify-between mb-2">
         <h1 className="text-3xl font-bold text-gray-900">我的收藏</h1>
-        <ShareButton url={window.location.origin + "/favorites"} label="分享收藏" />
+        <ShareButton url={window.location.origin + "/favorites"} label="Share Favorites" />
       </div>
       <p className="text-gray-500 mb-8">
         你收藏了 {favoriteSchools.length} 所学校

@@ -32,7 +32,7 @@ export default function Home() {
         <div className="absolute inset-0 bg-black/50" />
         <div className="relative z-10">
         <div className="absolute top-4 right-4 z-20">
-          <ShareButton url={window.location.origin} label="分享网站" />
+          <ShareButton url={window.location.origin} label="Share Website" />
         </div>
         <div className="max-w-6xl mx-auto px-4 pt-48 pb-16 text-center">
           <p className="text-5xl md:text-6xl text-yellow-400 mb-16 font-bold tracking-widest">H-shy出品</p>

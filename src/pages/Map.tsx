@@ -144,7 +144,7 @@ export default function Map() {
     <div className="max-w-6xl mx-auto px-4 py-8">
       <div className="flex items-center justify-between mb-2">
         <h1 className="text-3xl font-bold text-gray-900">学校地图</h1>
-        <ShareButton url={window.location.origin + "/map"} label="分享地图" />
+        <ShareButton url={window.location.origin + "/map"} label="Share Map" />
       </div>
       <p className="text-gray-500 mb-6">
         在地图上查看 {schools.length} 所学校的地理位置，点击标记查看详情
@@ -153,10 +153,10 @@ export default function Map() {
       {/* 筛选栏 */}
       <div className="flex flex-wrap gap-2 mb-4">
         {[
-          { key: "全部", label: "全部学校", count: schools.length },
-          { key: "顶尖", label: "🔴 顶尖", count: schools.filter((s) => s.rankingTier === "顶尖").length },
-          { key: "优秀", label: "🔵 优秀", count: schools.filter((s) => s.rankingTier === "优秀").length },
-          { key: "热门", label: "🟢 热门", count: schools.filter((s) => s.rankingTier === "热门").length },
+          { key: "全部", label: "All", count: schools.length },
+          { key: "顶尖", label: "🔴 Top", count: schools.filter((s) => s.rankingTier === "顶尖").length },
+          { key: "优秀", label: "🔵 Excellent", count: schools.filter((s) => s.rankingTier === "优秀").length },
+          { key: "热门", label: "🟢 Popular", count: schools.filter((s) => s.rankingTier === "热门").length },
         ].map(({ key, label, count }) => (
           <button
             key={key}

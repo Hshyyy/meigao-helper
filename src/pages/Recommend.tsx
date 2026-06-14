@@ -319,7 +319,7 @@ export default function Recommend() {
 
       <div className="flex items-center justify-between mb-2">
         <h1 className="text-3xl font-bold text-gray-900">智能选校推荐</h1>
-        <ShareButton url={window.location.origin + "/recommend"} label="分享推荐" />
+        <ShareButton url={window.location.origin + "/recommend"} label="Share Result" />
       </div>
       <p className="text-gray-500 mb-8">输入你的成绩和偏好，系统为你匹配最合适的学校</p>
 
