@@ -370,7 +370,7 @@ export default function Recommend() {
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">预算上限（年学费）</label>
                 <select value={profile.maxBudget} onChange={(e) => update("maxBudget", Number(e.target.value))} className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm">
-                  <option value={0}>不限</option><option value={60000}>$60,000 以下</option><option value={63000}>$63,000 以下</option><option value={65000}>$65,000 以下</option><option value={70000}>$70,000 以下</option>
+                  <option value={0}>不限</option><option value={65000}>$65,000 以下</option><option value={68000}>$68,000 以下</option><option value={70000}>$70,000 以下</option><option value={75000}>$75,000 以下</option>
                 </select>
               </div>
               <div>
