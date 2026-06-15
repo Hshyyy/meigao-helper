@@ -162,15 +162,15 @@ export default function CostCalculator() {
 
             {/* 住宿方式选择 */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">住宿方式</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Housing</label>
               {isPureBoarding && (
                 <select disabled className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm bg-gray-50 text-gray-500">
-                  <option>寄宿（住校）</option>
+                  <option>Boarding (On-campus)</option>
                 </select>
               )}
               {isPureDay && (
                 <select disabled className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm bg-gray-50 text-gray-500">
-                  <option>走读（不住校）</option>
+                  <option>Day School (Off-campus)</option>
                 </select>
               )}
               {isMixed && (
@@ -179,12 +179,12 @@ export default function CostCalculator() {
                   onChange={(e) => setMixedChoice(e.target.value as "boarding" | "day")}
                   className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
                 >
-                  <option value="boarding">寄宿（住校）</option>
-                  <option value="day">走读（不住校）</option>
+                  <option value="boarding">Boarding (On-campus)</option>
+                  <option value="day">Day School (Off-campus)</option>
                 </select>
               )}
               <p className="text-xs text-gray-400 mt-1">
-                {isPureBoarding && "✅ 纯寄宿学校，学校政策要求所有学生住校，学费已含住宿和餐饮，无需额外支付"}
+                {isPureBoarding && "✅ Full boarding school - all students live on campus, tuition includes room & board"}
                 {isPureDay && "⚠️ 纯走读学校，学校不提供住宿，国际生需自行安排寄宿家庭或租房"}
                 {isMixed && "🔄 学校政策允许寄宿或走读，国际生通常选寄宿，主要看个人选择和喜好"}
               </p>
@@ -216,10 +216,10 @@ export default function CostCalculator() {
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">就读年数</label>
               <select value={studyYears} onChange={(e) => setStudyYears(Number(e.target.value))} className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm">
-                <option value={1}>1 年</option>
-                <option value={2}>2 年</option>
-                <option value={3}>3 年</option>
-                <option value={4}>4 年</option>
+                <option value={1}>1 Year</option>
+                <option value={2}>2 Years</option>
+                <option value={3}>3 Years</option>
+                <option value={4}>4 Years</option>
               </select>
             </div>
 
@@ -227,9 +227,9 @@ export default function CostCalculator() {
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">每年往返次数</label>
               <select value={tripsPerYear} onChange={(e) => setTripsPerYear(Number(e.target.value))} className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm">
-                <option value={1}>1 次（暑假回）</option>
-                <option value={2}>2 次（寒暑假回）</option>
-                <option value={3}>3 次</option>
+                <option value={1}>1 Trip (Summer)</option>
+                <option value={2}>2 Trips (Winter + Summer)</option>
+                <option value={3}>3 Trips</option>
               </select>
             </div>
 
@@ -291,7 +291,7 @@ export default function CostCalculator() {
               <h4 className="text-sm font-semibold text-blue-900 mb-2">🏠 Housing Info</h4>
               {isBoarding ? (
                 <div className="text-sm text-blue-800">
-                  <p>住宿+餐饮费（估算）：≈ ${(estimatedRoomBoard + Math.round(selectedSchool.tuition * 0.1)).toLocaleString()}/年</p>
+                  <p>Room & Board (Est.): ≈ ${(estimatedRoomBoard + Math.round(selectedSchool.tuition * 0.1)).toLocaleString()}/yr</p>
                   <p className="text-xs text-blue-600 mt-1">💡 寄宿学校学费已包含住宿和餐饮，无需额外支付</p>
                 </div>
               ) : (
