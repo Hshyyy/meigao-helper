@@ -34,9 +34,6 @@ export default function Home() {
         <div className="absolute top-4 right-4 z-20">
           <ShareButton url={window.location.origin} label="Share Website" />
         </div>
-        <div className="absolute bottom-4 left-4 z-20">
-          <MusicPlayer />
-        </div>
         <div className="max-w-6xl mx-auto px-4 pt-48 pb-16 text-center">
           <p className="text-5xl md:text-6xl text-yellow-400 mb-16 font-bold tracking-widest">H-shy出品</p>
           <h1 className="text-3xl md:text-4xl font-bold mb-8">
@@ -99,6 +96,11 @@ export default function Home() {
       <div className="text-center py-4 bg-gray-50">
         <p className="text-base text-gray-900 font-bold" style={{ fontSize: '16px' }}>Chris chill to say：更多精彩内容往下划哦！👄</p>
         <p className="text-sm text-gray-900 font-bold mt-1">某些中介最严厉的父亲！👍</p>
+      </div>
+
+      {/* 音乐播放器（固定在页面左下角） */}
+      <div className="fixed bottom-4 left-4 z-50">
+        <MusicPlayer />
       </div>
 
       {/* 数据概览 */}
