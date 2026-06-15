@@ -86,7 +86,7 @@ export default function SchoolDetail({ school, onClose, profile }: Props) {
             <p className="text-sm text-gray-400">{school.name}</p>
           </div>
           <div className="flex items-center gap-2">
-            <ShareButton url={`${window.location.origin}/schools/${school.id}`} label="分享学校" />
+            <ShareButton url={`${window.location.origin}/schools/${school.id}`} label="Share School" />
             <button
               onClick={onClose}
               className="text-gray-400 hover:text-gray-600 text-2xl leading-none"

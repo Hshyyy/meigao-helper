@@ -468,7 +468,7 @@ export default function Recommend() {
               {/* 分享推荐结果 */}
               <div className="flex items-center justify-between">
                 <p className="text-sm text-gray-500">为你找到 {results.length} 所匹配学校</p>
-                <ShareButton url={window.location.origin + "/recommend"} label="分享结果" />
+                <ShareButton url={window.location.origin + "/recommend"} label="Share Result" />
               </div>
 
               {/* IB/A-Level 未填 SSAT 时，按 SSAT 分组 */}
