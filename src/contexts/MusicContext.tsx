@@ -205,7 +205,7 @@ export function MusicProvider({ children }: { children: ReactNode }) {
     return () => audio.removeEventListener("ended", onEnded);
   }, [currentTrack]);
 
-  // 首次进入自动播放（滑动页面后触发）
+  // 首次进入自动播放（滑动或点击触发）
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
@@ -222,24 +222,27 @@ export function MusicProvider({ children }: { children: ReactNode }) {
       }
     };
 
-    // 用户滑动页面后开始播放（解决浏览器自动播放限制）
-    const handleScroll = () => {
+    // 用户交互后开始播放（解决浏览器自动播放限制）
+    const handleUserInteraction = () => {
       if (!hasStarted) {
         hasStarted = true;
         audio.play().catch(() => {});
-        document.removeEventListener("scroll", handleScroll);
+        document.removeEventListener("scroll", handleUserInteraction);
+        document.removeEventListener("click", handleUserInteraction);
       }
     };
 
     if (!document.hidden && !hasStarted) {
-      document.addEventListener("scroll", handleScroll, { passive: true });
+      document.addEventListener("scroll", handleUserInteraction, { passive: true });
+      document.addEventListener("click", handleUserInteraction);
     }
 
     document.addEventListener("visibilitychange", handleVisibility);
 
     return () => {
       document.removeEventListener("visibilitychange", handleVisibility);
-      document.removeEventListener("scroll", handleScroll);
+      document.removeEventListener("scroll", handleUserInteraction);
+      document.removeEventListener("click", handleUserInteraction);
     };
   }, []);
 
