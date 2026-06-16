@@ -205,7 +205,7 @@ export function MusicProvider({ children }: { children: ReactNode }) {
     return () => audio.removeEventListener("ended", onEnded);
   }, [currentTrack]);
 
-  // 首次进入自动播放
+  // 首次进入自动播放（滑动页面后触发）
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
@@ -222,15 +222,24 @@ export function MusicProvider({ children }: { children: ReactNode }) {
       }
     };
 
+    // 用户滑动页面后开始播放（解决浏览器自动播放限制）
+    const handleScroll = () => {
+      if (!hasStarted) {
+        hasStarted = true;
+        audio.play().catch(() => {});
+        document.removeEventListener("scroll", handleScroll);
+      }
+    };
+
     if (!document.hidden && !hasStarted) {
-      hasStarted = true;
-      setTimeout(() => audio.play().catch(() => {}), 500);
+      document.addEventListener("scroll", handleScroll, { passive: true });
     }
 
     document.addEventListener("visibilitychange", handleVisibility);
 
     return () => {
       document.removeEventListener("visibilitychange", handleVisibility);
+      document.removeEventListener("scroll", handleScroll);
     };
   }, []);
 
