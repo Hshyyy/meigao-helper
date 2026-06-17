@@ -169,7 +169,7 @@ export default function Map() {
       </div>
 
       {/* 地图容器 */}
-      <div className="relative bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+      <div className="relative bg-white rounded-xl shadow-sm border border-gray-200">
         {/* 加载遮罩 - 放在地图外面 */}
         {loading && (
           <div className="absolute inset-0 flex items-center justify-center bg-gray-50/90 rounded-xl" style={{ zIndex: 9999 }}>
@@ -183,16 +183,8 @@ export default function Map() {
 
         {/* 地图 */}
         <div
-          ref={(el) => {
-            if (el) {
-              // 防止点击地图时浏览器自动滚动
-              el.addEventListener('mousedown', (e) => {
-                e.preventDefault();
-              }, { passive: false });
-            }
-          }}
           className="relative"
-          style={{ height: "70vh", minHeight: "500px", overflow: "hidden" }}
+          style={{ height: "50vh", minHeight: "350px", maxHeight: "500px" }}
         >
           <MapContainer
             center={INITIAL_CENTER}
