@@ -172,7 +172,16 @@ export default function Map() {
       <div
         id="map-container"
         className="relative bg-white rounded-xl shadow-sm border border-gray-200"
-        style={{ overscrollBehavior: 'contain' }}
+        onClick={() => {
+          // 点击地图时，滚动到地图居中位置
+          const mapEl = document.getElementById('map-container');
+          if (mapEl) {
+            const rect = mapEl.getBoundingClientRect();
+            const absoluteTop = window.pageYOffset + rect.top;
+            const centerPosition = absoluteTop - (window.innerHeight / 2) + (rect.height / 2);
+            window.scrollTo({ top: Math.max(0, centerPosition), behavior: 'smooth' });
+          }
+        }}
       >
         {/* 加载遮罩 - 放在地图外面 */}
         {loading && (
