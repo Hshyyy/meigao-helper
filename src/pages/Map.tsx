@@ -182,7 +182,15 @@ export default function Map() {
         )}
 
         {/* 地图 */}
-        <div className="relative" style={{ height: "70vh", minHeight: "500px", overflow: "hidden" }}>
+        <div
+          className="relative"
+          style={{ height: "70vh", minHeight: "500px", overflow: "hidden" }}
+          onClick={(e) => {
+            // 点击地图时，滚动到地图位置
+            const mapEl = e.currentTarget;
+            mapEl.scrollIntoView({ behavior: "smooth", block: "start" });
+          }}
+        >
           <MapContainer
             center={INITIAL_CENTER}
             zoom={INITIAL_ZOOM}
