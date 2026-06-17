@@ -182,12 +182,12 @@ export default function Map() {
         )}
 
         {/* 地图 */}
-        <div style={{ overflow: "hidden" }}>
+        <div className="relative" style={{ height: "70vh", minHeight: "500px", overflow: "hidden" }}>
           <MapContainer
             center={INITIAL_CENTER}
             zoom={INITIAL_ZOOM}
             maxZoom={18}
-            style={{ height: "500px", width: "100%" }}
+            style={{ height: "100%", width: "100%" }}
             scrollWheelZoom={false}
             touchZoom={true}
           >
