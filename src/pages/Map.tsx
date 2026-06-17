@@ -172,24 +172,21 @@ export default function Map() {
       <div
         id="map-container"
         className="relative bg-white rounded-xl shadow-sm border border-gray-200"
-        onMouseDown={(e) => {
-          // 点击地图时，阻止默认滚动并居中显示
-          e.preventDefault();
-          const mapEl = document.getElementById('map-container');
-          if (mapEl) {
-            setTimeout(() => {
-              mapEl.scrollIntoView({ behavior: "smooth", block: "center" });
-            }, 100);
-          }
-        }}
-        onTouchStart={(e) => {
-          // 手机端触摸时，阻止默认滚动并居中显示
-          e.preventDefault();
-          const mapEl = document.getElementById('map-container');
-          if (mapEl) {
-            setTimeout(() => {
-              mapEl.scrollIntoView({ behavior: "smooth", block: "center" });
-            }, 100);
+        tabIndex={-1}
+        onFocus={(e) => e.preventDefault()}
+        ref={(el) => {
+          if (el) {
+            // 阻止地图获取焦点时的自动滚动
+            el.addEventListener('focus', (e) => {
+              e.preventDefault();
+              e.stopPropagation();
+            }, true);
+            // 点击时滚动到地图居中
+            el.addEventListener('click', () => {
+              setTimeout(() => {
+                el.scrollIntoView({ behavior: "smooth", block: "center" });
+              }, 50);
+            });
           }
         }}
       >
