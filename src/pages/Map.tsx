@@ -190,8 +190,6 @@ export default function Map() {
             style={{ height: "500px", width: "100%" }}
             scrollWheelZoom={false}
             touchZoom={true}
-            tabIndex={-1}
-            keyboard={false}
           >
           <MapController onReady={handleReady} />
           <TileLayer
