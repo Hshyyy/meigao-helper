@@ -97,29 +97,20 @@ export default function App() {
         {menuOpen && (
           <div className="md:hidden border-t border-gray-100 bg-white">
             {navItems.map((item) => (
-              location.pathname === "/" ? (
-                <span
-                  key={item.path}
-                  className={`block px-4 py-3 text-sm font-medium cursor-default ${
-                    item.path === "/" ? "bg-blue-50 text-blue-600" : "text-gray-400"
-                  }`}
-                >
-                  {item.label}
-                </span>
-              ) : (
-                <Link
-                  key={item.path}
-                  to={item.path}
-                  onClick={() => setMenuOpen(false)}
-                  className={`block px-4 py-3 text-sm font-medium no-underline ${
-                    location.pathname === item.path
+              <Link
+                key={item.path}
+                to={item.path}
+                onClick={() => setMenuOpen(false)}
+                className={`block px-4 py-3 text-sm font-medium no-underline ${
+                  location.pathname === item.path
+                    ? "bg-blue-50 text-blue-600"
+                    : item.path === "/" && location.pathname === "/"
                       ? "bg-blue-50 text-blue-600"
                       : "text-gray-600 hover:bg-gray-50"
-                  }`}
-                >
-                  {item.label}
-                </Link>
-              )
+                }`}
+              >
+                {item.label}
+              </Link>
             ))}
           </div>
         )}

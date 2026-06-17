@@ -91,7 +91,7 @@ function MapControls({ onRefresh }: { onRefresh: () => void }) {
   };
 
   return (
-    <div className="leaflet-top leaflet-right" style={{ top: 10, right: 10 }}>
+    <div className="leaflet-top leaflet-right" style={{ top: 10, right: 10, zIndex: 1000 }}>
       <div className="leaflet-control flex flex-col gap-1">
         <button onClick={handleZoomIn} className="bg-white w-9 h-9 rounded-lg shadow-md flex items-center justify-center text-lg hover:bg-gray-50 border border-gray-200" title="放大">+</button>
         <button onClick={handleZoomOut} className="bg-white w-9 h-9 rounded-lg shadow-md flex items-center justify-center text-lg hover:bg-gray-50 border border-gray-200" title="缩小">−</button>
