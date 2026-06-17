@@ -183,13 +183,16 @@ export default function Map() {
 
         {/* 地图 */}
         <div
+          ref={(el) => {
+            if (el) {
+              // 防止点击地图时浏览器自动滚动
+              el.addEventListener('mousedown', (e) => {
+                e.preventDefault();
+              }, { passive: false });
+            }
+          }}
           className="relative"
           style={{ height: "70vh", minHeight: "500px", overflow: "hidden" }}
-          onClick={(e) => {
-            // 点击地图时，滚动到地图位置
-            const mapEl = e.currentTarget;
-            mapEl.scrollIntoView({ behavior: "smooth", block: "start" });
-          }}
         >
           <MapContainer
             center={INITIAL_CENTER}
