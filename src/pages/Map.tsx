@@ -169,34 +169,28 @@ export default function Map() {
       </div>
 
       {/* 地图容器 */}
-      <div
-        id="map-container"
-        className="relative bg-white rounded-xl shadow-sm border border-gray-200"
-        style={{
-          touchAction: 'pan-x pan-y',
-          overscrollBehavior: 'contain',
-          WebkitOverflowScrolling: 'touch'
-        }}
-        ref={(el) => {
-          if (el) {
-            // 阻止所有可能导致滚动的事件
-            const preventScroll = (e: Event) => {
-              e.stopPropagation();
-            };
-            el.addEventListener('touchstart', preventScroll, { passive: false });
-            el.addEventListener('touchmove', preventScroll, { passive: false });
-            el.addEventListener('mousedown', preventScroll);
-
-            // 点击时滚动到地图居中
-            el.addEventListener('click', () => {
-              const rect = el.getBoundingClientRect();
+      <div className="relative">
+        {/* 点击遮罩层 - 点击后滚动到地图居中 */}
+        <div
+          className="absolute inset-0 z-10 cursor-pointer md:hidden"
+          onClick={(e) => {
+            const mapContainer = e.currentTarget.parentElement;
+            if (mapContainer) {
+              const rect = mapContainer.getBoundingClientRect();
               const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
               const targetTop = rect.top + scrollTop - (window.innerHeight / 2) + (rect.height / 2);
               window.scrollTo({ top: Math.max(0, targetTop), behavior: 'smooth' });
-            });
-          }
-        }}
-      >
+              // 滚动完成后隐藏遮罩
+              setTimeout(() => {
+                e.currentTarget.style.display = 'none';
+              }, 500);
+            }
+          }}
+        />
+        <div
+          id="map-container"
+          className="bg-white rounded-xl shadow-sm border border-gray-200"
+        >
         {/* 加载遮罩 - 放在地图外面 */}
         {loading && (
           <div className="absolute inset-0 flex items-center justify-center bg-gray-50/90 rounded-xl" style={{ zIndex: 9999 }}>
@@ -232,6 +226,7 @@ export default function Map() {
             <SchoolMarker key={school.id} school={school} onSelect={setSelectedSchool} />
           ))}
         </MapContainer>
+        </div>
         </div>
       </div>
 
