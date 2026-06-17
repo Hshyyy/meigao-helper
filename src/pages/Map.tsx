@@ -180,7 +180,7 @@ export default function Map() {
         ref={(el) => {
           if (el) {
             // 阻止所有可能导致滚动的事件
-            const preventScroll = (e) => {
+            const preventScroll = (e: Event) => {
               e.stopPropagation();
             };
             el.addEventListener('touchstart', preventScroll, { passive: false });
