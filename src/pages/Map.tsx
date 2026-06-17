@@ -187,6 +187,9 @@ export default function Map() {
           zoom={INITIAL_ZOOM}
           maxZoom={18}
           style={{ height: "500px", width: "100%" }}
+          scrollWheelZoom={false}
+          touchZoom={true}
+          tabIndex={-1}
         >
           <MapController onReady={handleReady} />
           <TileLayer
