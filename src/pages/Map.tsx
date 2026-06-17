@@ -172,10 +172,14 @@ export default function Map() {
       <div
         id="map-container"
         className="relative bg-white rounded-xl shadow-sm border border-gray-200"
-        onMouseDown={(e) => {
-          // 阻止地图获取焦点导致的自动滚动
-          e.preventDefault();
+        onTouchStart={(e) => {
+          // 手机端：阻止触摸时的自动滚动
+          const mapEl = e.currentTarget;
+          setTimeout(() => {
+            mapEl.scrollIntoView({ behavior: "smooth", block: "center" });
+          }, 100);
         }}
+        style={{ scrollMarginTop: '80px' }}
       >
         {/* 加载遮罩 - 放在地图外面 */}
         {loading && (
