@@ -64,10 +64,11 @@ export default function App() {
 
           {/* 手机端汉堡按钮 */}
           <button
-            className="md:hidden p-2 text-gray-600 hover:text-gray-900"
+            className="md:hidden p-2 text-gray-600 hover:text-gray-900 relative"
             onClick={() => setMenuOpen(!menuOpen)}
             aria-label="菜单"
           >
+            <span className="absolute -top-1 -right-1 w-2 h-2 bg-blue-500 rounded-full animate-pulse"></span>
             <svg
               className="w-6 h-6"
               fill="none"

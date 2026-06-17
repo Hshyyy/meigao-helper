@@ -182,15 +182,17 @@ export default function Map() {
         )}
 
         {/* 地图 */}
-        <MapContainer
-          center={INITIAL_CENTER}
-          zoom={INITIAL_ZOOM}
-          maxZoom={18}
-          style={{ height: "500px", width: "100%" }}
-          scrollWheelZoom={false}
-          touchZoom={true}
-          tabIndex={-1}
-        >
+        <div style={{ overflow: "hidden" }}>
+          <MapContainer
+            center={INITIAL_CENTER}
+            zoom={INITIAL_ZOOM}
+            maxZoom={18}
+            style={{ height: "500px", width: "100%" }}
+            scrollWheelZoom={false}
+            touchZoom={true}
+            tabIndex={-1}
+            keyboard={false}
+          >
           <MapController onReady={handleReady} />
           <TileLayer
             attribution='&copy; <a href="https://carto.com/">CARTO</a>'
@@ -202,6 +204,7 @@ export default function Map() {
             <SchoolMarker key={school.id} school={school} onSelect={setSelectedSchool} />
           ))}
         </MapContainer>
+        </div>
       </div>
 
       {/* 图例 */}
