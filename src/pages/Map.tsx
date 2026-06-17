@@ -172,20 +172,27 @@ export default function Map() {
       <div
         id="map-container"
         className="relative bg-white rounded-xl shadow-sm border border-gray-200"
-        tabIndex={-1}
-        onFocus={(e) => e.preventDefault()}
+        style={{
+          touchAction: 'pan-x pan-y',
+          overscrollBehavior: 'contain',
+          WebkitOverflowScrolling: 'touch'
+        }}
         ref={(el) => {
           if (el) {
-            // 阻止地图获取焦点时的自动滚动
-            el.addEventListener('focus', (e) => {
-              e.preventDefault();
+            // 阻止所有可能导致滚动的事件
+            const preventScroll = (e) => {
               e.stopPropagation();
-            }, true);
+            };
+            el.addEventListener('touchstart', preventScroll, { passive: false });
+            el.addEventListener('touchmove', preventScroll, { passive: false });
+            el.addEventListener('mousedown', preventScroll);
+
             // 点击时滚动到地图居中
             el.addEventListener('click', () => {
-              setTimeout(() => {
-                el.scrollIntoView({ behavior: "smooth", block: "center" });
-              }, 50);
+              const rect = el.getBoundingClientRect();
+              const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+              const targetTop = rect.top + scrollTop - (window.innerHeight / 2) + (rect.height / 2);
+              window.scrollTo({ top: Math.max(0, targetTop), behavior: 'smooth' });
             });
           }
         }}
