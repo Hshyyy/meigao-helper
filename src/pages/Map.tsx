@@ -169,7 +169,20 @@ export default function Map() {
       </div>
 
       {/* 地图容器 */}
-      <div className="relative bg-white rounded-xl shadow-sm border border-gray-200">
+      <div
+        ref={(el) => {
+          if (el) {
+            el.addEventListener('click', () => {
+              // 点击地图时，滚动到地图完全显示的位置
+              const rect = el.getBoundingClientRect();
+              const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+              const targetTop = rect.top + scrollTop - 80; // 留80px顶部间距
+              window.scrollTo({ top: targetTop, behavior: 'smooth' });
+            }, true); // 使用捕获阶段
+          }
+        }}
+        className="relative bg-white rounded-xl shadow-sm border border-gray-200"
+      >
         {/* 加载遮罩 - 放在地图外面 */}
         {loading && (
           <div className="absolute inset-0 flex items-center justify-center bg-gray-50/90 rounded-xl" style={{ zIndex: 9999 }}>
