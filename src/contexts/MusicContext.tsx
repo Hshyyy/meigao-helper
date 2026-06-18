@@ -167,29 +167,40 @@ export function MusicProvider({ children }: { children: ReactNode }) {
     return () => audio.removeEventListener("ended", onEnded);
   }, [currentTrack]);
 
-  // 滑动页面后自动播放
+  // 用户交互后自动播放（滑动、点击、按键）
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
 
     let hasStarted = false;
 
-    const handleScroll = () => {
-      if (!hasStarted) {
-        hasStarted = true;
-        audio.play().catch((err) => {
-          console.log("自动播放失败，尝试重新加载:", err);
-          audio.load();
-          setTimeout(() => audio.play().catch(() => {}), 500);
-        });
-        window.removeEventListener("scroll", handleScroll);
-      }
+    const tryPlay = () => {
+      if (hasStarted) return;
+      hasStarted = true;
+      audio.load();
+      audio.play().then(() => {
+        console.log("音乐开始播放");
+      }).catch((err) => {
+        console.log("播放失败:", err);
+      });
+      // 移除所有监听器
+      document.removeEventListener("click", tryPlay);
+      document.removeEventListener("touchstart", tryPlay);
+      window.removeEventListener("scroll", tryPlay);
+      document.removeEventListener("keydown", tryPlay);
     };
 
-    window.addEventListener("scroll", handleScroll, { passive: true });
+    // 监听多种用户交互
+    document.addEventListener("click", tryPlay);
+    document.addEventListener("touchstart", tryPlay, { passive: true });
+    window.addEventListener("scroll", tryPlay, { passive: true });
+    document.addEventListener("keydown", tryPlay);
 
     return () => {
-      window.removeEventListener("scroll", handleScroll);
+      document.removeEventListener("click", tryPlay);
+      document.removeEventListener("touchstart", tryPlay);
+      window.removeEventListener("scroll", tryPlay);
+      document.removeEventListener("keydown", tryPlay);
     };
   }, []);
 
