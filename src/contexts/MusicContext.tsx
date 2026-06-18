@@ -226,23 +226,29 @@ export function MusicProvider({ children }: { children: ReactNode }) {
     const handleUserInteraction = () => {
       if (!hasStarted) {
         hasStarted = true;
-        audio.play().catch(() => {});
-        document.removeEventListener("scroll", handleUserInteraction);
+        audio.play().then(() => {
+          console.log("音乐开始播放");
+        }).catch((err) => {
+          console.log("播放失败:", err);
+        });
         document.removeEventListener("click", handleUserInteraction);
+        document.removeEventListener("touchstart", handleUserInteraction);
+        document.removeEventListener("keydown", handleUserInteraction);
       }
     };
 
-    if (!document.hidden && !hasStarted) {
-      document.addEventListener("scroll", handleUserInteraction, { passive: true });
-      document.addEventListener("click", handleUserInteraction);
-    }
+    // 监听多种用户交互事件
+    document.addEventListener("click", handleUserInteraction);
+    document.addEventListener("touchstart", handleUserInteraction, { passive: true });
+    document.addEventListener("keydown", handleUserInteraction);
 
     document.addEventListener("visibilitychange", handleVisibility);
 
     return () => {
       document.removeEventListener("visibilitychange", handleVisibility);
-      document.removeEventListener("scroll", handleUserInteraction);
       document.removeEventListener("click", handleUserInteraction);
+      document.removeEventListener("touchstart", handleUserInteraction);
+      document.removeEventListener("keydown", handleUserInteraction);
     };
   }, []);
 
