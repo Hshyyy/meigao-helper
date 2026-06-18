@@ -177,7 +177,11 @@ export function MusicProvider({ children }: { children: ReactNode }) {
     const handleScroll = () => {
       if (!hasStarted) {
         hasStarted = true;
-        audio.play().catch(() => {});
+        audio.play().catch((err) => {
+          console.log("自动播放失败，尝试重新加载:", err);
+          audio.load();
+          setTimeout(() => audio.play().catch(() => {}), 500);
+        });
         window.removeEventListener("scroll", handleScroll);
       }
     };
@@ -218,7 +222,13 @@ export function MusicProvider({ children }: { children: ReactNode }) {
 
   // 播放/暂停
   const play = useCallback(() => {
-    audioRef.current?.play().catch(() => {});
+    const audio = audioRef.current;
+    if (!audio) return;
+    audio.play().catch((err) => {
+      console.log("播放失败，尝试重新加载:", err);
+      audio.load();
+      setTimeout(() => audio.play().catch(() => {}), 500);
+    });
   }, []);
 
   const pause = useCallback(() => {
@@ -229,9 +239,9 @@ export function MusicProvider({ children }: { children: ReactNode }) {
     if (isPlaying) {
       audioRef.current?.pause();
     } else {
-      audioRef.current?.play().catch(() => {});
+      play();
     }
-  }, [isPlaying]);
+  }, [isPlaying, play]);
 
   // 播放指定歌曲
   const playTrack = useCallback((index: number) => {
