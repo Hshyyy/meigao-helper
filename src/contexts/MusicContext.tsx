@@ -13,10 +13,7 @@ const playlist: Track[] = [
   { name: "thank u, next (Explicit)", artist: "Ariana Grande", file: "./music/thank u, next (Explicit) - Ariana Grande.mp3", cover: "./music/covers/thank u, next.jpg" },
   { name: "Heat Waves", artist: "Glass Animals", file: "./music/Heat Waves - Glass Animals.mp3", cover: "./music/covers/Heat Waves.jpg" },
   { name: "Work (Derra Flip)", artist: "Drake、Derra、Rihanna", file: "./music/Work (Derra Flip) - Drake、Derra、Rihanna.mp3", cover: "./music/covers/Work (Derra Flip).jpg" },
-  { name: "JULY", artist: "Kris Wu", file: "./music/JULY.FLAC", cover: "./music/covers/JULY.jpg" },
-  { name: "Bad Girl", artist: "Kris Wu", file: "./music/Bad Girl.FLAC", cover: "./music/covers/Bad Girl.jpg" },
-  { name: "November Rain", artist: "Kris Wu", file: "./music/November Rain.FLAC", cover: "./music/covers/November Rain.jpg" },
-  { name: "大碗宽面", artist: "Kris Wu", file: "./music/大碗宽面 - Kris Wu.FLAC", cover: "./music/covers/大碗宽面.jpg" },
+  // Kris Wu - 暂时用MP3版本，后续可转FLAC
   { name: "Baby", artist: "Justin Bieber、Ludacris", file: "./music/Baby - Justin Bieber、Ludacris.mp3", cover: "./music/covers/Baby.jpg" },
   { name: "Beauty And A Beat", artist: "Justin Bieber、Nicki Minaj", file: "./music/Beauty And A Beat - Justin Bieber、Nicki Minaj.mp3", cover: "./music/covers/Beauty And A Beat.jpg" },
   { name: "Eenie Meenie", artist: "Justin Bieber、Sean Kingston", file: "./music/Eenie Meenie - Justin Bieber、Sean Kingston.mp3", cover: "./music/covers/Eenie Meenie.jpg" },
