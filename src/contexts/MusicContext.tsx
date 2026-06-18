@@ -166,40 +166,45 @@ export function MusicProvider({ children }: { children: ReactNode }) {
     return () => audio.removeEventListener("ended", onEnded);
   }, [currentTrack]);
 
-  // 用户交互后自动播放（滑动、点击、按键）
+  // 用户交互后自动播放（使用AudioContext绕过浏览器限制）
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
 
     let hasStarted = false;
+    let audioCtx: AudioContext | null = null;
 
     const tryPlay = () => {
       if (hasStarted) return;
       hasStarted = true;
-      audio.load();
+
+      // 创建AudioContext来解锁音频
+      audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
+      const source = audioCtx.createMediaElementSource(audio);
+      source.connect(audioCtx.destination);
+
       audio.play().then(() => {
         console.log("音乐开始播放");
       }).catch((err) => {
         console.log("播放失败:", err);
       });
+
       // 移除所有监听器
       document.removeEventListener("click", tryPlay);
       document.removeEventListener("touchstart", tryPlay);
       window.removeEventListener("scroll", tryPlay);
-      document.removeEventListener("keydown", tryPlay);
     };
 
-    // 监听多种用户交互
+    // 监听用户交互
     document.addEventListener("click", tryPlay);
     document.addEventListener("touchstart", tryPlay, { passive: true });
     window.addEventListener("scroll", tryPlay, { passive: true });
-    document.addEventListener("keydown", tryPlay);
 
     return () => {
       document.removeEventListener("click", tryPlay);
       document.removeEventListener("touchstart", tryPlay);
       window.removeEventListener("scroll", tryPlay);
-      document.removeEventListener("keydown", tryPlay);
+      if (audioCtx) audioCtx.close();
     };
   }, []);
 
