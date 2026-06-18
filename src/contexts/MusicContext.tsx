@@ -222,33 +222,22 @@ export function MusicProvider({ children }: { children: ReactNode }) {
       }
     };
 
-    // 用户交互后开始播放（解决浏览器自动播放限制）
-    const handleUserInteraction = () => {
+    // 滑动页面后开始播放
+    const handleScroll = () => {
       if (!hasStarted) {
         hasStarted = true;
-        audio.play().then(() => {
-          console.log("音乐开始播放");
-        }).catch((err) => {
-          console.log("播放失败:", err);
-        });
-        document.removeEventListener("click", handleUserInteraction);
-        document.removeEventListener("touchstart", handleUserInteraction);
-        document.removeEventListener("keydown", handleUserInteraction);
+        audio.play().catch(() => {});
+        window.removeEventListener("scroll", handleScroll);
       }
     };
 
-    // 监听多种用户交互事件
-    document.addEventListener("click", handleUserInteraction);
-    document.addEventListener("touchstart", handleUserInteraction, { passive: true });
-    document.addEventListener("keydown", handleUserInteraction);
+    window.addEventListener("scroll", handleScroll, { passive: true });
 
     document.addEventListener("visibilitychange", handleVisibility);
 
     return () => {
       document.removeEventListener("visibilitychange", handleVisibility);
-      document.removeEventListener("click", handleUserInteraction);
-      document.removeEventListener("touchstart", handleUserInteraction);
-      document.removeEventListener("keydown", handleUserInteraction);
+      window.removeEventListener("scroll", handleScroll);
     };
   }, []);
 
