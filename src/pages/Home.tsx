@@ -27,7 +27,7 @@ export default function Home() {
       {/* Hero */}
       <section className="relative text-white">
         {/* 背景图片 */}
-        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: "url('/hero-bg-3.jpg')" }} />
+        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: "url('./hero-bg-3.jpg')" }} />
         {/* 半透明遮罩 */}
         <div className="absolute inset-0 bg-black/50" />
         <div className="relative z-10">
@@ -204,7 +204,7 @@ export default function Home() {
       <section className="max-w-6xl mx-auto px-4 py-20">
         <div className="relative rounded-2xl overflow-hidden p-10 text-center text-white">
           {/* 背景图片 */}
-          <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: "url('/hero-bg.jpg')" }} />
+          <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: "url('./hero-bg.jpg')" }} />
           {/* 半透明遮罩 */}
           <div className="absolute inset-0 bg-black/50" />
           {/* 内容 */}
@@ -234,7 +234,7 @@ export default function Home() {
           </p>
           <p className="text-pink-500 font-bold text-sm text-right mt-2">—你们的Hshy_Chris.W</p>
           <div className="mt-4 flex justify-center">
-            <img src="/chris-photo.jpg" alt="Chris.W" className="rounded-xl shadow-md w-full max-w-xl object-contain" />
+            <img src="./chris-photo.jpg" alt="Chris.W" className="rounded-xl shadow-md w-full max-w-xl object-contain" />
           </div>
         </div>
       </section>
