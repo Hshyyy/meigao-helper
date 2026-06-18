@@ -26,11 +26,12 @@ export default function Home() {
 
       {/* Hero */}
       <section className="relative text-white overflow-hidden" style={{ minHeight: '100vh' }}>
-        {/* 背景图片 - 手机端和电脑端同样效果 */}
-        <div className="absolute inset-0 bg-cover bg-no-repeat" style={{
+        {/* 背景图片 - 自适应所有屏幕 */}
+        <div className="absolute inset-0" style={{
           backgroundImage: "url('./hero-bg-3.jpg')",
-          backgroundPosition: 'center 20%',
-          backgroundSize: 'cover'
+          backgroundPosition: 'center 30%',
+          backgroundSize: 'cover',
+          backgroundRepeat: 'no-repeat'
         }} />
         {/* 半透明遮罩 */}
         <div className="absolute inset-0 bg-black/50" />
@@ -38,7 +39,7 @@ export default function Home() {
         <div className="absolute top-4 right-4 z-20">
           <ShareButton url={window.location.origin} label="Share Website" />
         </div>
-        <div className="max-w-6xl mx-auto px-4 py-32 md:py-48 text-center">
+        <div className="max-w-6xl mx-auto px-4 pt-40 pb-24 md:pt-48 md:pb-32 text-center">
           <p className="text-5xl md:text-6xl text-yellow-400 mb-16 font-bold tracking-widest">H-shy出品</p>
           <h1 className="text-3xl md:text-4xl font-bold mb-8">
             为hshy们推荐适合你的美国寄宿高中
@@ -206,12 +207,13 @@ export default function Home() {
 
       {/* CTA */}
       <section className="max-w-6xl mx-auto px-4 py-20">
-        <div className="relative rounded-2xl overflow-hidden p-8 md:p-10 text-center text-white">
-          {/* 背景图片 */}
-          <div className="absolute inset-0 bg-cover bg-no-repeat" style={{
+        <div className="relative rounded-2xl overflow-hidden p-6 md:p-10 text-center text-white min-h-[200px] md:min-h-[250px]">
+          {/* 背景图片 - 自适应 */}
+          <div className="absolute inset-0" style={{
             backgroundImage: "url('./hero-bg.jpg')",
-            backgroundPosition: 'center center',
-            backgroundSize: 'cover'
+            backgroundPosition: 'center 40%',
+            backgroundSize: 'cover',
+            backgroundRepeat: 'no-repeat'
           }} />
           {/* 半透明遮罩 */}
           <div className="absolute inset-0 bg-black/50" />
