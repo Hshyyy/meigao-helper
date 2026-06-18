@@ -169,21 +169,17 @@ export default function Map() {
       </div>
 
       {/* 地图容器 */}
-      <div className="relative">
+      <div className="relative" id="map-section">
         {/* 点击遮罩层 - 点击后滚动到地图居中 */}
         <div
           className="absolute inset-0 z-10 cursor-pointer md:hidden"
           onClick={(e) => {
-            const mapContainer = e.currentTarget.parentElement;
-            if (mapContainer) {
-              const rect = mapContainer.getBoundingClientRect();
-              const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-              const targetTop = rect.top + scrollTop - (window.innerHeight / 2) + (rect.height / 2);
-              window.scrollTo({ top: Math.max(0, targetTop), behavior: 'smooth' });
-              // 滚动完成后隐藏遮罩
+            const mapSection = document.getElementById('map-section');
+            if (mapSection) {
+              mapSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
               setTimeout(() => {
                 e.currentTarget.style.display = 'none';
-              }, 500);
+              }, 800);
             }
           }}
         />
