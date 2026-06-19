@@ -26,18 +26,13 @@ export default function Home() {
 
       {/* Hero */}
       <section className="relative text-white overflow-hidden" style={{ minHeight: '100vh' }}>
-        {/* 背景图片 - 电脑端 */}
-        <div className="hidden md:block absolute inset-0 bg-cover bg-no-repeat" style={{
-          backgroundImage: "url('/meigao-helper/hero-bg-3.jpg')",
-          backgroundPosition: 'center 30%',
-          backgroundSize: 'cover'
-        }} />
-        {/* 背景图片 - 手机端 */}
-        <div className="md:hidden absolute inset-0 bg-cover bg-no-repeat" style={{
-          backgroundImage: "url('/meigao-helper/hero-bg-3.jpg')",
-          backgroundPosition: 'center 20%',
-          backgroundSize: 'cover'
-        }} />
+        {/* 背景图片 - 用img标签精确控制 */}
+        <img
+          src="/meigao-helper/hero-bg-3.jpg"
+          alt="背景"
+          className="absolute inset-0 w-full h-full object-cover"
+          style={{ objectPosition: 'center 30%' }}
+        />
         {/* 半透明遮罩 */}
         <div className="absolute inset-0 bg-black/50" />
         <div className="relative z-10">
