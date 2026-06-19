@@ -34,13 +34,13 @@ export default function App() {
             </span>
           </Link>
 
-          {/* 桌面端导航 */}
-          <div className="hidden md:flex gap-1">
+          {/* 导航栏 - 手机端和电脑端一样 */}
+          <div className="flex gap-1 overflow-x-auto">
             {navItems.map((item) => (
               location.pathname === "/" ? (
                 <span
                   key={item.path}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium cursor-default ${
+                  className={`px-3 md:px-4 py-2 rounded-lg text-xs md:text-sm font-medium cursor-default whitespace-nowrap ${
                     item.path === "/" ? "bg-blue-600 text-white" : "text-gray-400"
                   }`}
                 >
@@ -50,7 +50,7 @@ export default function App() {
                 <Link
                   key={item.path}
                   to={item.path}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors no-underline ${
+                  className={`px-3 md:px-4 py-2 rounded-lg text-xs md:text-sm font-medium transition-colors no-underline whitespace-nowrap ${
                     location.pathname === item.path
                       ? "bg-blue-600 text-white"
                       : "text-gray-600 hover:bg-gray-100"
@@ -61,60 +61,6 @@ export default function App() {
               )
             ))}
           </div>
-
-          {/* 手机端汉堡按钮 */}
-          <button
-            className="md:hidden p-2 text-gray-600 hover:text-gray-900 relative"
-            onClick={() => setMenuOpen(!menuOpen)}
-            aria-label="菜单"
-          >
-            <span className="absolute -top-1 -right-1 w-2 h-2 bg-blue-500 rounded-full animate-pulse"></span>
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              {menuOpen ? (
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              ) : (
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 6h16M4 12h16M4 18h16"
-                />
-              )}
-            </svg>
-          </button>
-        </div>
-
-        {/* 手机端下拉菜单 */}
-        {menuOpen && (
-          <div className="md:hidden border-t border-gray-100 bg-white">
-            {navItems.map((item) => (
-              <Link
-                key={item.path}
-                to={item.path}
-                onClick={() => setMenuOpen(false)}
-                className={`block px-4 py-3 text-sm font-medium no-underline ${
-                  location.pathname === item.path
-                    ? "bg-blue-50 text-blue-600"
-                    : item.path === "/" && location.pathname === "/"
-                      ? "bg-blue-50 text-blue-600"
-                      : "text-gray-600 hover:bg-gray-50"
-                }`}
-              >
-                {item.label}
-              </Link>
-            ))}
-          </div>
-        )}
       </nav>
 
       {/* 页面内容 */}
