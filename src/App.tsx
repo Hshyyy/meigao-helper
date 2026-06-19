@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Outlet, Link, useLocation } from "react-router-dom";
 import { MusicProvider } from "./contexts/MusicContext";
 
@@ -15,7 +14,6 @@ const navItems = [
 
 export default function App() {
   const location = useLocation();
-  const [menuOpen, setMenuOpen] = useState(false);
 
   return (
     <MusicProvider>
