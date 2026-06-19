@@ -26,13 +26,10 @@ export default function Home() {
 
       {/* Hero */}
       <section className="relative text-white overflow-hidden" style={{ minHeight: '100vh' }}>
-        {/* 背景图片 - 自适应所有屏幕 */}
-        <div className="absolute inset-0" style={{
+        {/* 背景图片 - 手机端和电脑端同样效果 */}
+        <div className="absolute inset-0 bg-cover bg-center bg-no-repeat" style={{
           backgroundImage: "url('./hero-bg-3.jpg')",
-          backgroundPosition: 'center 30%',
-          backgroundSize: 'cover',
-          backgroundRepeat: 'no-repeat',
-          backgroundAttachment: 'fixed'
+          backgroundPosition: 'center 30%'
         }} />
         {/* 半透明遮罩 */}
         <div className="absolute inset-0 bg-black/50" />
@@ -210,12 +207,9 @@ export default function Home() {
       <section className="max-w-6xl mx-auto px-4 py-20">
         <div className="relative rounded-2xl overflow-hidden p-8 md:p-10 text-center text-white">
           {/* 背景图片 */}
-          <div className="absolute inset-0" style={{
+          <div className="absolute inset-0 bg-cover bg-center bg-no-repeat" style={{
             backgroundImage: "url('./hero-bg.jpg')",
-            backgroundPosition: 'center center',
-            backgroundSize: 'cover',
-            backgroundRepeat: 'no-repeat',
-            backgroundAttachment: 'fixed'
+            backgroundPosition: 'center center'
           }} />
           {/* 半透明遮罩 */}
           <div className="absolute inset-0 bg-black/50" />
