@@ -42,7 +42,7 @@ export default function Home() {
         <div className="max-w-6xl mx-auto px-4 pt-48 pb-20 text-center">
           <p className="text-5xl md:text-6xl text-yellow-400 mb-16 font-bold tracking-widest">H-shy出品</p>
           <h1 className="text-3xl md:text-4xl font-bold mb-8">
-            为hshy们推荐适合你的美国寄宿高中
+            测试：为hshy们推荐适合你的美国寄宿高中
           </h1>
           <p className="text-xl text-blue-100 mb-12 max-w-2xl mx-auto">
             输入你的成绩和偏好，Chris为你智能匹配推荐学校，助力你成功圆梦！
