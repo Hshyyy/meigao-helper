@@ -24,7 +24,6 @@ export default function App() {
           <Link
             to="/"
             className="flex items-center gap-2 no-underline"
-            onClick={() => setMenuOpen(false)}
           >
             <span className="text-2xl">🎓</span>
             <span className="text-xl font-bold text-gray-900">
