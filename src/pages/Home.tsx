@@ -28,7 +28,7 @@ export default function Home() {
       <section className="relative text-white overflow-hidden" style={{ minHeight: '100vh' }}>
         {/* 背景图片 - 手机端裁剪头部，电脑端正常 */}
         <img
-          src="/meigao-helper/hero-bg-3.jpg"
+          src="./hero-bg-3.jpg"
           alt="背景"
           className="absolute w-full h-full object-cover md:object-center"
           style={{
@@ -216,7 +216,7 @@ export default function Home() {
         <div className="relative rounded-2xl overflow-hidden p-8 md:p-10 text-center text-white">
           {/* 背景图片 */}
           <div className="absolute inset-0 bg-cover bg-center bg-no-repeat" style={{
-            backgroundImage: "url('/meigao-helper/hero-bg.jpg')",
+            backgroundImage: "url('./hero-bg.jpg')",
             backgroundPosition: 'center center'
           }} />
           {/* 半透明遮罩 */}
@@ -248,7 +248,7 @@ export default function Home() {
           </p>
           <p className="text-pink-500 font-bold text-sm text-right mt-2">—你们的Hshy_Chris.W</p>
           <div className="mt-4 flex justify-center">
-            <img src="/meigao-helper/chris-photo.jpg" alt="Chris.W" className="rounded-xl shadow-md w-full max-w-xl object-contain" />
+            <img src="./chris-photo.jpg" alt="Chris.W" className="rounded-xl shadow-md w-full max-w-xl object-contain" />
           </div>
         </div>
       </section>
