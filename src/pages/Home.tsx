@@ -216,7 +216,7 @@ export default function Home() {
         <div className="relative rounded-2xl overflow-hidden p-8 md:p-10 text-center text-white">
           {/* 背景图片 */}
           <div className="absolute inset-0 bg-cover bg-center bg-no-repeat" style={{
-            backgroundImage: "url('./hero-bg.jpg')",
+            backgroundImage: "url('/hero-bg.jpg')",
             backgroundPosition: 'center center'
           }} />
           {/* 半透明遮罩 */}
